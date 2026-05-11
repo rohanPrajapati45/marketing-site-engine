@@ -1,48 +1,55 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-function Nav() {
+function Nav({ replaySplash }) {
   return (
     <div>
       <div className="flex justify-between items-center px-8 py-6 bg-transparent text-black mt-7">
         <div>
-          <a href="#">
+          <Link
+            to="#"
+            onClick={(e) => {
+              e.preventDefault();
+              replaySplash();
+            }}
+          >
             <img
               src="./src/assets/logo/tedmob_logo_dark.svg"
               alt="Tedmob Logo"
               className="h-5 w-auto object-contain"
             />
-          </a>
+          </Link>
         </div>
         <ul className="flex gap-12 shrink-0 list-none">
           <li>
-            <a href="" className="no-underline font-semibold text-[0.95rem]">
+            <Link to="#" className="no-underline font-semibold text-[0.95rem]">
               WORK
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="" className="no-underline font-semibold text-[0.95rem]">
+            <Link to="" className="no-underline font-semibold text-[0.95rem]">
               AGENCY
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="" className="no-underline font-semibold text-[0.95rem]">
+            <Link to="" className="no-underline font-semibold text-[0.95rem]">
               WHAT WE DO
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="" className="no-underline font-semibold text-[0.95rem]">
+            <Link to="" className="no-underline font-semibold text-[0.95rem]">
               SOLUTIONS
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="" className="no-underline font-semibold text-[0.95rem]">
+            <Link to="" className="no-underline font-semibold text-[0.95rem]">
               BLOG
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="" className="no-underline font-semibold text-[0.95rem]">
+            <Link to="" className="no-underline font-semibold text-[0.95rem]">
               CONTACT
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

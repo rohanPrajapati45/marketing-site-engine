@@ -28,10 +28,10 @@ const Footer = () => {
       </div>
 
       {/* ROW 2 — Main bordered row */}
-      <div className="border-t border-b border-gray-600">
+      <div className="border-t border-b border-black">
         <div className="flex items-stretch">
           {/* CELL 1 — Logo (desktop only) */}
-          <div className="hidden xl:flex shrink-0 items-center border-r border-gray-600 px-10 py-12">
+          <div className="hidden xl:flex shrink-0 items-center border-r border-black px-11 py-12">
             <a href="/" aria-label="TEDMOB Home">
               <img
                 src={logoDark}
