@@ -1,14 +1,13 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
-function Nav({ replaySplash }) {
+function Nav({ replaySplash, isOverlay }) {
   return (
-    <div>
+    <div className={isOverlay ? "fixed inset-x-0 top-0 z-30" : "relative"}>
       <div className="flex justify-between items-center px-8 py-6 bg-transparent text-black mt-7">
         <div>
           <Link to="/">
             <img
-              onClick={(e) => {
+              onClick={() => {
                 replaySplash();
               }}
               src="./src/assets/logo/tedmob_logo_dark.svg"

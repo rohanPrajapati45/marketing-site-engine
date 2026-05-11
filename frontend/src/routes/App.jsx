@@ -3,10 +3,12 @@ import Footer from "../components/Footer";
 import Nav from "../components/Nav";
 import SplashScreen from "../components/SplashScreen";
 import Btn_slide from "../components/Btn_slide";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const App = () => {
   const [showSplash, setShowSplash] = useState(true);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   const replaySplash = () => {
     setShowSplash(false);
@@ -16,9 +18,9 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="relative min-h-screen flex flex-col">
       {showSplash && <SplashScreen />}
-      <Nav replaySplash={replaySplash} />
+      <Nav replaySplash={replaySplash} isOverlay={isHome} />
       <main className="flex-1">
         <Outlet></Outlet>
       </main>
