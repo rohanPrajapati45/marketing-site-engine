@@ -31,14 +31,14 @@ const Footer = () => {
       <div className="border-t border-b border-gray-300">
         <div className="flex items-stretch">
           {/* CELL 1 — Logo (desktop only) */}
-          <div className="hidden xl:flex items-center border-r border-gray-300 px-10 py-8">
+          <div className="hidden xl:flex shrink-0 items-center border-r border-gray-300 px-10 py-8">
             <a href="/" aria-label="TEDMOB Home">
               <img src={logoDark} alt="TEDMOB logo" className="h-7 object-contain" />
             </a>
           </div>
 
           {/* CELL 2 — Social Icons */}
-          <div className="flex flex-1">
+          <div className="flex flex-1 items-stretch">
             {socialLinks.map((link, index) => (
               <a
                 key={link.name}
@@ -46,9 +46,14 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.name}
-                className={`flex flex-1 xl:flex-none justify-center items-center px-6 xl:px-10 py-7 xl:py-9 text-black transition-opacity duration-200 hover:opacity-40 ${index > 0 ? 'border-l border-gray-300' : ''}`}
+                className={`relative overflow-hidden group flex flex-1 justify-center items-center px-6 py-7 text-black ${index > 0 ? 'border-l border-gray-300' : ''}`}
               >
-                {index === 0 && (
+                <span
+                  className="absolute bottom-0 left-0 w-full h-0 group-hover:h-[15%] bg-black transition-[height] duration-300 ease-out pointer-events-none"
+                  aria-hidden="true"
+                />
+                <span className="relative z-10 text-black">
+                  {index === 0 && (
                   <svg width="19" height="34" viewBox="0 0 19.281 36" fill="currentColor">
                     <path d="M19.627,20.25l1-6.515H14.375V9.507c0-1.782.873-3.52,3.673-3.52h2.842V.44A34.658,34.658,0,0,0,15.846,0C10.7,0,7.332,3.12,7.332,8.769v4.965H1.609V20.25H7.332V36h7.043V20.25Z" transform="translate(-1.609)" />
                   </svg>
@@ -77,12 +82,13 @@ const Footer = () => {
                     <path d="m626.8125 64.035156c-7.375-27.417968-28.992188-49.03125-56.40625-56.414062-50.082031-13.703125-250.414062-13.703125-250.414062-13.703125s-200.324219 0-250.40625 13.183593c-26.886719 7.375-49.03125 29.519532-56.40625 56.933594-13.179688 50.078125-13.179688 153.933594-13.179688 153.933594s0 104.378906 13.179688 153.933594c7.382812 27.414062 28.992187 49.027344 56.410156 56.410156 50.605468 13.707031 250.410156 13.707031 250.410156 13.707031s200.324219 0 250.40625-13.183593c27.417969-7.378907 49.03125-28.992188 56.414062-56.40625 13.175782-50.082032 13.175782-153.933594 13.175782-153.933594s.527344-104.382813-13.183594-154.460938zm-370.601562 249.878906v-191.890624l166.585937 95.945312zm0 0" />
                   </svg>
                 )}
+              </span>
               </a>
             ))}
           </div>
 
           {/* CELL 3 — Nav links (desktop only) */}
-          <div className="hidden xl:flex items-center border-l border-gray-300 px-10 py-8">
+          <div className="hidden xl:flex shrink-0 items-center border-l border-gray-300 px-10 py-8">
             <ul className="flex gap-10">
               {navLinks.map((link) => (
                 <li key={link.label}>
