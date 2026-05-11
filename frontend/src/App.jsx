@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Footer from "./components/Footer";
 import Nav from "./components/Nav";
 import SplashScreen from "./components/SplashScreen";
+import Btn_slide from "./components/Btn_slide";
 
 const App = () => {
   const [showSplash, setShowSplash] = useState(true);
@@ -17,11 +18,8 @@ const App = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {showSplash && <SplashScreen />}
-
       <Nav replaySplash={replaySplash} />
-
-      <main className="flex-1"></main>
-
+      <main className="flex-1">{/* <Btn_slide inside="Submit" /> */}</main>
       <Footer />
     </div>
   );
