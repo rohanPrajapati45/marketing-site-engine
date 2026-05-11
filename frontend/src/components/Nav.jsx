@@ -15,32 +15,32 @@ function Nav() {
         </div>
         <ul className="flex gap-12 shrink-0 list-none">
           <li>
-            <a href="" className="no-underline font-medium text-[1rem]">
+            <a href="" className="no-underline font-semibold text-[0.95rem]">
               WORK
             </a>
           </li>
           <li>
-            <a href="" className="no-underline font-medium text-[1rem]">
+            <a href="" className="no-underline font-semibold text-[0.95rem]">
               AGENCY
             </a>
           </li>
           <li>
-            <a href="" className="no-underline font-medium text-[1rem]">
+            <a href="" className="no-underline font-semibold text-[0.95rem]">
               WHAT WE DO
             </a>
           </li>
           <li>
-            <a href="" className="no-underline font-medium text-[1rem]">
+            <a href="" className="no-underline font-semibold text-[0.95rem]">
               SOLUTIONS
             </a>
           </li>
           <li>
-            <a href="" className="no-underline font-medium text-[1rem]">
+            <a href="" className="no-underline font-semibold text-[0.95rem]">
               BLOG
             </a>
           </li>
           <li>
-            <a href="" className="no-underline font-medium text-[1rem]">
+            <a href="" className="no-underline font-semibold text-[0.95rem]">
               CONTACT
             </a>
           </li>
