@@ -28,15 +28,15 @@ const Footer = () => {
       </div>
 
       {/* ROW 2 — Main bordered row */}
-      <div className="border-t border-b border-gray-300">
+      <div className="border-t border-b border-gray-600">
         <div className="flex items-stretch">
           {/* CELL 1 — Logo (desktop only) */}
-          <div className="hidden xl:flex shrink-0 items-center border-r border-gray-300 px-10 py-8">
+          <div className="hidden xl:flex shrink-0 items-center border-r border-gray-600 px-10 py-12">
             <a href="/" aria-label="TEDMOB Home">
               <img
                 src={logoDark}
                 alt="TEDMOB logo"
-                className="h-7 object-contain"
+                className="h-5 object-contain"
               />
             </a>
           </div>
@@ -50,7 +50,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={link.name}
-                className={`relative overflow-hidden group flex flex-1 justify-center items-center px-6 py-7 text-black ${index > 0 ? "border-l border-gray-300" : ""}`}
+                className={`relative overflow-hidden group flex flex-1 justify-center items-center px-6 py-7 text-black ${index > 0 ? "border-l border-gray-600" : ""}`}
               >
                 <span
                   className="absolute bottom-0 left-0 w-full h-0 group-hover:h-[15%] bg-black transition-[height] duration-300 ease-out pointer-events-none"
@@ -128,13 +128,13 @@ const Footer = () => {
           </div>
 
           {/* CELL 3 — Nav links (desktop only) */}
-          <div className="hidden xl:flex shrink-0 items-center border-l border-gray-300 px-10 py-8">
-            <ul className="flex gap-10">
+          <div className="hidden xl:flex shrink-0 items-center border-l border-gray-600 px-10 py-8">
+            <ul className="flex gap-12">
               {navLinks.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-[13px] uppercase font-semibold tracking-tighters text-black transition-opacity duration-200 hover:opacity-40"
+                    className="text-[1rem] uppercase font-semibold tracking-tighters text-black transition-opacity duration-200 "
                   >
                     {link.label}
                   </a>
