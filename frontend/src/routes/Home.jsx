@@ -1,4 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
+import { useOutletContext } from "react-router-dom";
+import ProjectsSection from '../components/homepage/ProjectsSection';
+import CTASection from '../components/homepage/CTASection';
+import SectionScrollBar from '../components/homepage/SectionScrollBar';
+import Footer from '../components/Footer';
 
 const typedTexts = [
   "E-Commerce Solutions",
@@ -12,13 +17,34 @@ const typedTexts = [
 
 const typingPrefix = "For";
 
+const sections = [
+  { id: 'hero', label: 'Hero', theme: 'dark' },
+  { id: 'project-1', label: 'OMT', theme: 'dark' },
+  { id: 'project-2', label: 'Zain', theme: 'dark' },
+  { id: 'project-3', label: 'Z&V', theme: 'dark' },
+  { id: 'project-4', label: 'BOKRA', theme: 'dark' },
+  { id: 'project-5', label: 'CLIENT 5', theme: 'dark' },
+  { id: 'project-6', label: 'CLIENT 6', theme: 'dark' },
+  { id: 'project-7', label: 'CLIENT 7', theme: 'dark' },
+  { id: 'cta', label: "Let's Transform", theme: 'light' },
+];
+
 function Home() {
   const [showHeroText, setShowHeroText] = useState(false);
   const [popupPhase, setPopupPhase] = useState("closed");
+  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  const [themeTick, setThemeTick] = useState(0);
+  const currentTheme = useMemo(() => {
+    const sectionId = sections[activeSectionIndex]?.id;
+    const sectionEl = typeof document !== 'undefined' ? document.getElementById(sectionId) : null;
+    return sectionEl?.dataset?.theme || sections[activeSectionIndex]?.theme || 'dark';
+  }, [activeSectionIndex, themeTick]);
   const typingRef = useRef(null);
   const gifRef = useRef(null);
   const timerRef = useRef(null);
   const popupTimerRef = useRef(null);
+  const outletContext = useOutletContext();
+  const setHideNav = outletContext?.setHideNav ?? (() => {});
 
   const openPopup = () => {
     if (popupPhase !== "closed") return;
@@ -35,6 +61,29 @@ function Home() {
       setPopupPhase("closed");
     }, 600);
   };
+
+  useEffect(() => {
+    setHideNav(popupPhase !== "closed");
+    return () => {
+      setHideNav(false);
+    };
+  }, [popupPhase, setHideNav]);
+
+  useEffect(() => {
+    const sectionId = sections[activeSectionIndex]?.id;
+    const sectionEl = typeof document !== 'undefined' ? document.getElementById(sectionId) : null;
+    if (!sectionEl) return;
+
+    const observer = new MutationObserver(() => {
+      setThemeTick((tick) => tick + 1);
+    });
+    observer.observe(sectionEl, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, [activeSectionIndex]);
+
+  useEffect(() => {
+    document.documentElement.dataset.homeTheme = currentTheme;
+  }, [currentTheme]);
 
   useEffect(() => {
     const words = typedTexts;
@@ -84,9 +133,123 @@ function Home() {
     };
   }, []);
 
+  const handleSectionClick = (index) => {
+    setActiveSectionIndex(index);
+    document.getElementById(sections[index]?.id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = sections.findIndex((section) => section.id === entry.target.id);
+            if (index !== -1) setActiveSectionIndex(index);
+          }
+        });
+      },
+      { threshold: 0.55 }
+    );
+
+    const observed = sections
+      .map((section) => document.getElementById(section.id))
+      .filter(Boolean);
+
+    observed.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const sectionEls = sections
+      .map((section) => document.getElementById(section.id))
+      .filter(Boolean);
+
+    if (!sectionEls.length) return;
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.25 }
+    );
+
+    sectionEls.forEach((el) => revealObserver.observe(el));
+    return () => revealObserver.disconnect();
+  }, []);
+
   return (
-    <section id="hero">
-      <style>{`
+    <>
+      <section id="hero" data-theme="dark">
+        <style>{`
+        html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+          scroll-behavior: smooth;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        body::-webkit-scrollbar {
+          display: none;
+          width: 0;
+          height: 0;
+        }
+
+        body {
+          scroll-snap-type: y mandatory;
+          overscroll-behavior: none;
+        }
+
+        section, footer {
+          scroll-snap-align: start;
+        }
+
+        footer {
+          min-height: auto;
+        }
+
+        section[id] {
+          opacity: 0;
+          transform: translateY(120px);
+          transition: opacity 1.4s cubic-bezier(0.17, 0.84, 0.44, 1), transform 1.4s cubic-bezier(0.17, 0.84, 0.44, 1);
+          will-change: opacity, transform;
+        }
+
+        section[id].in-view {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .home-end-section {
+          position: relative;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          scroll-snap-align: start;
+          overflow: hidden;
+        }
+
+        .home-end-section .cta-section {
+          flex: 1;
+          min-height: auto !important;
+        }
+
+        .home-end-section .cta-section,
+        .home-end-section footer {
+          scroll-snap-align: none;
+        }
+
+        .home-end-section footer {
+          margin-top: auto;
+        }
+
         #hero {
           position: relative;
           height: 100vh;
@@ -102,12 +265,6 @@ function Home() {
           width: 100%; height: 100%;
           object-fit: cover;
           display: block;
-        }
-
-        .hero-gradient {
-          position: absolute;
-          inset: 0;
-          background: transparent;
         }
 
         .hero-text {
@@ -255,6 +412,60 @@ function Home() {
           line-height: 1.5;
         }
 
+        html[data-home-theme="light"] .hero-headline,
+        html[data-home-theme="light"] .typing-for,
+        html[data-home-theme="light"] .typed-text,
+        html[data-home-theme="light"] .typed-cursor,
+        html[data-home-theme="light"] .video-hover small {
+          color: #111 !important;
+        }
+
+        html[data-home-theme="light"] .typed-text {
+          background-color: transparent !important;
+        }
+
+        html[data-home-theme="light"] .scroll-hint {
+          color: rgba(0,0,0,0.7);
+        }
+
+        html[data-home-theme="light"] .scroll-hint::after {
+          background: rgba(0,0,0,0.35);
+        }
+
+        html[data-home-theme="light"] .slide-heading h2,
+        html[data-home-theme="light"] .slide-heading p,
+        html[data-home-theme="light"] .client-name,
+        html[data-home-theme="light"] .client-country,
+        html[data-home-theme="light"] .slide-counter {
+          color: #111 !important;
+        }
+
+        html[data-home-theme="light"] .btn-case-study {
+          border-color: rgba(0,0,0,0.92) !important;
+          color: #111 !important;
+        }
+
+        html[data-home-theme="light"] .btn-case-study::before {
+          background: rgba(0,0,0,0.08) !important;
+        }
+
+        html[data-home-theme="light"] .btn-case-study:hover::before {
+          background: rgba(0,0,0,0.15);
+        }
+
+        html[data-home-theme="light"] .section-scrollbar .scrollbar-line {
+          background: rgba(0, 0, 0, 0.35) !important;
+        }
+
+        html[data-home-theme="light"] .section-scrollbar .scrollbar-item.is-active .scrollbar-line {
+          background: #111 !important;
+          box-shadow: 0 0 8px rgba(0, 0, 0, 0.25) !important;
+        }
+
+        html[data-home-theme="light"] .section-scrollbar .scrollbar-item:not(.is-active):hover .scrollbar-line {
+          background: rgba(0,0,0,0.65) !important;
+        }
+
         /* ── FULLSCREEN OVERLAY WRAPPER ── */
         .video-popup-overlay {
           position: fixed;
@@ -271,12 +482,21 @@ function Home() {
         }
 
         /* ── WHITE FILL LAYER — expands from GIF corner ── */
+        /*
+          clip-path circle() animates from a tiny circle at the
+          bottom-right corner (where the GIF lives) outward to
+          cover the entire screen, then back on close.
+
+          Origin point is bottom-right: calc(100% - 55px) calc(100% - 55px)
+          This matches the center of the 50px GIF at bottom:30px right:30px
+          (30px from edge + 25px = center of GIF = 55px from corner)
+        */
         .popup-fill {
           position: fixed;
           inset: 0;
           background: #ffffff;
           clip-path: circle(0% at calc(100% - 55px) calc(100% - 55px));
-          transition: clip-path 2s cubic-bezier(0.76, 0, 0.24, 1);
+          transition: clip-path 1s cubic-bezier(0.76, 0, 0.24, 1);
           z-index: 9998;
         }
 
@@ -292,13 +512,13 @@ function Home() {
         /* ── VIDEO CONTENT BOX ── */
         .video-popup-content {
           position: relative;
-          width: 100vw;
+          width: 90vw;
           max-width: 960px;
           background: #000;
           z-index: 9999;
           opacity: 0;
           transform: scale(0.94);
-          transition: opacity 0.99s ease 0.95s, transform 0.3s ease 0.35s;
+          transition: opacity 0.3s ease 0.35s, transform 0.3s ease 0.35s;
           pointer-events: none;
         }
 
@@ -364,7 +584,6 @@ function Home() {
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
       </div>
-      <div className="hero-gradient" />
 
       <div className={`hero-text ${showHeroText ? "show" : ""}`}>
         <h2 className="hero-headline">
@@ -397,21 +616,21 @@ function Home() {
       {/* ── WHITE FILL LAYER (always in DOM, animates via class) ── */}
       <div
         className={`popup-fill
-          ${(popupPhase === "opening" || popupPhase === "open") ? "expanding" : ""}
-          ${popupPhase === "closing" ? "collapsing" : ""}
+          ${popupPhase === 'opening' || popupPhase === 'open' ? 'expanding' : ''}
+          ${popupPhase === 'closing' ? 'collapsing' : ''}
         `}
       />
 
       {/* ── OVERLAY + VIDEO CONTENT ── */}
-      {popupPhase !== "closed" && (
+      {popupPhase !== 'closed' && (
         <div
-          className={`video-popup-overlay ${popupPhase !== "closed" ? "is-active" : ""}`}
+          className={`video-popup-overlay ${popupPhase !== 'closed' ? 'is-active' : ''}`}
           onClick={closePopup}
         >
           <div
             className={`video-popup-content
-              ${popupPhase === "open" ? "visible" : ""}
-              ${popupPhase === "closing" ? "hiding" : ""}
+              ${popupPhase === 'open' ? 'visible' : ''}
+              ${popupPhase === 'closing' ? 'hiding' : ''}
             `}
             onClick={(e) => e.stopPropagation()}
           >
@@ -434,6 +653,21 @@ function Home() {
         </div>
       )}
     </section>
+
+    <SectionScrollBar
+      sections={sections}
+      activeIndex={activeSectionIndex}
+      onDotClick={handleSectionClick}
+      theme={currentTheme}
+    />
+
+    <ProjectsSection />
+
+    <section className="home-end-section" id="cta" data-theme="light">
+      <CTASection />
+      <Footer />
+    </section>
+    </>
   );
 }
 
