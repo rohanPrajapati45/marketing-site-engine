@@ -4,11 +4,14 @@ import Nav from "../components/Nav";
 import SplashScreen from "../components/SplashScreen";
 import Btn_slide from "../components/Btn_slide";
 import { Outlet, useLocation } from "react-router-dom";
+import { pageThemes } from "../styles/themes";
 
 const App = () => {
   const [showSplash, setShowSplash] = useState(true);
   const location = useLocation();
   const isHome = location.pathname === "/";
+
+  const theme = pageThemes[location.pathname] || pageThemes["/"];
 
   const replaySplash = () => {
     setShowSplash(false);
@@ -18,11 +21,11 @@ const App = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col">
+    <div className={`relative min-h-screen flex flex-col ${theme.bg}`}>
       {showSplash && <SplashScreen />}
-      <Nav replaySplash={replaySplash} isOverlay={isHome} />
+      <Nav replaySplash={replaySplash} isOverlay={isHome} theme={theme} />
       <main className="flex-1">
-        <Outlet></Outlet>
+        <Outlet context={theme}></Outlet>
       </main>
       <Footer />
     </div>
