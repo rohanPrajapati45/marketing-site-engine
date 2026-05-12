@@ -6,6 +6,7 @@ import WorkWithClients from "../components/agency_components/WorkWithClients";
 import HowWeDo from "../components/agency_components/HowWeDo";
 import ManagementTeam from "../components/agency_components/ManagementTeam";
 import JoinOurTeam from "../components/agency_components/JoinOurTeam";
+import TeamActivities from "../components/agency_components/TeamActivities";
 
 function Agency() {
   return (
@@ -18,6 +19,7 @@ function Agency() {
       <HowWeDo />
       <ManagementTeam />
       <JoinOurTeam />
+      <TeamActivities />
     </div>
   );
 }
