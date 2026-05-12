@@ -3,6 +3,9 @@ import AgencyTagLine from "../components/agency_components/AgencyTagLine";
 import Statistics from "../components/agency_components/Statistics";
 import WhatWeDo from "../components/agency_components/WhatWeDo";
 import WorkWithClients from "../components/agency_components/WorkWithClients";
+import HowWeDo from "../components/agency_components/HowWeDo";
+import ManagementTeam from "../components/agency_components/ManagementTeam";
+import JoinOurTeam from "../components/agency_components/JoinOurTeam";
 
 function Agency() {
   return (
@@ -12,6 +15,9 @@ function Agency() {
       <Statistics />
       <WhatWeDo />
       <WorkWithClients />
+      <HowWeDo />
+      <ManagementTeam />
+      <JoinOurTeam />
     </div>
   );
 }

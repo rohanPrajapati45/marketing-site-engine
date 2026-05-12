@@ -206,8 +206,8 @@ function ClientItem({ client, index }) {
     w-full
 
     h-[38px]
-    sm:h-[42px]
-    lg:h-[50px]
+    sm:h-[80px]
+    lg:h-[85px]
 
     flex
     items-center
@@ -250,7 +250,7 @@ function WorkWithClients() {
       className="
         w-full
 
-        bg-[#ECECEC]
+        bg-[#fafafa]
 
         px-5
         sm:px-8

@@ -86,7 +86,7 @@ function WhatWeDo() {
           A dedicated team of strategists, creatives and technologists working
           in collaboration to transform and enhance the way people see and
           interact with their everyday technology. From traditional to digital
-          and everything in between.
+          and everything in between
         </p>
       </div>
 
