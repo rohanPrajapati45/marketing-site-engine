@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 
-function Nav({ replaySplash, isOverlay, hidden }) {
-  if (hidden) return null;
-
+function Nav({ replaySplash, isOverlay, theme }) {
   return (
     <div className={isOverlay ? "fixed inset-x-0 top-0 z-30" : "relative"}>
-      <div className="flex justify-between items-center px-8 py-6 bg-transparent text-black mt-7">
+      <div
+        className={`flex justify-between items-center px-8 py-6 ${theme.navbar}`}
+      >
         <div>
           <Link to="/">
             <img
