@@ -1,0 +1,75 @@
+.tabs{
+    background-color: #f4f4f4;
+
+    padding: 6px;
+
+    border-radius: 999px;
+
+    display: inline-flex;
+
+    position: relative;
+}
+
+/* TAB BUTTON */
+.tab-label{
+
+    height: 38px;
+    width: 135px;
+
+    border: none;
+    background: transparent;
+
+    font-size: 0.92rem;
+    font-weight: 400;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+
+    position: relative;
+    z-index: 2;
+
+    color: #4f4f4f;
+
+    transition:
+      color 0.4s ease,
+      font-weight 0.4s ease;
+}
+
+/* HOVER */
+.tab-label:hover{
+    color: black;
+}
+
+/* ACTIVE TAB */
+.tab-label.active{
+    color: black;
+    font-weight: 600;
+}
+
+/* GLIDER */
+.glider{
+
+    position: absolute;
+
+    top: 6px;
+    left: 6px;
+
+    width: 135px;
+    height: 38px;
+
+    background-color: white;
+
+    border-radius: 999px;
+
+    z-index: 1;
+
+    transition:
+      transform 0.65s
+      cubic-bezier(0.22,1,0.36,1);
+
+    box-shadow:
+      0 4px 20px rgba(0,0,0,0.08);
+}
