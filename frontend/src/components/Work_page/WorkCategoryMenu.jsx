@@ -6,8 +6,8 @@ import React, {
 
 import "./WorkCategoryMenu.css";
 
-import WorkTabs from "../WorkTabs";
-import WorkSubmenu from "../WorkSubmenu";
+import WorkTabs from "./WorkTabs";
+import WorkSubmenu from "./WorkSubmenu";
 import ProjectGrid from "./ProjectGrid";
 import RecentProjectsSection from "./RecentProjectsSection";
 
