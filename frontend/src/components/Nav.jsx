@@ -4,7 +4,7 @@ function Nav({ replaySplash, isOverlay, theme }) {
   return (
     <div className={isOverlay ? "fixed inset-x-0 top-0 z-30" : "relative"}>
       <div
-        className={`flex justify-between items-center px-8 py-6 ${theme.navbar}`}
+        className={`flex justify-between items-center px-8 py-11 ${theme.navbar}`}
       >
         <div>
           <Link to="/">
