@@ -97,28 +97,29 @@ function TeamActivities() {
               <div
                 key={index}
                 className="
-          min-w-[25%]
-          flex-shrink-0
+                    w-[25%]
+                    flex-shrink-0
 
-          relative
+                    relative
 
-          h-[160px]
-          sm:h-[230px]
-          lg:h-[360px]
+                    h-[180px]
+                    sm:h-[240px]
+                    lg:h-[340px]
 
-          overflow-hidden
-        "
+                    overflow-hidden
+                    "
               >
                 <img
                   src={item.image}
                   alt="Team Activity"
                   loading="lazy"
                   className="
-            w-full
-            h-full
+                w-full
+                h-full
 
-            object-cover
-          "
+                object-cover
+                object-center
+                "
                 />
               </div>
             ))}
