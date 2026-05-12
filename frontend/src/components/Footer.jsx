@@ -21,7 +21,7 @@ const Footer = () => {
   const copyrightText = `Copyrights © ${currentYear} - TEDMOB SAL ALL RIGHTS RESERVED.`;
 
   return (
-    <footer className="bg-white text-black">
+    <footer className="bg-[#fafafa] text-black">
       {/* ROW 1 — Desktop copyright above the border */}
       <div className="hidden xl:block text-center text-[13px] text-gray-500 py-4">
         {copyrightText}
