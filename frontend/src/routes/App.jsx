@@ -7,6 +7,7 @@ import { Outlet, useLocation } from "react-router-dom";
 
 const App = () => {
   const [showSplash, setShowSplash] = useState(true);
+  const [hideNav, setHideNav] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
 
@@ -20,11 +21,11 @@ const App = () => {
   return (
     <div className="relative min-h-screen flex flex-col">
       {showSplash && <SplashScreen />}
-      <Nav replaySplash={replaySplash} isOverlay={isHome} />
+      <Nav replaySplash={replaySplash} isOverlay={isHome && !hideNav} hidden={hideNav} />
       <main className="flex-1">
-        <Outlet></Outlet>
+        <Outlet context={{ setHideNav }}></Outlet>
       </main>
-      <Footer />
+      {!isHome && <Footer />}
     </div>
   );
 };
