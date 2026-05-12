@@ -91,10 +91,17 @@ function ReputationCard({ item }) {
 
       const maxDelay = (walls.length - 1) * 0.12;
 
-      const start = window.innerHeight * 1;
-      const end = window.innerHeight / 2 - rect.height / 2;
+      const viewportHeight = window.innerHeight;
 
-      let progress = (start - rect.top) / (start - end);
+      // Start when 80% of card becomes visible
+      const startPoint = viewportHeight - rect.height * 0.8;
+
+      // End when card bottom reaches center of screen
+      const endPoint = viewportHeight / 2 - rect.height * 0.7;
+
+      let progress = (startPoint - rect.top) / (startPoint - endPoint);
+
+      progress = Math.max(0, Math.min(progress, 1));
 
       progress *= 1 + maxDelay;
 
@@ -221,7 +228,7 @@ function ReputationCard({ item }) {
 
 function Statistics() {
   return (
-    <section className="w-full bg-[#ECECEC] py-10 sm:py-14 lg:py-[60px]">
+    <section className="w-full bg-white py-10 sm:py-14 lg:py-[60px]">
       <div
         className="
             w-full
