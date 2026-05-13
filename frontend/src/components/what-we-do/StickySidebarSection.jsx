@@ -141,7 +141,10 @@ export default function StickySidebarSection() {
   return (
     <section className="flex">
       {/* SIDEBAR */}
-      <aside className="sticky top-0 hidden h-screen w-[320px] shrink-0 bg-[#0B0F19] px-10 xl:block">
+      <aside className="sticky top-0 hidden h-screen w-[350px] shrink-0 px-10 xl:block"
+      style={{
+    background: "linear-gradient(to bottom, #2D2E32, #0D0F13)"
+  }}>
         <div className="flex h-full flex-col justify-center">
           {services.map((service, index) => (
             <div
@@ -174,55 +177,57 @@ export default function StickySidebarSection() {
       <section
         key={service.title}
         ref={(el) => (sectionRefs.current[index] = el)}
-        className={`scroll-mt-[140px] flex min-h-screen items-center px-0 py-[0px] transition-all duration-500 md:px-0 xl:px-0 ${
-          activeIndex === index ? "text-[#111]" : "text-[#999]"
+        className={`flex transition-all duration-500 ${
+            activeIndex === index ? "text-[#111]" : "text-[#999]"
         }`}
-      >
-        <div
-          className={`grid w-full gap-10 xl:grid-cols-2 ${
-            isReverse ? "xl:[&>*:first-child]:order-2" : ""
-          }`}
         >
-          {/* TEXT SIDE */}
-          <div className="max-w-[620px] mt-[60px]">
-            <h1 className="mb-8 text-xl font-black leading-[0.95] tracking-tight md:text-3xl xl:text-4xl">
-              {service.title}
+        <div
+            className={`grid h-[630px] w-full items-start overflow-hidden xl:grid-cols-2 ${
+            isReverse ? "xl:[&>*:first-child]:order-2" : ""
+            }`}
+        >
+            {/* TEXT SIDE */}
+            <div className="flex h-full py-10">
+        <div className="w-full px-5 xl:px-8">
+            <h1 className="mb-3 text-[40px] font-bold">
+            {service.title}
             </h1>
 
-            <p className="mb-10 max-w-[560px] text-[1rem] leading-[1.9] text-black/65 md:text-[1.05rem]">
-              {service.description}
+            <p className="mb-12 text-[18px] leading-[1.8] ">
+            {service.description}
             </p>
 
-            <ul className="grid list-none grid-cols-1 gap-y-5 md:grid-cols-2 md:gap-x-10">
-              {service.items.map((item) => (
+            <ul className=" font-[600] ">
+            {service.items.map((item) => (
                 <li
-                  key={item}
-                  className="relative pl-5 text-[0.95rem] leading-relaxed text-black/75"
+                key={item}
+                className="flex items-start text-[16px] leading-[1.7]"
                 >
-                  <span className="absolute left-0">—</span>
+                <span className="mt-[0px] shrink-0">—</span>
 
-                  {item}
+                <span>{item}</span>
                 </li>
-              ))}
+            ))}
             </ul>
-          </div>
-
-          {/* IMAGE SIDE */}
-          <div className="relative">
-            <div className="overflow-hidden">
-              <img
-                src={service.image}
-                alt={service.title}
-                className={`h-[820px] w-full object-cover transition-all duration-700 ease-out ${
-                  activeIndex === index
-                    ? "scale-100 opacity-100"
-                    : "scale-[0.98] opacity-75"
-                }`}
-              />
-            </div>
-          </div>
         </div>
-      </section>
+        </div>
+
+        {/* IMAGE SIDE */}
+        <div className="relative h-full">
+        <div className="h-full overflow-hidden">
+            <img
+            src={service.image}
+            alt={service.title}
+            className={`block h-full w-full object-cover transition-all duration-700 ease-out ${
+                activeIndex === index
+                ? "scale-100 opacity-100"
+                : "scale-100 opacity-75"
+            }`}
+            />
+        </div>
+        </div>
+    </div>
+    </section>
     );
   })}
 </div>
