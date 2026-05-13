@@ -111,6 +111,27 @@ const services = [
 export default function StickySidebarSection() {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const [sidebarOffset, setSidebarOffset] = useState(0);
+    const [isLocked, setIsLocked] = useState(false);
+    useEffect(() => {
+  const handleScroll = () => {
+    const scrollTop = window.scrollY;
+    const docHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+
+    const scrollProgress = scrollTop / docHeight; // 0 → 1
+
+    if (scrollProgress >= 0.7) {
+      setIsLocked(true);
+    } else {
+      setIsLocked(false);
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
+
   const sectionRefs = useRef([]);
 
   useEffect(() => {
@@ -138,6 +159,8 @@ export default function StickySidebarSection() {
     return () => observer.disconnect();
   }, []);
 
+  const sidebarTranslate = activeIndex * -28;
+
   return (
     <section className="flex">
      {/* SIDEBAR */}
@@ -158,7 +181,11 @@ export default function StickySidebarSection() {
         }}
         >
         {/* INNER CONTENT */}
-        <div className="flex h-full items-center px-10">
+        <div className="flex h-full  px-10 py-22"
+        style={{
+           transform: `translateY(${activeIndex * 80}px)`,
+           transition: "transform 800ms cubic-bezier(0.5,1,0.1,1)", 
+        }}>
             <div className="w-full">
             {services.map((service, index) => (
                 <div
