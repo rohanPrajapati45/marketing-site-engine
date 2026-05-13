@@ -152,7 +152,7 @@ export default function StickySidebarSection() {
               className={`relative my-1 cursor-pointer text-[1rem] transition-all duration-500 ${
                 activeIndex === index
                   ? "-translate-x-[1px] text-white"
-                  : "text-white/35"
+                  : "text-white/25"
               }`}
             >
               {/* LINE */}
