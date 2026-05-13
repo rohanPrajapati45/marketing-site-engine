@@ -11,6 +11,8 @@ const App = () => {
   const [hideNav, setHideNav] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const isContact = location.pathname === "/contact";
+  const isNavOverlay = isHome || isContact;
 
   const theme = pageThemes[location.pathname] || pageThemes["/"];
 
@@ -24,7 +26,7 @@ const App = () => {
   return (
     <div className={`relative min-h-screen flex flex-col ${theme.bg}`}>
       {showSplash && <SplashScreen />}
-      <Nav replaySplash={replaySplash} isOverlay={isHome} theme={theme} />
+      <Nav replaySplash={replaySplash} isOverlay={isNavOverlay} theme={theme} />
       <main className="flex-1">
         <Outlet context={theme}></Outlet>
       </main>
