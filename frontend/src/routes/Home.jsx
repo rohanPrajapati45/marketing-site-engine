@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import ProjectsSection from '../components/homepage/ProjectsSection';
 import CTASection from '../components/homepage/CTASection';
@@ -42,6 +42,8 @@ function Home() {
   const typingRef = useRef(null);
   const gifRef = useRef(null);
   const timerRef = useRef(null);
+  const isSnapping = useRef(false);
+  const sectionEls = useRef([]);
   const popupTimerRef = useRef(null);
   const outletContext = useOutletContext();
   const setHideNav = outletContext?.setHideNav ?? (() => {});
@@ -160,26 +162,163 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    const sectionEls = sections
-      .map((section) => document.getElementById(section.id))
-      .filter(Boolean);
+    let rafId = null;
 
-    if (!sectionEls.length) return;
+    /* ── re-collect section elements (handles async renders) ── */
+    function collectSections() {
+      sectionEls.current = sections
+        .map((s) => document.getElementById(s.id))
+        .filter(Boolean);
+    }
+    collectSections();
 
-    const revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.25 }
-    );
+    /* ── easeOutCubic — same as reference ── */
+    function easeOutCubic(t) {
+      return 1 - Math.pow(1 - t, 3);
+    }
 
-    sectionEls.forEach((el) => revealObserver.observe(el));
-    return () => revealObserver.disconnect();
+    /* ── animated scroll with easing (cancelable) ── */
+    function animatedScrollTo(targetY, duration) {
+      if (rafId) cancelAnimationFrame(rafId);
+      const startY = window.scrollY;
+      const distance = targetY - startY;
+      if (Math.abs(distance) < 1) {
+        isSnapping.current = false;
+        return;
+      }
+      const startTime = performance.now();
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = easeOutCubic(progress);
+        window.scrollTo(0, startY + distance * eased);
+
+        if (progress < 1) {
+          rafId = requestAnimationFrame(step);
+        } else {
+          isSnapping.current = false;
+          rafId = null;
+        }
+      }
+
+      rafId = requestAnimationFrame(step);
+    }
+
+    /* ── snap to a specific section index ── */
+    function snapToSlide(index) {
+      collectSections();
+      const els = sectionEls.current;
+      if (index < 0 || index >= els.length) return;
+      isSnapping.current = true;
+      const targetY = els[index].offsetTop;
+      animatedScrollTo(targetY, 1200);
+    }
+
+    /* ── find which section is currently in view ── */
+    function getCurrentIndex() {
+      collectSections();
+      const scrollY = window.scrollY;
+      const els = sectionEls.current;
+      if (!els.length) return 0;
+      let idx = 0;
+      for (let i = els.length - 1; i >= 0; i--) {
+        if (scrollY >= els[i].offsetTop - window.innerHeight / 3) {
+          idx = i;
+          break;
+        }
+      }
+      return idx;
+    }
+
+    /* ── shared navigation helper ── */
+    function navigateToSection(direction) {
+      if (isSnapping.current) return false;
+      const currentIndex = getCurrentIndex();
+      const targetIndex = Math.min(
+        sectionEls.current.length - 1,
+        Math.max(0, direction > 0 ? currentIndex + 1 : currentIndex - 1)
+      );
+      if (targetIndex !== currentIndex) {
+        snapToSlide(targetIndex);
+        return true;
+      }
+      return false;
+    }
+
+    /* ── WHEEL handler (mouse wheel + trackpad) ── */
+    function onWheel(event) {
+      event.preventDefault();
+      if (isSnapping.current) return;
+
+      const delta = event.deltaY;
+      if (Math.abs(delta) < 2) return;
+
+      navigateToSection(delta > 0 ? 1 : -1);
+    }
+
+    /* ── KEYBOARD handler (arrows, PageUp/Down, Space, Home/End) ── */
+    function onKeyDown(event) {
+      const key = event.key;
+
+      if (key === 'ArrowDown' || key === 'ArrowRight' || key === 'PageDown' || key === ' ') {
+        event.preventDefault();
+        navigateToSection(1);
+      } else if (key === 'ArrowUp' || key === 'ArrowLeft' || key === 'PageUp') {
+        event.preventDefault();
+        navigateToSection(-1);
+      } else if (key === 'Home') {
+        event.preventDefault();
+        if (!isSnapping.current) snapToSlide(0);
+      } else if (key === 'End') {
+        event.preventDefault();
+        if (!isSnapping.current) snapToSlide(sectionEls.current.length - 1);
+      }
+    }
+
+    /* ── TOUCH handlers (swipe gestures for mobile / trackpad) ── */
+    let touchStartY = 0;
+    let touchStartTime = 0;
+
+    function onTouchStart(event) {
+      touchStartY = event.touches[0].clientY;
+      touchStartTime = Date.now();
+    }
+
+    function onTouchMove(event) {
+      if (isSnapping.current) {
+        event.preventDefault();
+      }
+    }
+
+    function onTouchEnd(event) {
+      if (isSnapping.current) return;
+      const touchEndY = event.changedTouches[0].clientY;
+      const diff = touchStartY - touchEndY;
+      const elapsed = Date.now() - touchStartTime;
+
+      /* require a meaningful swipe: >40px within 600ms */
+      if (Math.abs(diff) > 40 && elapsed < 600) {
+        navigateToSection(diff > 0 ? 1 : -1);
+      }
+    }
+
+    /* ── attach all events ── */
+    window.addEventListener('wheel', onWheel, { passive: false });
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+    /* ── cleanup on unmount ── */
+    return () => {
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
@@ -187,11 +326,10 @@ function Home() {
       <section id="hero" data-theme="dark">
         <style>{`
         html, body {
-          height: 100%;
+          min-height: 100%;
           margin: 0;
           padding: 0;
           overflow-x: hidden;
-          scroll-behavior: smooth;
           scrollbar-width: none;
           -ms-overflow-style: none;
         }
@@ -203,12 +341,7 @@ function Home() {
         }
 
         body {
-          scroll-snap-type: y mandatory;
           overscroll-behavior: none;
-        }
-
-        section, footer {
-          scroll-snap-align: start;
         }
 
         footer {
@@ -216,15 +349,10 @@ function Home() {
         }
 
         section[id] {
-          opacity: 0;
-          transform: translateY(120px);
-          transition: opacity 1.4s cubic-bezier(0.17, 0.84, 0.44, 1), transform 1.4s cubic-bezier(0.17, 0.84, 0.44, 1);
-          will-change: opacity, transform;
-        }
-
-        section[id].in-view {
           opacity: 1;
-          transform: translateY(0);
+          transform: none;
+          transition: none;
+          will-change: auto;
         }
 
         .home-end-section {
@@ -232,7 +360,6 @@ function Home() {
           min-height: 100vh;
           display: flex;
           flex-direction: column;
-          scroll-snap-align: start;
           overflow: hidden;
         }
 
@@ -241,10 +368,7 @@ function Home() {
           min-height: auto !important;
         }
 
-        .home-end-section .cta-section,
-        .home-end-section footer {
-          scroll-snap-align: none;
-        }
+
 
         .home-end-section footer {
           margin-top: auto;

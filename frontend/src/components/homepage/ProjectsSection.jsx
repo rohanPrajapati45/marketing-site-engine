@@ -146,6 +146,28 @@ export default function ProjectsSection() {
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.document) return;
+    const contentEls = Array.from(document.querySelectorAll('.slide-content'));
+    if (!contentEls.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          } else {
+            entry.target.classList.remove('in-view');
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    contentEls.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <style>{`
@@ -179,6 +201,15 @@ export default function ProjectsSection() {
           padding: 0 52px;
           min-height: 100vh;
           box-sizing: border-box;
+          opacity: 0;
+          transform: translateY(42px);
+          transition: opacity 3.4s cubic-bezier(0.22, 1, 0.36, 1), transform 3.4s cubic-bezier(0.22, 1, 0.36, 1);
+          will-change: opacity, transform;
+        }
+
+        .slide-content.in-view {
+          opacity: 1;
+          transform: translateY(0);
         }
 
         .slide-heading {
