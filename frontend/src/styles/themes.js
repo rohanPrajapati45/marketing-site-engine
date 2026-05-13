@@ -18,7 +18,7 @@ export const pageThemes = {
   },
   "/blog": {
     bg: "bg-transparent",
-    navbar: "bg-white text-black",
+    navbar: "bg-[#fafafa] text-black",
   },
   "/contact": {
     bg: "bg-transparent",
