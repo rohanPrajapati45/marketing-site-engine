@@ -140,33 +140,92 @@ export default function StickySidebarSection() {
 
   return (
     <section className="flex">
-      {/* SIDEBAR */}
-      <aside className="sticky top-0 hidden h-screen w-[350px] shrink-0 px-10 xl:block"
-      style={{
-    background: "linear-gradient(to bottom, #2D2E32, #0D0F13)"
-  }}>
-        <div className="flex h-full flex-col justify-center">
-          {services.map((service, index) => (
-            <div
-              key={service.title}
-              className={`relative my-1 cursor-pointer text-[1rem] transition-all duration-500 ${
-                activeIndex === index
-                  ? "-translate-x-[1px] text-white"
-                  : "text-white/25"
-              }`}
-            >
-              {/* LINE */}
-              <span
-                className={`absolute left-[180px] top-1/2 h-[2px] -translate-y-1/2 bg-white transition-all duration-500 ${
-                  activeIndex === index ? "w-[50px]" : "w-0"
-                }`}
-              />
+     {/* SIDEBAR */}
+        <aside
+        className="
+            sticky
+            top-0
+            hidden
+            h-screen
+            w-[350px]
+            shrink-0
+            overflow-hidden
+            xl:block
+        "
+        style={{
+            background:
+            "linear-gradient(to bottom, #2D2E32, #0D0F13)",
+        }}
+        >
+        {/* INNER CONTENT */}
+        <div className="flex h-full items-center px-10">
+            <div className="w-full">
+            {services.map((service, index) => (
+                <div
+                key={service.title}
+                className={`
+                    group
+                    relative
+                    flex
+                    items-center
+                    py-2
+                    transition-all
+                    duration-500
+                    ease-[cubic-bezier(0.22,1,0.36,1)]
+                    ${
+                    activeIndex === index
+                        ? "translate-x-[1px]"
+                        : "translate-x-0"
+                    }
+                `}
+                >
+                {/* SMALL DEFAULT LINE */}
+                <span
+                    className="
+                    absolute
+                    left-[230px]
+                    top-1/2
+                    h-[1px]
+                    -translate-y-1/2
+                    bg-white/25
+                    "
+                    style={{
+                    width: activeIndex === index ? "56px" : "22px",
+                    transition:
+                        "width 500ms cubic-bezier(0.22,1,0.36,1), background-color 500ms cubic-bezier(0.22,1,0.36,1)",
+                    backgroundColor:
+                        activeIndex === index
+                        ? "rgba(255,255,255,0.9)"
+                        : "rgba(255,255,255,0.25)",
+                    }}
+                />
 
-              {service.navTitle}
+                {/* TEXT */}
+                <span
+                    className={`
+                    w-full
+                    pr-[50px]
+                    text-right
+                    text-[15px]
+                    tracking-[0.02em]
+                    transition-all
+                    duration-500
+                    ease-[cubic-bezier(0.22,1,0.36,1)]
+                    uppercase
+                    ${
+                        activeIndex === index
+                        ? "font-medium text-[#f4f4f4]"
+                        : "font-medium text-white/35"
+                    }
+                    `}
+                >
+                    {service.navTitle}
+                </span>
+                </div>
+            ))}
             </div>
-          ))}
         </div>
-      </aside>
+        </aside>
 
       {/* CONTENT */}
       <div className="flex-1 bg-[#f4f4f4]">
