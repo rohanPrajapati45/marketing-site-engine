@@ -189,7 +189,7 @@ function ClientItem({ client, index }) {
 
         transition-all
         duration-700
-        ease-out
+        ease
 
         hover:-translate-y-3
 
@@ -231,12 +231,6 @@ function ClientItem({ client, index }) {
       object-center
 
       mix-blend-multiply
-
-      opacity-55
-      hover:opacity-90
-
-      transition-all
-      duration-500
     "
         />
       </div>
