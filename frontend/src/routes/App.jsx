@@ -10,7 +10,7 @@ const App = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
   const isContact = location.pathname === "/contact";
-  const isNavOverlay = isHome || isContact;
+  // const isNavOverlay = isHome || isContact;
   const [showSplash, setShowSplash] = useState(false);
   const [splashKey, setSplashKey] = useState(0);
   const [hideNav, setHideNav] = useState(false);
@@ -38,9 +38,13 @@ const App = () => {
 
   return (
     <div className={`relative min-h-screen flex flex-col ${theme.bg}`}>
-      {showSplash && <SplashScreen key={splashKey}/>}
-      <Nav replaySplash={replaySplash} isOverlay={isNavOverlay} theme={theme} />
-
+      {showSplash && <SplashScreen key={splashKey} />}
+      <Nav
+        replaySplash={replaySplash}
+        isHome={isHome}
+        isContact={isContact}
+        theme={theme}
+      />
       <main className="flex-1">
         <Outlet context={theme}></Outlet>
       </main>
