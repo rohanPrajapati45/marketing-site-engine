@@ -11,6 +11,7 @@ import Blog from "./routes/Blog.jsx";
 import Contact from "./routes/Contact.jsx";
 import Agency from "./routes/Agency.jsx";
 import Blog_details from "./routes/Blog_details.jsx";
+import CaseStudy from "./routes/CaseStudy.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
       {
         path: "/work",
         element: <Work />,
+      },
+      {
+        path: "/work/:slug",
+        element: <CaseStudy />,
       },
       {
         path: "/agency",
