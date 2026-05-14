@@ -15,15 +15,22 @@ const App = () => {
   const [splashKey, setSplashKey] = useState(0);
   const [hideNav, setHideNav] = useState(false);
 
-  const theme = pageThemes[location.pathname] || pageThemes["/"];
+  const pathname = location.pathname;
+
+  const theme = pathname.startsWith("/blog-details/")
+    ? pageThemes["/blog-details/:id"]
+    : pageThemes[pathname] || pageThemes["/"];
 
   const replaySplash = () => {
     setShowSplash(true);
-    setSplashKey(prev => prev + 1);
+    setSplashKey((prev) => prev + 1);
   };
 
   useEffect(() => {
-    if(isHome && performance.getEntriesByType("navigation")[0]?.type === "reload") { 
+    if (
+      isHome &&
+      performance.getEntriesByType("navigation")[0]?.type === "reload"
+    ) {
       setShowSplash(true);
     }
     // setShowSplash(false);
@@ -31,8 +38,13 @@ const App = () => {
 
   return (
     <div className={`relative min-h-screen flex flex-col ${theme.bg}`}>
+<<<<<<< HEAD
       {showSplash && <SplashScreen key={splashKey}/>}
       <Nav replaySplash={replaySplash} isOverlay={isNavOverlay} theme={theme} />
+=======
+      {showSplash && <SplashScreen key={splashKey} />}
+      <Nav replaySplash={replaySplash} isOverlay={isHome} theme={theme} />
+>>>>>>> c19c900b1d394de63c2842b6a139332d2598024c
       <main className="flex-1">
         <Outlet context={theme}></Outlet>
       </main>
