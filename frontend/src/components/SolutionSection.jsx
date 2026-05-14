@@ -197,9 +197,9 @@ const SolutionSection = ({ solution }) => {
           text-align: center;
           text-decoration: none;
           font-family: 'Exo', sans-serif;
-          font-size: 17px;
-          font-weight: -1000;
-          letter-spacing: 1px;
+          font-size: 16.5px;
+          font-weight: 400;
+          letter-spacing: 0.1px;
           text-transform: none;
           color: #fff;
           border: 1.5px solid rgba(255, 255, 255, 0.6);
@@ -207,11 +207,12 @@ const SolutionSection = ({ solution }) => {
           cursor: pointer;
           position: relative;
           overflow: hidden;
-          transition: color 0.4s ease;
+          transition: color 0.4s ease, background 0.4s ease, border-color 0.4s ease;
         }
 
         .theme-light .btn-request-demo {
           color: #111;
+          background: transparent;
           border-color: rgba(0, 0, 0, 0.4);
         }
 
@@ -240,7 +241,16 @@ const SolutionSection = ({ solution }) => {
         .btn-request-demo span {
           position: relative;
           z-index: 1;
-          mix-blend-mode: difference;
+          mix-blend-mode: normal;
+          color: inherit;
+          transition: color 0.3s ease;
+        }
+
+        .btn-request-demo:hover span {
+          color: #111;
+        }
+
+        .theme-light .btn-request-demo:hover span {
           color: #fff;
         }
 
