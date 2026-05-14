@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Btn_slide.module.css";
 
 function Btn_slide({ inside }) {
