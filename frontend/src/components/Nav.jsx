@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "../assets/logo/tedmob_logo_dark.svg";
 
 function Nav({ replaySplash, isOverlay, theme }) {
   return (
@@ -12,7 +13,7 @@ function Nav({ replaySplash, isOverlay, theme }) {
               onClick={() => {
                 replaySplash();
               }}
-              src="./src/assets/logo/tedmob_logo_dark.svg"
+              src={logo}
               alt="Tedmob Logo"
               className="h-5 w-auto object-contain"
             />
