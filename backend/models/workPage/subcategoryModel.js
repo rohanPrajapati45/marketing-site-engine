@@ -10,6 +10,16 @@ const subCategorySchema =
         required: true,
         trim: true,
       },
+      category: [
+          {
+            type:
+              mongoose.Schema.Types.ObjectId,
+  
+              ref: "categoryModel",
+              required: true,
+
+          },
+        ],
     },
     {
       timestamps: true,

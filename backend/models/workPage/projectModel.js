@@ -16,12 +16,17 @@ const projectSchema =
         required: true,
       },
 
+      projectlink : {
+        type: String,
+        required: true,
+      },
+
       subcategories: [
         {
           type:
             mongoose.Schema.Types.ObjectId,
 
-          ref: "SubCategory",
+          ref: "subcategoryModel",
         },
       ],
 

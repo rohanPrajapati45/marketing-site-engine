@@ -5,6 +5,9 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import serviceRoutes from './routes/whatwedoPage/serviceRoute.js';
+import categoryRoutes from './routes/workPage/categoryRoute.js';
+import subcategoryRoutes from './routes/workPage/subcategoryRoute.js';
+import projectRoutes from './routes/workPage/projectRoute.js';
 
 const app=express();
 
@@ -24,6 +27,9 @@ app.get('/', (req, res)=>{
 const PORT=process.env.PORT;
 
 app.use('/api/services', serviceRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/subcategories', subcategoryRoutes);
+app.use('/api/projects', projectRoutes);
 
 const startServer = async () => {
     try {
