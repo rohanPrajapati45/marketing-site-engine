@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function StretchHero() {
+function StrechHero() {
   const sectionRef = useRef(null);
-  const [height, setHeight] = useState(window.innerHeight * 0.62);
+  const [height, setHeight] = useState(200);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,7 +17,7 @@ function StretchHero() {
       );
 
       // overlay stretches upward
-      setHeight(window.innerHeight * 0.62 + progress * 260);
+      setHeight(200 + progress * 260);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -35,26 +35,25 @@ function StretchHero() {
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* Fixed Dark Overlay */}
-      <div className="absolute inset-0 bg-black/20 z-[1]" />
+      {/* Full Dark Overlay */}
+      <div className="absolute h-full inset-0 bg-black/15 z-[1]" />
 
-      {/* Stretching Dark Box */}
+      {/* Stretching Overlay Box */}
       <div
         style={{
-          height: `${height}px`,
           transition: "height 0.12s linear",
         }}
         className="
-            absolute bottom-0 left-0
-            w-full
-            bg-black/45
-            backdrop-blur-[2px]
-            z-[2]
-            flex items-end
+          absolute bottom-0 left-0
+          w-full h-full
+          bg-black/25
+          backdrop-blur-[2px]
+          z-[2]
+          flex items-end
         "
       >
-        <div className="w-full h-full flex items-center justify-center px-5 md:px-10 lg:px-16">
-          <div className="max-w-5xl text-center">
+        <div className="w-full px-5 md:px-10 lg:px-16 pb-8 md:pb-12 flex justify-center items-center">
+          <div className="max-w-5xl">
             <h1 className="text-white text-3xl md:text-5xl lg:text-5xl leading-tight font-[300]">
               TEDMOB Ranked Number 1 Web and App Development Company in Lebanon
             </h1>
@@ -70,4 +69,4 @@ function StretchHero() {
   );
 }
 
-export default StretchHero;
+export default StrechHero;
