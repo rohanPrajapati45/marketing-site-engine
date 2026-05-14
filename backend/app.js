@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import connectDB from './config/db.js';
 
 dotenv.config();
 const app=express();
@@ -15,10 +16,15 @@ app.use('/',(req,res,next)=>{
     next();
 })
 
+app.get('/', (req, res)=>{
+    res.send("Welcome to SrashtaSoft API");
+})
+
 const PORT=process.env.PORT;
 
 const startServer = async () => {
     try {
+        await connectDB();
         app.listen(PORT,()=>{
             console.log(`Server is running on http://localhost:${PORT}/`);
         });
