@@ -20,6 +20,10 @@ export const pageThemes = {
     bg: "bg-transparent",
     navbar: "bg-[#fafafa] text-black",
   },
+  "/blog-details/:id": {
+    bg: "bg-transparent",
+    navbar: "bg-[#fafafa] text-black",
+  },
   "/contact": {
     bg: "bg-transparent",
     navbar: "bg-transparent text-white",

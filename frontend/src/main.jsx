@@ -10,6 +10,7 @@ import Solutions from "./routes/Solutions.jsx";
 import Blog from "./routes/Blog.jsx";
 import Contact from "./routes/Contact.jsx";
 import Agency from "./routes/Agency.jsx";
+import Blog_details from "./routes/Blog_details.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "/contact",
         element: <Contact />,
+      },
+      {
+        path: "/blog-details/:id",
+        element: <Blog_details />,
       },
     ],
   },
