@@ -4,11 +4,11 @@ import Btn_slide from "../Btn_slide";
 
 export default function SolutionsCTA() {
   return (
-    <section className="px-6 py-34 h-[508px]">
+    <section className="px-6 py-34 h-[508px]]">
       <div className="mx-auto max-w-5xl">
         {/* TEXT */}
         <div className="text-center">
-          <p className="text-[2.5rem] font-bold md:text-[2.5rem]">
+          <p className="text-[3.5rem] font-[700] md:text-[2.5rem]">
             Looking for a Specific Solution?
           </p>
 
@@ -21,7 +21,7 @@ export default function SolutionsCTA() {
         </div>
 
         {/* BUTTON */}
-        <div className="mt-10 flex justify-center">
+        <div className="mt-10 ml-100">
           <Link to="/solutions">
             <Btn_slide inside="Our Solutions" />
           </Link>
