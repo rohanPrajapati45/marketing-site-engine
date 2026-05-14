@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { getImageTheme } from '../../hooks/useMediaTheme';
 
 const projectsData = [
   {
@@ -87,41 +88,11 @@ const projectsData = [
   },
 ];
 
-const getImageTheme = async (src) => {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const width = 40;
-      const height = 40;
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        resolve('dark');
-        return;
-      }
-      ctx.drawImage(img, 0, 0, width, height);
-      let total = 0;
-      try {
-        const data = ctx.getImageData(0, 0, width, height).data;
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-          total += (r * 299 + g * 587 + b * 114) / 1000;
-        }
-      // eslint-disable-next-line no-unused-vars
-      } catch (e) {
-        resolve('dark');
-        return;
-      }
-      const brightness = total / (width * height);
-      resolve(brightness > 145 ? 'light' : 'dark');
-    };
-    img.onerror = () => resolve('dark');
-    img.src = src;
-  });
+const getProjectThemes = async (projects) => {
+  const entries = await Promise.all(
+    projects.map(async (project) => [project.id, await getImageTheme(project.mockupImage)])
+  );
+  return Object.fromEntries(entries);
 };
 
 export default function ProjectsSection() {
@@ -129,18 +100,16 @@ export default function ProjectsSection() {
 
   useEffect(() => {
     let active = true;
+
     const loadThemes = async () => {
-      const values = {};
-      for (const project of projectsData) {
-        const theme = await getImageTheme(project.mockupImage);
-        if (!active) return;
-        values[project.id] = theme;
-      }
+      const values = await getProjectThemes(projectsData);
       if (active) setThemes(values);
     };
+
     if (typeof window !== 'undefined' && window.document) {
       loadThemes();
     }
+
     return () => {
       active = false;
     };

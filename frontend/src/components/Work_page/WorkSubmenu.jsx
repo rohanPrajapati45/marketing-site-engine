@@ -13,14 +13,7 @@ const WorkSubmenu = ({
 
   return (
     <div
-      className={`
-        relative
-        overflow-hidden
-
-        ml-[12px]
-        transition-all
-        duration-500
-
+      className={`relative overflow-hidden ml-[12px] transition-all duration-500
         ${
           hasSubmenu
             ? "mt-[18px] h-[170px] opacity-100"
@@ -32,13 +25,8 @@ const WorkSubmenu = ({
       {/* OLD MENU */}
       {previousMenu &&
         isAnimating && (
-
         <div
-          className={`
-            absolute
-            inset-0
-            pointer-events-none
-
+          className={`absolute inset-0 pointer-events-none
             ${
               direction === "up"
                 ? "animate-old-up"
@@ -48,39 +36,22 @@ const WorkSubmenu = ({
         >
 
           <div className="grid grid-cols-4 gap-y-[5px] gap-x-[1px]">
-
             {subCategories[
               previousMenu
             ]?.map((item, index) => (
-
               <button
                 key={index}
-                className="
-                  w-fit
-                  text-left
-
-                  text-[0.9rem]
-                  font-[400]
-
-                  text-[#1d1d1d]
-                "
+                className="w-fit text-left text-[0.9rem] font-[400] text-[#1d1d1d]"
               >
                 {item}
               </button>
-
             ))}
-
           </div>
-
         </div>
       )}
-
       {/* NEW MENU */}
       <div
-        className={`
-          absolute
-          inset-0
-
+        className={`absolute inset-0
           ${
             direction === "up"
               ? "animate-new-up"

@@ -16,3 +16,63 @@
 .recent-carousel{
   scroll-behavior:smooth;
 }
+
+:root {
+  --nav-fg: currentColor;
+}
+
+html[data-home-theme="dark"] {
+  --nav-fg: #ffffff;
+}
+
+html[data-home-theme="light"] {
+  --nav-fg: #111111;
+}
+
+.navbar-theme {
+  color: var(--nav-fg);
+  transition: color 0.35s ease;
+}
+
+.navbar-theme a {
+  color: inherit;
+  transition: color 0.35s ease;
+}
+
+.navbar-theme .nav-menu-icon {
+  color: var(--nav-fg);
+  transition: color 0.35s ease;
+}
+
+.nav-logo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-logo-img {
+  transition: opacity 0.35s ease;
+}
+
+.nav-logo .logo-light {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
+html[data-home-theme="dark"] .nav-logo .logo-dark {
+  opacity: 0;
+}
+
+html[data-home-theme="dark"] .nav-logo .logo-light {
+  opacity: 1;
+}
+
+html[data-home-theme="light"] .nav-logo .logo-dark {
+  opacity: 1;
+}
+
+html[data-home-theme="light"] .nav-logo .logo-light {
+  opacity: 0;
+}
