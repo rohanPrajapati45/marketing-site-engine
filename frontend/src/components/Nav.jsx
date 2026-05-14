@@ -5,17 +5,29 @@ function Nav({ replaySplash, isOverlay, theme }) {
   return (
     <div className={isOverlay ? "fixed inset-x-0 top-0 z-30" : "relative"}>
       <div
-        className={`flex justify-between items-center px-8 py-11 ${theme.navbar}`}
+        className={`navbar-theme flex justify-between items-center px-8 py-11 ${theme.navbar}`}
       >
         <div>
-          <Link to="/">
+          <Link
+            to="/"
+            className="nav-logo"
+            onClick={() => {
+              replaySplash();
+            }}
+          >
             <img
               onClick={() => {
                 replaySplash();
               }}
               src={logo}
               alt="Tedmob Logo"
-              className="h-5 w-auto object-contain"
+              className="nav-logo-img logo-dark h-5 w-auto object-contain"
+            />
+            <img
+              src="./src/assets/logo/tedmob_logo_white.svg"
+              alt=""
+              aria-hidden="true"
+              className="nav-logo-img logo-light h-5 w-auto object-contain"
             />
           </Link>
         </div>

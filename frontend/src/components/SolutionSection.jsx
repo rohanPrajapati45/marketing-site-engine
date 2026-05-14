@@ -212,8 +212,7 @@ const SolutionSection = ({ solution }) => {
 
         .theme-light .btn-request-demo {
           color: #111;
-          border-color: rgba(0, 0, 0, 0.5);
-          background: rgba(255, 255, 255, 0.95);
+          border-color: rgba(0, 0, 0, 0.4);
         }
 
         .btn-request-demo::before {
@@ -242,20 +241,6 @@ const SolutionSection = ({ solution }) => {
           position: relative;
           z-index: 1;
           mix-blend-mode: difference;
-          color: #fff;
-        }
-
-        .theme-light .btn-request-demo span {
-          mix-blend-mode: normal;
-          color: #111;
-        }
-
-        .theme-light .btn-request-demo:hover {
-          color: #fff;
-          border-color: rgba(255, 255, 255, 0.9);
-        }
-
-        .theme-light .btn-request-demo:hover span {
           color: #fff;
         }
 

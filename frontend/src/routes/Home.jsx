@@ -4,6 +4,7 @@ import ProjectsSection from '../components/homepage/ProjectsSection';
 import CTASection from '../components/homepage/CTASection';
 import SectionScrollBar from '../components/homepage/SectionScrollBar';
 import Footer from '../components/Footer';
+import { useVideoTheme } from '../hooks/useMediaTheme';
 
 const typedTexts = [
   "E-Commerce Solutions",
@@ -42,9 +43,16 @@ function Home() {
   const typingRef = useRef(null);
   const gifRef = useRef(null);
   const timerRef = useRef(null);
+  const heroVideoRef = useRef(null);
   const isSnapping = useRef(false);
   const sectionEls = useRef([]);
   const popupTimerRef = useRef(null);
+  const heroTheme = useVideoTheme(heroVideoRef, {
+    threshold: 145,
+    sampleIntervalMs: 650,
+    sampleSize: 32,
+    intersectionThreshold: 0.6,
+  });
   const outletContext = useOutletContext();
   const setHideNav = outletContext?.setHideNav ?? (() => {});
 
@@ -84,8 +92,16 @@ function Home() {
   }, [activeSectionIndex]);
 
   useEffect(() => {
+    if (typeof document === 'undefined') return;
     document.documentElement.dataset.homeTheme = currentTheme;
   }, [currentTheme]);
+
+  useEffect(() => {
+    return () => {
+      if (typeof document === 'undefined') return;
+      delete document.documentElement.dataset.homeTheme;
+    };
+  }, []);
 
   useEffect(() => {
     const words = typedTexts;
@@ -323,7 +339,7 @@ function Home() {
 
   return (
     <>
-      <section id="hero" data-theme="dark">
+      <section id="hero" data-theme={heroTheme}>
         <style>{`
         html, body {
           min-height: 100%;
@@ -704,7 +720,15 @@ function Home() {
       `}</style>
 
       <div className="hero-video-wrap">
-        <video autoPlay muted loop playsInline preload="auto" aria-label="Hero background video">
+        <video
+          ref={heroVideoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label="Hero background video"
+        >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
       </div>
