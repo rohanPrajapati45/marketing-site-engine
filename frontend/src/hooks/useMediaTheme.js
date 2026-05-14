@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import ColorThief from "colorthief";
 
 const DEFAULT_THRESHOLD = 145;
 
@@ -8,7 +7,61 @@ const getBrightnessFromRgb = (r, g, b) => (r * 299 + g * 587 + b * 114) / 1000;
 const getThemeFromBrightness = (brightness, threshold = DEFAULT_THRESHOLD) =>
   brightness >= threshold ? "light" : "dark";
 
-export const getImageTheme = (src, threshold = DEFAULT_THRESHOLD) =>
+const getNavbarHeightRatio = (navSelector) => {
+  if (!navSelector || typeof window === "undefined") return null;
+  const nav = document.querySelector(navSelector);
+  if (!nav) return null;
+
+  const rect = nav.getBoundingClientRect();
+  if (!rect.height || !window.innerHeight) return null;
+  return rect.height / window.innerHeight;
+};
+
+const getSampleRect = ({
+  mediaWidth,
+  mediaHeight,
+  topRatio,
+  topOffsetRatio,
+  navSelector,
+}) => {
+  const navRatio = getNavbarHeightRatio(navSelector);
+  const heightRatio = Math.max(topRatio, navRatio ?? 0);
+
+  const sampleHeight = Math.max(1, Math.round(mediaHeight * heightRatio));
+  const offsetY = Math.max(0, Math.round(mediaHeight * topOffsetRatio));
+
+  return {
+    sx: 0,
+    sy: Math.min(offsetY, mediaHeight - sampleHeight),
+    sWidth: mediaWidth,
+    sHeight: sampleHeight,
+  };
+};
+
+const getAverageBrightnessFromCanvas = (ctx, width, height, pixelStride) => {
+  const data = ctx.getImageData(0, 0, width, height).data;
+  let total = 0;
+  let count = 0;
+
+  for (let i = 0; i < data.length; i += 4 * pixelStride) {
+    total += getBrightnessFromRgb(data[i], data[i + 1], data[i + 2]);
+    count += 1;
+  }
+
+  return count ? total / count : 0;
+};
+
+export const getImageTheme = (
+  src,
+  {
+    threshold = DEFAULT_THRESHOLD,
+    sampleWidth = 48,
+    topRatio = 0.12,
+    topOffsetRatio = 0,
+    pixelStride = 3,
+    navSelector = ".navbar-theme",
+  } = {}
+) =>
   new Promise((resolve) => {
     if (typeof window === "undefined") {
       resolve("dark");
@@ -20,10 +73,44 @@ export const getImageTheme = (src, threshold = DEFAULT_THRESHOLD) =>
     img.decoding = "async";
 
     img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const sampleHeight = Math.max(6, Math.round(sampleWidth * 0.35));
+      canvas.width = sampleWidth;
+      canvas.height = sampleHeight;
+
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) {
+        resolve("dark");
+        return;
+      }
+
+      const rect = getSampleRect({
+        mediaWidth: img.naturalWidth || img.width,
+        mediaHeight: img.naturalHeight || img.height,
+        topRatio,
+        topOffsetRatio,
+        navSelector,
+      });
+
       try {
-        const colorThief = new ColorThief();
-        const [r, g, b] = colorThief.getColor(img);
-        const brightness = getBrightnessFromRgb(r, g, b);
+        ctx.drawImage(
+          img,
+          rect.sx,
+          rect.sy,
+          rect.sWidth,
+          rect.sHeight,
+          0,
+          0,
+          sampleWidth,
+          sampleHeight
+        );
+
+        const brightness = getAverageBrightnessFromCanvas(
+          ctx,
+          sampleWidth,
+          sampleHeight,
+          pixelStride
+        );
         resolve(getThemeFromBrightness(brightness, threshold));
       } catch (error) {
         resolve("dark");
@@ -39,8 +126,13 @@ export const useVideoTheme = (
   {
     threshold = DEFAULT_THRESHOLD,
     sampleIntervalMs = 600,
-    sampleSize = 32,
+    sampleWidth = 48,
     intersectionThreshold = 0.6,
+    topRatio = 0.12,
+    topOffsetRatio = 0,
+    pixelStride = 3,
+    navSelector = ".navbar-theme",
+    debounceMs = 180,
   } = {}
 ) => {
   const [theme, setTheme] = useState("dark");
@@ -48,35 +140,64 @@ export const useVideoTheme = (
   const frameIdRef = useRef(null);
   const intervalIdRef = useRef(null);
   const isRunningRef = useRef(false);
+  const debounceRef = useRef(null);
+  const pendingThemeRef = useRef(null);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video || typeof window === "undefined") return;
 
     const canvas = document.createElement("canvas");
-    canvas.width = sampleSize;
-    canvas.height = sampleSize;
+    const sampleHeight = Math.max(6, Math.round(sampleWidth * 0.35));
+    canvas.width = sampleWidth;
+    canvas.height = sampleHeight;
 
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) return;
 
     const updateTheme = (nextTheme) => {
-      setTheme((prev) => (prev === nextTheme ? prev : nextTheme));
+      if (pendingThemeRef.current === nextTheme) return;
+      pendingThemeRef.current = nextTheme;
+
+      if (debounceRef.current) {
+        window.clearTimeout(debounceRef.current);
+      }
+
+      debounceRef.current = window.setTimeout(() => {
+        setTheme((prev) => (prev === nextTheme ? prev : nextTheme));
+      }, debounceMs);
     };
 
     const analyzeFrame = () => {
       if (!video || video.readyState < 2) return;
 
       try {
-        ctx.drawImage(video, 0, 0, sampleSize, sampleSize);
-        const data = ctx.getImageData(0, 0, sampleSize, sampleSize).data;
-        let total = 0;
+        const rect = getSampleRect({
+          mediaWidth: video.videoWidth || sampleWidth,
+          mediaHeight: video.videoHeight || sampleHeight,
+          topRatio,
+          topOffsetRatio,
+          navSelector,
+        });
 
-        for (let i = 0; i < data.length; i += 4) {
-          total += getBrightnessFromRgb(data[i], data[i + 1], data[i + 2]);
-        }
+        ctx.drawImage(
+          video,
+          rect.sx,
+          rect.sy,
+          rect.sWidth,
+          rect.sHeight,
+          0,
+          0,
+          sampleWidth,
+          sampleHeight
+        );
 
-        const brightness = total / (sampleSize * sampleSize);
+        const brightness = getAverageBrightnessFromCanvas(
+          ctx,
+          sampleWidth,
+          sampleHeight,
+          pixelStride
+        );
         updateTheme(getThemeFromBrightness(brightness, threshold));
       } catch (error) {
         // Ignore frame errors (e.g., not ready yet)
@@ -136,8 +257,22 @@ export const useVideoTheme = (
     return () => {
       observer.disconnect();
       stopSampling();
+      if (debounceRef.current) {
+        window.clearTimeout(debounceRef.current);
+      }
     };
-  }, [intersectionThreshold, sampleIntervalMs, sampleSize, threshold, videoRef]);
+  }, [
+    debounceMs,
+    intersectionThreshold,
+    navSelector,
+    pixelStride,
+    sampleIntervalMs,
+    sampleWidth,
+    threshold,
+    topOffsetRatio,
+    topRatio,
+    videoRef,
+  ]);
 
   return theme;
 };
