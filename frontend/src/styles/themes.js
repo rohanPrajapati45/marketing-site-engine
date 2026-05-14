@@ -2,7 +2,6 @@ export const pageThemes = {
 
   "/": {
     bg: "bg-transparent",
-    navbar: "bg-transparent text-white",
   },
   "/work": {
     bg: "bg-transparent",

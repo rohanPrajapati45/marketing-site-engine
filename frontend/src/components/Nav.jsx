@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/logo/tedmob_logo_dark.svg";
+import whiteLogo from "../assets/logo/tedmob_logo_white.svg";
 
 function Nav({ replaySplash, isHome, isContact, theme }) {
   return (
@@ -13,7 +14,9 @@ function Nav({ replaySplash, isHome, isContact, theme }) {
       }
     >
       <div
-        className={`navbar-theme flex justify-between items-center px-8 py-11 ${theme.navbar}`}
+        className={`flex justify-between items-center px-8 py-11 ${
+          theme?.navbar || "navbar-theme"
+        }`}
       >
         <div>
           <Link
@@ -27,7 +30,7 @@ function Nav({ replaySplash, isHome, isContact, theme }) {
               onClick={() => {
                 replaySplash();
               }}
-              src={logo}
+              src={isContact ? whiteLogo : logo}
               alt="Tedmob Logo"
               className="nav-logo-img logo-dark h-5 w-auto object-contain"
             />
