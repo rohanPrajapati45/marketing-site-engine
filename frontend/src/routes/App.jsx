@@ -32,7 +32,7 @@ const App = () => {
   return (
     <div className={`relative min-h-screen flex flex-col ${theme.bg}`}>
       {showSplash && <SplashScreen key={splashKey}/>}
-      <Nav replaySplash={replaySplash} isOverlay={isHome} theme={theme} />
+      <Nav replaySplash={replaySplash} isOverlay={isNavOverlay} theme={theme} />
       <main className="flex-1">
         <Outlet context={theme}></Outlet>
       </main>
