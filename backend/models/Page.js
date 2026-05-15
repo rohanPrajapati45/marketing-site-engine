@@ -15,14 +15,7 @@ const pageSchema = new mongoose.Schema(
       metaDescription: String,
       ogImage: String,
     },
-
-    sections: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Section",
-      },
-    ],
-
+    
     isPublished: {
       type: Boolean,
       default: true,

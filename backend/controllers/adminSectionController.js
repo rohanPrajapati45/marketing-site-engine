@@ -21,19 +21,55 @@ const cardModels = {
   LargeLogo,
 };
 
+export const allowedSectionTypes = [
+  // NORMAL SECTIONS
+  "slide-gallery",
+  "gallery",
+  "tagline",
+  "cta",
+  "standard",
+];
+
 
 // CREATE SECTION
 export const createAgencySection = async (req, res) => {
   try {
     const { type, data } = req.body;
 
-    const page = await Page.findOne({ slug: "agency" });
+    const {
+    cards,
+    cardType,
+    ...sectionData
+    } = data || {};
+
+    
+const { pageId } = req.params;
+
+const page = await Page.findById(pageId);
+
 
     if (!page) {
       return res.status(404).json({
         success: false,
-        message: "Agency page not found",
+        message: "Page not found",
       });
+    }
+
+    if (!allowedSectionTypes.includes(type)) {
+    return res.status(400).json({
+        success: false,
+        message: "Invalid section type",
+    });
+    }
+
+    if (
+    cardType &&
+    !cardModels[cardType]
+    ) {
+    return res.status(400).json({
+        success: false,
+        message: "Invalid card type",
+    });
     }
 
     const lastSection = await Section.findOne({
@@ -49,14 +85,12 @@ export const createAgencySection = async (req, res) => {
       enabled: true,
       data: {},
     });
-    
-    const { cards, ...sectionData } = data;
-
 
     // CARD MODEL EXISTS
-    if (cardModels[type]) {
+    
+    if (cardType) {
 
-    const CardModel = cardModels[type];
+    const CardModel = cardModels[cardType];
 
     const cardDoc = await CardModel.create({
         sectionId: section._id,
@@ -65,72 +99,22 @@ export const createAgencySection = async (req, res) => {
 
     section.data = {
         ...sectionData,
+        cardType,
         cardId: cardDoc._id,
     };
-
-    await section.save();
 
     } else {
 
     section.data = sectionData;
-
-    await section.save();
     }
 
-    page.sections.push(section._id);
-    await page.save();
+    await section.save();
+
+
 
     return res.status(201).json({
       success: true,
       data: section,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// GET ALL AGENCY SECTIONS
-export const getAgencySections = async (req, res) => {
-  try {
-    const page = await Page.findOne({ slug: "agency" });
-
-    if (!page) {
-      return res.status(404).json({
-        success: false,
-        message: "Agency page not found",
-      });
-    }
-
-    const sections = await Section.find({
-      page: page._id,
-      enabled: true,
-    }).sort({ order: 1 });
-
-    const formattedSections = await Promise.all(
-      sections.map(async (section) => {
-        const sectionObj = section.toObject();
-
-        // CARD TYPE SECTION
-        if (cardModels[section.type]) {
-          const CardModel = cardModels[section.type];
-
-          const cardData = await CardModel.findById(
-            section.data.cardId
-          );
-
-          sectionObj.data.cards = cardData?.cards || [];
-        }
-
-        return sectionObj;
-      })
-    );
-
-    return res.status(200).json({
-      success: true,
-      data: formattedSections,
     });
   } catch (error) {
     return res.status(500).json({
@@ -147,6 +131,11 @@ export const updateAgencySection = async (req, res) => {
     const { sectionId } = req.params;
 
     const { enabled, order, data } = req.body;
+    const {
+        cards,
+        cardType,
+        ...sectionData
+    } = data || {};
 
     const section = await Section.findById(sectionId);
 
@@ -167,7 +156,6 @@ export const updateAgencySection = async (req, res) => {
       section.order = order;
     }
 
-    const { cards, ...sectionData } = data || {};
 
     // UPDATE SECTION DATA
     section.data = {
@@ -176,20 +164,17 @@ export const updateAgencySection = async (req, res) => {
     };
 
     // UPDATE CARD DATA
-    if (cardModels[section.type]) {
-      const CardModel = cardModels[section.type];
+    if (section.data.cardType){
+      const CardModel =
+  cardModels[section.data.cardType];
 
-      await CardModel.findOneAndUpdate(
-        {
-          sectionId: section._id,
-        },
-        {
-          cards: cards || [],
-        },
-        {
-          new: true,
+        if (cards !== undefined) {
+        await CardModel.findOneAndUpdate(
+            { sectionId: section._id },
+            { cards },
+            { new: true }
+        );
         }
-      );
     }
 
     await section.save();
@@ -221,25 +206,14 @@ export const deleteAgencySection = async (req, res) => {
     }
 
     // DELETE CARD DOCUMENTS
-    if (cardModels[section.type]) {
-      const CardModel = cardModels[section.type];
+    if (section.data.cardType) {
+      const CardModel =
+  cardModels[section.data.cardType];
 
-      await CardModel.deleteMany({
+        await CardModel.findOneAndDelete({
         sectionId: section._id,
-      });
+        });
     }
-
-    // REMOVE SECTION FROM PAGE
-    await Page.updateOne(
-      {
-        _id: section.page,
-      },
-      {
-        $pull: {
-          sections: section._id,
-        },
-      }
-    );
 
     // DELETE SECTION
     await Section.findByIdAndDelete(sectionId);

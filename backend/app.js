@@ -8,7 +8,7 @@ import serviceRoutes from './routes/whatwedoPage/serviceRoute.js';
 import categoryRoutes from './routes/workPage/categoryRoute.js';
 import subcategoryRoutes from './routes/workPage/subcategoryRoute.js';
 import projectRoutes from './routes/workPage/projectRoute.js';
-import agencyRouter from './routes/agencyPage/agencyRouter.js';
+import agencyRouter from './routes/adminSectionRouter.js';
 
 const app=express();
 
