@@ -11,14 +11,14 @@ import MidLogo from "../models/cards/MidLogo.js";
 import LargeLogo from "../models/cards/LargeLogo.js";
 
 const cardModels = {
-  StatCard,
-  Max5Liner,
-  StdCards,
-  TeamCard,
-  UniqueCard,
-  SmallLogo,
-  MidLogo,
-  LargeLogo,
+  "stat-card": StatCard,
+  "max5liner-card": Max5Liner,
+  "std-card": StdCards,
+  "team-card": TeamCard,
+  "unique-card": UniqueCard,
+  "small-logo-card": SmallLogo,
+  "mid-logo-card": MidLogo,
+  "large-logo-card": LargeLogo,
 };
 
 export const allowedSectionTypes = [

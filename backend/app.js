@@ -9,6 +9,10 @@ import categoryRoutes from './routes/workPage/categoryRoute.js';
 import subcategoryRoutes from './routes/workPage/subcategoryRoute.js';
 import projectRoutes from './routes/workPage/projectRoute.js';
 import agencyRouter from './routes/adminSectionRouter.js';
+import adminRouter from './routes/adminPageRouter.js';
+import sectionRouter from './routes/adminSectionRouter.js';
+import publicRouter from './routes/publicPageRouter.js';
+import utilityRouter from './routes/utilityRouter.js';
 
 const app=express();
 
@@ -27,12 +31,16 @@ app.get('/', (req, res)=>{
 
 const PORT=process.env.PORT;
 
-app.use('/api/services', serviceRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/subcategories', subcategoryRoutes);
-app.use('/api/projects', projectRoutes);
+// app.use('/api/services', serviceRoutes);
+// app.use('/api/categories', categoryRoutes);
+// app.use('/api/subcategories', subcategoryRoutes);
+// app.use('/api/projects', projectRoutes);
 
-app.use('/api',agencyRouter);
+app.use('/admin',adminRouter);
+app.use('/admin',sectionRouter);
+app.use('/admin',utilityRouter);
+app.use('/',publicRouter);
+
 
 const startServer = async () => {
     try {
