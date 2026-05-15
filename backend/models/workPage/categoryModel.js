@@ -9,6 +9,15 @@ const categorySchema =
         unique: true,
         trim: true,
       },
+      subcategory : [
+        {
+          type:
+            mongoose.Schema.Types.ObjectId,
+            
+            ref: "subcategoryModel",
+            required: false,
+        }
+      ]
     },
     {
       timestamps: true,

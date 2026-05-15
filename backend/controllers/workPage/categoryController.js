@@ -12,7 +12,7 @@ export const createCategory = async (req, res) =>{
 
 export const getAllCategories = async (req, res) => {
     try{
-        const categories = await categoryModel.find();  
+        const categories = await categoryModel.find().populate("subcategory");
         res.status(200).json({message: "Categories fetched successfully", categories});
     }
     catch(error){
@@ -22,7 +22,7 @@ export const getAllCategories = async (req, res) => {
 
 export const getCategoryById = async (req, res) => {
     try{
-        const category = await categoryModel.findById(req.params.id);
+        const category = await categoryModel.findById(req.params.id).populate("subcategory");
         if(!category){
             return res.status(404).json({message: "Category not found"});
         }

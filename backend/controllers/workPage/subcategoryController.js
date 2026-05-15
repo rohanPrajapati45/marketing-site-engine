@@ -59,7 +59,7 @@ export const getSubCategoryById = async (req, res) => {
 export const updateSubCategory = async (req, res) => {
     try{
         const subcategory = await subcategoryModel.findByIdAndUpdate(req.params.id, req.body
-                                                                        , {new: true});
+                                                                        , {new: true}).populate("category");
         if(!subcategory){
             return res.status(404).json({message: "SubCategory not found"});
         }
