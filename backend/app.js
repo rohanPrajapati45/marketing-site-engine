@@ -11,6 +11,15 @@ import projectRoutes from './routes/workPage/projectRoute.js';
 import heroRoute        from './routes/homePage/heroRoute.js';
 import homeProjectRoute from './routes/homePage/projectRoute.js';
 import caseStudyRoute   from './routes/homePage/caseStudyRoute.js';
+// ──Contact page routes ──
+import contactInfoRoute       from './routes/contactPage/contactInfoRoute.js';
+import branchRoute            from './routes/contactPage/branchRoute.js';
+import contactFormRoute       from './routes/contactPage/contactFormRoute.js';
+import contactSubmissionRoute from './routes/contactPage/contactSubmissionRoute.js';
+// ──sollution page routes ──
+import solutionsHeaderRoute      from './routes/solutionsPage/solutionsHeaderRoute.js';
+import solutionRoute             from './routes/solutionsPage/solutionRoute.js';
+import demoRequestRoute          from './routes/solutionsPage/demoRequestRoute.js';
 
 const app=express();
 
@@ -36,6 +45,19 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/home/hero',          heroRoute);
 app.use('/api/home/projects',      homeProjectRoute);
 app.use('/api/home/case-studies',  caseStudyRoute);
+// ═══════════════════════════════════════════════════════════════
+// Contact page routes
+// ═══════════════════════════════════════════════════════════════
+app.use('/api/contact/info',           contactInfoRoute);
+app.use('/api/contact/branches',       branchRoute);
+app.use('/api/contact/form',           contactFormRoute);
+app.use('/api/contact/submissions',    contactSubmissionRoute);
+// ═══════════════════════════════════════════════════════════════
+// solution page routes
+// ═══════════════════════════════════════════════════════════════
+app.use('/api/solutions/header',        solutionsHeaderRoute);
+app.use('/api/solutions',               solutionRoute);
+app.use('/api/solutions/demo-requests', demoRequestRoute);
 
 const startServer = async () => {
     try {
