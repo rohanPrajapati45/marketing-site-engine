@@ -1,3 +1,5 @@
+import Btn_slide from "../Btn_slide";
+
 function LetsTransform({ section }) {
   const { title, subtitle, buttons = [] } = section.data;
 

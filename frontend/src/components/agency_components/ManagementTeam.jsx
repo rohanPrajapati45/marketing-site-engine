@@ -81,8 +81,7 @@ function ManagementTeam({ section }) {
     subtitle,
     lastCardTitle,
     lastCardSubtitle,
-
-    cards: [{ name, role, image }],
+    cards = [],
   } = section.data;
 
   return (
