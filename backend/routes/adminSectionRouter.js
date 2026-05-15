@@ -1,22 +1,22 @@
 import express from "express";
 
 import {
-  createAgencySection,
-  updateAgencySection,
-  deleteAgencySection,
-} from "../controllers/agencyController.js";
+  createSection,
+  updateSection,
+  deleteSection,
+} from "../controllers/adminSectionController.js";
 
 const sectionRouter = express.Router();
 
 
 // CREATE SECTION
-agnecyRouter.post("pages/:pageId/sections", createAgencySection);
+sectionRouter.post("/pages/:pageId/sections", createSection);
 
 // UPDATE SECTION
-agnecyRouter.put("/sections/:sectionId", updateAgencySection);
+sectionRouter.put("/sections/:sectionId", updateSection);
 
 // DELETE SECTION
-agnecyRouter.delete("/sections/:sectionId", deleteAgencySection);
+sectionRouter.delete("/sections/:sectionId", deleteSection);
 
 
 export default sectionRouter;

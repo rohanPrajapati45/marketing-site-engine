@@ -1,11 +1,7 @@
-import React from "react";
+function Empty({ section }) {
+  const { height = "100vh" } = section.data;
 
-function Empty() {
-  return (
-    <div>
-      <div className="h-screen w-full"></div>
-    </div>
-  );
+  return <div style={{ height }} className="w-full" />;
 }
 
 export default Empty;

@@ -3,7 +3,7 @@ import Section from "../models/Section.js";
 
 import StatCard from "../models/cards/StatCard.js";
 import Max5Liner from "../models/cards/Max5Liner.js";
-import StdCards from "../models/cards/StdCards.js";
+import StdCards from "../models/cards/StdCard.js";
 import TeamCard from "../models/cards/TeamCard.js";
 import UniqueCard from "../models/cards/UniqueCard.js";
 import SmallLogo from "../models/cards/SmallLogo.js";

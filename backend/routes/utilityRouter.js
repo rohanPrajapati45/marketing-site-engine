@@ -1,5 +1,5 @@
 import express from 'express';
-import { reorderCards, reorderSections } from '../controllers/utilityController';
+import { reorderCards, reorderSections } from '../controllers/utilityController.js';
 
 const utilityRouter = express.Router();
 

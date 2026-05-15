@@ -3,7 +3,7 @@ import Section from "../models/Section.js";
 
 import StatCard from "../models/cards/StatCard.js";
 import Max5Liner from "../models/cards/Max5Liner.js";
-import StdCards from "../models/cards/StdCards.js";
+import StdCards from "../models/cards/StdCard.js";
 import TeamCard from "../models/cards/TeamCard.js";
 import UniqueCard from "../models/cards/UniqueCard.js";
 import SmallLogo from "../models/cards/SmallLogo.js";
@@ -28,11 +28,12 @@ export const allowedSectionTypes = [
   "tagline",
   "cta",
   "standard",
+  "empty",
 ];
 
 
 // CREATE SECTION
-export const createAgencySection = async (req, res) => {
+export const createSection = async (req, res) => {
   try {
     const { type, data } = req.body;
 
@@ -126,7 +127,7 @@ const page = await Page.findById(pageId);
 
 
 // UPDATE SECTION
-export const updateAgencySection = async (req, res) => {
+export const updateSection = async (req, res) => {
   try {
     const { sectionId } = req.params;
 
@@ -192,7 +193,7 @@ export const updateAgencySection = async (req, res) => {
 };
 
 // DELETE SECTION
-export const deleteAgencySection = async (req, res) => {
+export const deleteSection = async (req, res) => {
   try {
     const { sectionId } = req.params;
 

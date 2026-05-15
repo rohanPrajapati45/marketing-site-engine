@@ -10,14 +10,14 @@ import {
 
 const adminRouter = express.Router();
 
-adminRouter.get("/admin/pages", getAllPages);
+adminRouter.get("/pages", getAllPages);
 
-adminRouter.get("/admin/pages/:pageId", getSinglePage);
+adminRouter.get("/pages/:pageId", getSinglePage);
 
-adminRouter.post("/admin/pages", createPage);
+adminRouter.post("/pages", createPage);
 
-adminRouter.put("/admin/pages/:pageId", updatePage);
+adminRouter.put("/pages/:pageId", updatePage);
 
-adminRouter.delete("/admin/pages/:pageId", deletePage);
+adminRouter.delete("/pages/:pageId", deletePage);
 
 export default adminRouter;

@@ -10,7 +10,11 @@ const SmallLogoSchema = new mongoose.Schema(
 
     cards: [
       {
-        photo: {
+        name:{
+            type:String,
+            required:true,
+        },
+        image: {
           type: String,
           required: true,
           validate: {

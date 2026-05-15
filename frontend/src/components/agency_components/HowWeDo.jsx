@@ -25,7 +25,9 @@ const services = [
   },
 ];
 
-function HowWeDo() {
+function HowWeDo({ section }) {
+  const { title, subtitle, cards = [] } = section.data;
+
   return (
     <section
       className="
@@ -57,7 +59,7 @@ function HowWeDo() {
             leading-none
         "
         >
-          HOW WE DO IT
+          {title}
         </h2>
 
         <p
@@ -76,9 +78,7 @@ function HowWeDo() {
             font-[700]
         "
         >
-          The 5 Principles of success: It's simple: our remarkable team and our
-          success-driven process. Our process is designed for your success. It's
-          designed for successful collaboration, transparency and efficiency
+          {subtitle}
         </p>
       </div>
 
@@ -98,7 +98,7 @@ function HowWeDo() {
     gap-5
   "
       >
-        {services.map((service, index) => (
+        {cards.map((service, index) => (
           <div
             key={index}
             className="
@@ -155,7 +155,7 @@ function HowWeDo() {
           text-inherit
         "
             >
-              {service.desc}
+              {service.description}
             </p>
           </div>
         ))}

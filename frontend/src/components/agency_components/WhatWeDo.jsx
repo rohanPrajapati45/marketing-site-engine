@@ -32,7 +32,8 @@ const services = [
   ],
 ];
 
-function WhatWeDo() {
+function WhatWeDo({ section }) {
+  const { title, subtitle, cards = [] } = section.data;
   return (
     <section
       className="
@@ -64,7 +65,7 @@ function WhatWeDo() {
             leading-none
         "
         >
-          WHAT WE DO
+          {title}
         </h2>
 
         <p
@@ -83,10 +84,7 @@ function WhatWeDo() {
             font-[700]
         "
         >
-          A dedicated team of strategists, creatives and technologists working
-          in collaboration to transform and enhance the way people see and
-          interact with their everyday technology. From traditional to digital
-          and everything in between
+          {subtitle}
         </p>
       </div>
 
@@ -106,7 +104,7 @@ function WhatWeDo() {
     lg:gap-5
   "
       >
-        {services.map((group, index) => (
+        {cards.map((group, index) => (
           <div
             key={index}
             className="
@@ -135,7 +133,7 @@ function WhatWeDo() {
         cursor-pointer
       "
           >
-            {group.map((item, itemIndex) => (
+            {group.lines.map((item, itemIndex) => (
               <div
                 key={itemIndex}
                 className="
