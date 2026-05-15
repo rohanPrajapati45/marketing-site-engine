@@ -8,6 +8,9 @@ import serviceRoutes from './routes/whatwedoPage/serviceRoute.js';
 import categoryRoutes from './routes/workPage/categoryRoute.js';
 import subcategoryRoutes from './routes/workPage/subcategoryRoute.js';
 import projectRoutes from './routes/workPage/projectRoute.js';
+import heroRoute        from './routes/homePage/heroRoute.js';
+import homeProjectRoute from './routes/homePage/projectRoute.js';
+import caseStudyRoute   from './routes/homePage/caseStudyRoute.js';
 
 const app=express();
 
@@ -30,6 +33,9 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/subcategories', subcategoryRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/home/hero',          heroRoute);
+app.use('/api/home/projects',      homeProjectRoute);
+app.use('/api/home/case-studies',  caseStudyRoute);
 
 const startServer = async () => {
     try {
