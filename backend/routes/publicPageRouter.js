@@ -9,7 +9,7 @@ const publicRouter = express.Router();
 
 
 // GET PUBLIC PAGE BY SLUG
-router.get("/pages/:slug", getPublicPage);
+publicRouter.get("/pages/:slug", getPublicPage);
 
 
 

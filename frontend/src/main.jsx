@@ -12,6 +12,8 @@ import Contact from "./routes/Contact.jsx";
 import Agency from "./routes/Agency.jsx";
 import Blog_details from "./routes/Blog_details.jsx";
 import CaseStudy from "./routes/CaseStudy.jsx";
+import { store } from "./redux/store.js";
+import { Provider } from "react-redux";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +62,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <Provider store={store}>
+      <RouterProvider router={router}></RouterProvider>
+    </Provider>
   </StrictMode>,
 );
