@@ -144,7 +144,9 @@ const certifications = [
   },
 ];
 
-function Expertise() {
+function Expertise({ section }) {
+  const { title, subtitle, cards = [] } = section.data;
+
   return (
     <section
       className="
@@ -180,7 +182,7 @@ function Expertise() {
             text-[#1E2329]
           "
         >
-          OUR EXPERTISE & CERTIFICATIONS
+          {title}
         </h2>
 
         <p
@@ -195,7 +197,7 @@ function Expertise() {
             text-[#7A7A7A]
           "
         >
-          Everyone is a developer with the right toolkit.
+          {subtitle}
         </p>
 
         {/* LOGOS */}
@@ -216,7 +218,7 @@ function Expertise() {
             items-center
           "
         >
-          {certifications.map((item, index) => (
+          {cards.map((item, index) => (
             <li
               key={index}
               className="

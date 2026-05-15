@@ -8,6 +8,7 @@ import serviceRoutes from './routes/whatwedoPage/serviceRoute.js';
 import categoryRoutes from './routes/workPage/categoryRoute.js';
 import subcategoryRoutes from './routes/workPage/subcategoryRoute.js';
 import projectRoutes from './routes/workPage/projectRoute.js';
+<<<<<<< HEAD
 import heroRoute        from './routes/homePage/heroRoute.js';
 import homeProjectRoute from './routes/homePage/projectRoute.js';
 import caseStudyRoute   from './routes/homePage/caseStudyRoute.js';
@@ -22,6 +23,13 @@ import solutionRoute             from './routes/solutionsPage/solutionRoute.js';
 import demoRequestRoute          from './routes/solutionsPage/demoRequestRoute.js';
 import authRoutes from './routes/admin/adminRoute.js';
 import { createMainAdmin } from './config/createmainAdmin.js';
+=======
+import agencyRouter from './routes/adminSectionRouter.js';
+import adminRouter from './routes/adminPageRouter.js';
+import sectionRouter from './routes/adminSectionRouter.js';
+import publicRouter from './routes/publicPageRouter.js';
+import utilityRouter from './routes/utilityRouter.js';
+>>>>>>> agency-backend
 
 const app=express();
 
@@ -61,6 +69,16 @@ app.use('/api/contact/submissions',    contactSubmissionRoute);
 app.use('/api/solutions/header',        solutionsHeaderRoute);
 app.use('/api/solutions',               solutionRoute);
 app.use('/api/solutions/demo-requests', demoRequestRoute);
+// app.use('/api/services', serviceRoutes);
+// app.use('/api/categories', categoryRoutes);
+// app.use('/api/subcategories', subcategoryRoutes);
+// app.use('/api/projects', projectRoutes);
+
+app.use('/admin',adminRouter);
+app.use('/admin',sectionRouter);
+app.use('/admin',utilityRouter);
+app.use('/',publicRouter);
+
 
 const startServer = async () => {
     try {

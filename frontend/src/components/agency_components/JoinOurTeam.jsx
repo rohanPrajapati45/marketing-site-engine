@@ -17,14 +17,22 @@ const careerImages = [
   // add more images here
 ];
 
-function JoinOurTeam() {
+function JoinOurTeam({ section }) {
+  const {
+    title,
+    description,
+    buttonText,
+    buttonLink,
+    cards = [],
+  } = section.data;
+
   const [currentImage, setCurrentImage] = useState(0);
 
   // AUTO IMAGE CHANGE
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % careerImages.length);
+      setCurrentImage((prev) => (prev + 1) % cards.length);
     }, 3200);
 
     return () => clearInterval(interval);
@@ -85,7 +93,7 @@ function JoinOurTeam() {
               text-[#1E2228]
             "
           >
-            JOIN OUR TEAM
+            {title}
           </h2>
 
           <div
@@ -104,12 +112,7 @@ function JoinOurTeam() {
               max-w-[720px]
             "
           >
-            <p>
-              TEDMOB is a dynamic, diverse and passionate place to be. We work
-              hard to create a place where people love to spend time, where
-              careers flourish and everyone enjoys the best possible conditions
-              for creating great work that transforms brands.
-            </p>
+            <p>{description}</p>
 
             <p>
               Were always on the look-out people with a passion for digital,
@@ -119,9 +122,9 @@ function JoinOurTeam() {
 
           {/* BUTTON */}
 
-          <a href="mailto:careers@tedmob.com">
+          <a href={buttonLink}>
             <div className="py-10">
-              <Btn_slide inside="Careers" />
+              <Btn_slide inside={buttonText} />
             </div>
           </a>
         </div>
@@ -152,7 +155,7 @@ function JoinOurTeam() {
               transform: `translateX(-${currentImage * (100 / careerImages.length)}%)`,
             }}
           >
-            {careerImages.map((item, index) => (
+            {cards.map((item, index) => (
               <div
                 key={index}
                 className="w-full h-full flex-shrink-0"

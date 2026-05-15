@@ -238,7 +238,8 @@ function ClientItem({ client, index }) {
   );
 }
 
-function WorkWithClients() {
+function WorkWithClients({ section }) {
+  const { title, subtitle, cards = [] } = section.data;
   return (
     <section
       className="
@@ -274,7 +275,7 @@ function WorkWithClients() {
             text-[#1F2329]
           "
         >
-          WHO DO WE WORK WITH
+          {title}
         </h2>
 
         <p
@@ -290,7 +291,7 @@ function WorkWithClients() {
             text-[#7A7A7A]
           "
         >
-          Trusted by Awesome Clients
+          {subtitle}
         </p>
 
         {/* CLIENTS */}
@@ -315,7 +316,7 @@ function WorkWithClients() {
             lg:gap-x-4
           "
         >
-          {clients.map((client, index) => (
+          {cards.map((client, index) => (
             <ClientItem key={index} client={client} index={index} />
           ))}
         </ul>

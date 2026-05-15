@@ -226,7 +226,8 @@ function ReputationCard({ item }) {
   );
 }
 
-function Statistics() {
+function Statistics({ section }) {
+  const { cards = [] } = section.data;
   return (
     <section className="w-full bg-white py-10 sm:py-14 lg:py-[60px]">
       <div
@@ -244,7 +245,7 @@ function Statistics() {
             flex-wrap
             "
       >
-        {statsData.map((item, index) => (
+        {cards.map((item, index) => (
           <ReputationCard key={index} item={item} />
         ))}
       </div>

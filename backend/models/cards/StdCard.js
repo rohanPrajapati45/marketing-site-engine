@@ -15,7 +15,7 @@ const StdCardsSchema = new mongoose.Schema(
           required: true,
         },
 
-        subTitle: {
+        description: {
           type: String,
           required: true,
         },

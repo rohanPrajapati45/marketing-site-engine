@@ -10,7 +10,7 @@ const MidLogoSchema = new mongoose.Schema(
 
     cards: [
       {
-        photo: {
+        image: {
           type: String,
           required: true,
           validate: {
@@ -19,6 +19,10 @@ const MidLogoSchema = new mongoose.Schema(
             },
             message: "Only .png images are allowed.",
           },
+        },
+        link:{
+            type:String,
+            required:true,
         },
         order: {
           type: Number,

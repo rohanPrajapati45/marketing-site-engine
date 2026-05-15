@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Section from "../Section";
+import Section from "../Section.js";
 
 const StatSchema =
   new mongoose.Schema(
@@ -11,18 +11,18 @@ const StatSchema =
       },
       cards:[
         {
-            label:{
+            title:{
                 type:String,
                 required:true,
             },
-            NaNumbers:{
+            number:{
                 type:Number,
                 required:true,
             },
-            description:{
+            lines:[{
                 type:String,
                 required:true,
-            }
+            }]
             ,
             order:{
               type:Number,

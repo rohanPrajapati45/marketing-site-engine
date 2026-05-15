@@ -43,7 +43,8 @@ const teamActivities = [
   },
 ];
 
-function TeamActivities() {
+function TeamActivities({ section }) {
+  const { cards = [] } = section.data;
   const [startIndex, setStartIndex] = useState(0);
 
   // AUTO MOVE
@@ -57,13 +58,11 @@ function TeamActivities() {
   }, [startIndex]);
 
   const nextSlide = () => {
-    setStartIndex((prev) => (prev >= teamActivities.length - 4 ? 0 : prev + 1));
+    setStartIndex((prev) => (prev >= cards.length - 4 ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
-    setStartIndex((prev) =>
-      prev === 0 ? teamActivities.length - 4 : prev - 1,
-    );
+    setStartIndex((prev) => (prev === 0 ? cards.length - 4 : prev - 1));
   };
 
   return (
@@ -93,7 +92,7 @@ function TeamActivities() {
               transform: `translateX(-${startIndex * 25}%)`,
             }}
           >
-            {teamActivities.map((item, index) => (
+            {cards.map((item, index) => (
               <div
                 key={index}
                 className="

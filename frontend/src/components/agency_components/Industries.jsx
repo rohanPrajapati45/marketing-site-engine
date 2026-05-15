@@ -60,7 +60,9 @@ const industries = [
   },
 ];
 
-function Industries() {
+function Industries({ section }) {
+  const { title, cards = [] } = section.data;
+
   return (
     <section
       className="
@@ -95,7 +97,7 @@ function Industries() {
             tracking-[-3px]
           "
         >
-          INDUSTRIES WE EXCEL IN
+          {title}
         </h2>
 
         {/* GRID */}
@@ -116,7 +118,7 @@ function Industries() {
             gap-y-4
           "
         >
-          {industries.map((item, index) => (
+          {cards.map((item, index) => (
             <li key={index}>
               <div
                 className="

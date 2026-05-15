@@ -75,7 +75,15 @@ const lastCard = {
   subtitle: "Employees",
 };
 
-function ManagementTeam() {
+function ManagementTeam({ section }) {
+  const {
+    title,
+    subtitle,
+    lastCardTitle,
+    lastCardSubtitle,
+    cards = [],
+  } = section.data;
+
   return (
     <section
       className="
@@ -107,7 +115,7 @@ function ManagementTeam() {
             leading-none
         "
         >
-          MANAGEMENT TEAM
+          {title}
         </h2>
 
         <p
@@ -126,9 +134,7 @@ function ManagementTeam() {
             font-[700]
         "
         >
-          Meet our team of digital agile team. Growing every day, in business &
-          beyond. With each project, we elevate together, scaling new creative
-          peaks!
+          {subtitle}
         </p>
       </div>
 
@@ -151,7 +157,7 @@ function ManagementTeam() {
     gap-y-14
   "
       >
-        {teamMembers.map((member, index) => (
+        {cards.map((member, index) => (
           <div
             key={index}
             className="
@@ -263,7 +269,7 @@ function ManagementTeam() {
           leading-none
         "
             >
-              {lastCard.title}
+              {lastCardTitle}
             </p>
 
             <p
@@ -275,7 +281,7 @@ function ManagementTeam() {
           leading-none
         "
             >
-              {lastCard.subtitle}
+              {lastCardSubtitle}
             </p>
           </div>
         </div>

@@ -1,33 +1,62 @@
-import React from "react";
-import AgencyTagLine from "../components/agency_components/AgencyTagLine";
-import Statistics from "../components/agency_components/Statistics";
-import WhatWeDo from "../components/agency_components/WhatWeDo";
-import WorkWithClients from "../components/agency_components/WorkWithClients";
-import HowWeDo from "../components/agency_components/HowWeDo";
-import ManagementTeam from "../components/agency_components/ManagementTeam";
-import JoinOurTeam from "../components/agency_components/JoinOurTeam";
-import TeamActivities from "../components/agency_components/TeamActivities";
-import Partners from "../components/agency_components/Partners";
-import Industries from "../components/agency_components/Industries";
-import Expertise from "../components/agency_components/Expertise";
-import LetsTransform from "../components/agency_components/LetsTransform";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { getPageBySlug } from "../redux/slices/pageSlice";
+
+import { componentMap } from "../utils/componentMap";
 
 function Agency() {
+  const dispatch = useDispatch();
+
+  const { page, loading, error } = useSelector((state) => state.page);
+
+  // FETCH PAGE
+  useEffect(() => {
+    dispatch(getPageBySlug("agency"));
+  }, [dispatch]);
+
+  // LOADING
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
+  // ERROR
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
+  }
+
+  // NO PAGE
+  if (!page) {
+    return null;
+  }
+
   return (
     <div>
-      <AgencyTagLine />
-      <div className="h-screen w-full"></div>
-      <Statistics />
-      <WhatWeDo />
-      <WorkWithClients />
-      <HowWeDo />
-      <ManagementTeam />
-      <JoinOurTeam />
-      <TeamActivities />
-      <Partners />
-      <Industries />
-      <Expertise />
-      <LetsTransform />
+      {page.sections?.map((section) => {
+        // PICK COMPONENT
+        const Component = section.data?.cardType
+          ? componentMap[section.data.cardType]
+          : componentMap[section.type];
+
+        // COMPONENT NOT FOUND
+        if (!Component) {
+          console.warn(
+            `No component found for ${section.data?.cardType || section.type}`,
+          );
+
+          return null;
+        }
+
+        return <Component key={section._id} section={section} />;
+      })}
     </div>
   );
 }

@@ -152,7 +152,8 @@ function ClientItem({ client, index }) {
   );
 }
 
-function Partners() {
+function Partners({ section }) {
+  const { title, subtitle, cards = [] } = section.data;
   return (
     <section
       className="
@@ -188,7 +189,7 @@ function Partners() {
             text-[#1F2329]
           "
         >
-          OUR PARTNERS
+          {title}
         </h2>
 
         <p
@@ -204,8 +205,7 @@ function Partners() {
             text-[#7A7A7A]
           "
         >
-          We don’t limit our work to any single industry.We also serve different
-          local & regional partners.
+          {subtitle}
         </p>
 
         {/* CLIENTS */}
@@ -224,7 +224,7 @@ function Partners() {
             gap-5
             "
         >
-          {partners.map((client, index) => (
+          {cards.map((client, index) => (
             <ClientItem key={index} client={client} index={index} />
           ))}
         </ul>
