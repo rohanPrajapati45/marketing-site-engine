@@ -11,12 +11,13 @@ import Partners from "../components/agency_components/Partners";
 import Industries from "../components/agency_components/Industries";
 import Expertise from "../components/agency_components/Expertise";
 import LetsTransform from "../components/agency_components/LetsTransform";
+import Empty from "../components/agency_components/Empty";
 
 function Agency() {
   return (
     <div>
       <AgencyTagLine />
-      <div className="h-screen w-full"></div>
+      <Empty />
       <Statistics />
       <WhatWeDo />
       <WorkWithClients />

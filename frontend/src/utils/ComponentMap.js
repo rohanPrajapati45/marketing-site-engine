@@ -1,0 +1,34 @@
+// agencyComponentMap.js
+
+import AgencyTagLine from "../components/agency_components/AgencyTagLine";
+import Empty from "../components/agency_components/Empty";
+import Expertise from "../components/agency_components/Expertise";
+import HowWeDo from "../components/agency_components/HowWeDo";
+import Industries from "../components/agency_components/Industries";
+import JoinOurTeam from "../components/agency_components/JoinOurTeam";
+import LetsTransform from "../components/agency_components/LetsTransform";
+import ManagementTeam from "../components/agency_components/ManagementTeam";
+import Partners from "../components/agency_components/Partners";
+import Statistics from "../components/agency_components/Statistics";
+import TeamActivities from "../components/agency_components/TeamActivities";
+import WhatWeDo from "../components/agency_components/WhatWeDo";
+import WorkWithClients from "../components/agency_components/WorkWithClients";
+
+export const componentMap = {
+
+  // SECTION TYPES
+  "slide-gallery":JoinOurTeam,
+  "gallery":TeamActivities,
+  "tagline":AgencyTagLine,
+  "cta":LetsTransform,
+  "empty":Empty,
+  // CARD TYPES
+  "stat-card": Statistics,
+  "std-card": HowWeDo,
+  "team-card": ManagementTeam,
+  "small-logo-card": WorkWithClients,
+  "mid-logo-card": Expertise,
+  "large-logo-card": Partners,
+  "max5liner-card": WhatWeDo,
+  "unique-card":Industries,
+};
