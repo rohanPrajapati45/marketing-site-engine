@@ -8,6 +8,7 @@ import serviceRoutes from './routes/whatwedoPage/serviceRoute.js';
 import categoryRoutes from './routes/workPage/categoryRoute.js';
 import subcategoryRoutes from './routes/workPage/subcategoryRoute.js';
 import projectRoutes from './routes/workPage/projectRoute.js';
+import agencyRouter from './routes/agencyPage/agencyRouter.js';
 
 const app=express();
 
@@ -30,6 +31,8 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/subcategories', subcategoryRoutes);
 app.use('/api/projects', projectRoutes);
+
+app.use('/api',agencyRouter);
 
 const startServer = async () => {
     try {
