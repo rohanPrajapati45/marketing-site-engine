@@ -25,6 +25,15 @@ const UniqueCardSchema = new mongoose.Schema(
             message: "Only .svg icons are allowed.",
           },
         },
+        order: {
+          type: Number,
+          required: true,
+        },
+
+        active: {
+          type: Boolean,
+          default: true,
+        },
       },
     ],
   },

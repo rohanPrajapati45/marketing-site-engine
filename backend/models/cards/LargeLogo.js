@@ -20,6 +20,15 @@ const LargeLogoSchema = new mongoose.Schema(
             message: "Only .png images are allowed.",
           },
         },
+        order: {
+          type: Number,
+          required: true,
+        },
+
+        active: {
+          type: Boolean,
+          default: true,
+        },
       },
     ],
   },
