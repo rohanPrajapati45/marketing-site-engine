@@ -1,0 +1,105 @@
+.contact-page {
+  background: #fafafa;
+  font-family: 'Exo', sans-serif;
+  font-size: 15px;
+  color: #212529;
+}
+
+.contact-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 25, 26, 0.54);
+  z-index: 2;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  z-index: 0;
+}
+
+.hero-slide.is-active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.hero-content {
+  position: absolute;
+  z-index: 3;
+  left: 52px;
+  top: 40%;
+  transform: translateY(-50%);
+  color: #fff;
+  padding-top: 80px;
+}
+
+.hero-heading {
+  font-family: 'Exo', sans-serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 600;
+  line-height: 1.1;
+  margin: 0 0 32px 0;
+  color: #fff;
+}
+
+.hero-emails {
+  margin-bottom: 24px;
+}
+
+.hero-email-row {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+  color: #fff;
+  margin: 0;
+}
+
+.hero-email-row a {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.hero-email-row a:hover {
+  opacity: 0.75;
+}
+
+.hero-phone-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 20px;
+  color: #fff;
+  font-weight: 400;
+}
+
+.hero-phone-row a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.hero-phone-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}

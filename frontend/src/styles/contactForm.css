@@ -1,0 +1,81 @@
+.contact-form-section {
+  background: #fafafa;
+  padding: 140px 24px 120px;
+  border-top: 1px solid #e8e8e8;
+}
+
+.contact-form-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.form-heading {
+  font-family: 'Exo', sans-serif;
+  font-size: clamp(22px, 4vw, 38px);
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 32px 0;
+}
+
+.form-paragraphs {
+  margin-bottom: 48px;
+}
+
+.form-paragraphs p {
+  font-family: 'Exo', sans-serif;
+  font-size: 15px;
+  line-height: 1.9;
+  color: #000000ff;
+  margin: 0;
+}
+
+.contact-form {
+  width: 100%;
+}
+
+.form-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-row-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.form-row-2 {
+  grid-template-columns: 1fr 2fr;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: #fff;
+  font-family: 'Exo', sans-serif;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-input::placeholder {
+  color: #aaa;
+  font-family: 'Exo', sans-serif;
+}
+
+.form-input:focus {
+  border-color: #111;
+}
+
+@media (max-width: 992px) {
+  .form-row-3 { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .form-row-3 { grid-template-columns: 1fr; }
+  .form-row-2 { grid-template-columns: 1fr; }
+}

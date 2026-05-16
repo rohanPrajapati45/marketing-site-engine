@@ -91,10 +91,10 @@ export default function CTASection() {
           text-align: center;
           text-decoration: none;
           font-family: 'Exo', sans-serif;
-          font-size: 17px;
-          font-weight: 600;
-          letter-spacing: 1px;         
-          color: #111;
+          font-size: 20px;
+          font-weight: 300;
+          letter-spacing: 0.1px;         
+          color: #efeded;
           border: 1.5px solid #111;
           background: transparent;
           overflow: hidden;
