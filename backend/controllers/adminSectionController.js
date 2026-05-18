@@ -29,6 +29,8 @@ export const allowedSectionTypes = [
   "cta",
   "standard",
   "empty",
+  "hero-section",
+  "project-section",
 ];
 
 

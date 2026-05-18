@@ -17,9 +17,44 @@ const App = () => {
 
   const pathname = location.pathname;
 
-  const theme = pathname.startsWith("/blog-details/")
-    ? pageThemes["/blog-details/:id"]
-    : pageThemes[pathname] || pageThemes["/"];
+  const [dynamicTheme, setDynamicTheme] = useState(null);
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      setDynamicTheme(null);
+      return;
+    }
+
+    const observer = new MutationObserver(() => {
+      const current = document.documentElement.dataset.homeTheme;
+
+      setDynamicTheme(current);
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-home-theme"],
+    });
+
+    setDynamicTheme(document.documentElement.dataset.homeTheme);
+
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  const theme =
+    pathname === "/"
+      ? dynamicTheme === "light"
+        ? {
+            bg: "bg-white",
+            navbar: "navbar-theme text-black",
+          }
+        : {
+            bg: "bg-black",
+            navbar: "navbar-theme text-white",
+          }
+      : pathname.startsWith("/blog-details/")
+        ? pageThemes["/blog-details/:id"]
+        : pageThemes[pathname] || pageThemes["/"];
 
   const replaySplash = () => {
     setShowSplash(true);
