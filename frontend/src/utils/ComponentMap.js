@@ -16,14 +16,11 @@ import WorkWithClients from "../components/agency_components/WorkWithClients";
 import HeroSection from "../components/homepage/hero/HeroSection";
 import ProjectsSection from "../components/homepage/ProjectsSection";
 import SectionScrollBar from "../components/homepage/SectionScrollBar";
-<<<<<<< HEAD
 import StickySidebarSection from "../components/what-we-do/StickySidebarSection";
-=======
 import WorkCategoryMenu from "../components/Work_page/WorkCategoryMenu";
 import SoluctionSection from "../components/solutions/SolutionSection";
 import Branch from "../components/Contact/Branch";
 import ContactInfo from "../components/Contact/ContactInfo";
->>>>>>> home
 
 export const componentMap = {
 
@@ -47,11 +44,9 @@ export const componentMap = {
   "hero-section":HeroSection,
   "project-section":ProjectsSection,
 
-<<<<<<< HEAD
   //what-we-do
   "sticky-services": StickySidebarSection,
 
-=======
   //work page
   "work-category-menu": WorkCategoryMenu,
 
@@ -61,5 +56,4 @@ export const componentMap = {
   //contact page
   "contact-hero": ContactInfo,
   "branch-section": Branch,
->>>>>>> home
 };
