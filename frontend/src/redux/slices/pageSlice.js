@@ -10,7 +10,11 @@ export const getPageBySlug = createAsyncThunk(
     try {
 
       const response = await axios.get(
+<<<<<<< HEAD
         `http://localhost:8080/pages/${slug}`
+=======
+        `http://localhost:3000/pages/${slug}`
+>>>>>>> e9f4b006f55e7ee1b7cef12b68cfe9dac2adf4e5
       );
 
       return response.data.data;
@@ -46,11 +50,14 @@ const pageSlice = createSlice({
 
       .addCase(getPageBySlug.pending, (state) => {
         state.loading = true;
+        state.page = null;
+        state.error = null;
       })
 
       .addCase(getPageBySlug.fulfilled, (state, action) => {
         state.loading = false;
         state.page = action.payload;
+        state.error = null;
       })
 
       .addCase(getPageBySlug.rejected, (state, action) => {
