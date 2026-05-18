@@ -16,6 +16,7 @@ import WorkWithClients from "../components/agency_components/WorkWithClients";
 import HeroSection from "../components/homepage/hero/HeroSection";
 import ProjectsSection from "../components/homepage/ProjectsSection";
 import SectionScrollBar from "../components/homepage/SectionScrollBar";
+import WorkCategoryMenu from "../components/Work_page/WorkCategoryMenu";
 
 export const componentMap = {
 
@@ -39,4 +40,6 @@ export const componentMap = {
   "hero-section":HeroSection,
   "project-section":ProjectsSection,
 
+  //work page
+  "work-category-menu": WorkCategoryMenu,
 };

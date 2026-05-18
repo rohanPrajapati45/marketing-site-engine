@@ -31,6 +31,7 @@ export const allowedSectionTypes = [
   "empty",
   "hero-section",
   "project-section",
+  "work-category-menu",
 ];
 
 

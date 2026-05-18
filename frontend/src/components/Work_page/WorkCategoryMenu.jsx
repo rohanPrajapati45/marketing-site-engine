@@ -2,189 +2,38 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useMemo,
 } from "react";
 
 import "./WorkCategoryMenu.css";
 
 import WorkTabs from "./WorkTabs";
+
 import WorkSubmenu from "./WorkSubmenu";
+
 import ProjectGrid from "./ProjectGrid";
+
 import RecentProjectsSection from "./RecentProjectsSection";
 
-const WorkCategoryMenu = () => {
 
-  const tabs = [
-    "Recent Projects",
-    "ALL Projects",
-    "By Industry",
-    "By Region",
-    "By Service",
-    "Coming Soon",
-  ];
 
-  const subCategories = {
+const WorkCategoryMenu = ({
+  section,
+}) => {
 
-    "By Industry": [
-      "Real Estate",
-      "Logistics",
-      "Ecommerce, Retail & QSR",
-      "Fintech & Banking",
-      "Insurance",
-      "Government & NGO",
-      "Telecom",
-      "Healthcare & Wellness",
-      "Media & Entertainment",
-      "B2B & Employee WorkForce",
-      "Corporate & Enterprise",
-      "Transportation & Logistics",
-      "Startups",
-      "Travel",
-      "FINTECH",
-    ],
+  const {
+    tabs = [],
+    subCategories = {},
+    projects = [],
+  } = section.data || {};
 
-    "By Region": [
-      "Libya",
-      "USA",
-      "UK",
-      "FRANCE",
-      "Tehran",
-      "LEBANON",
-      "SAUDI ARABIA",
-      "UAE",
-      "KUWAIT",
-      "QATAR",
-      "USA | UK | EU",
-      "AFRICA",
-      "IRAQ",
-      "JORDAN",
-    ],
 
-    "By Service": [
-      "E-Commerce Services",
-      "Website Development",
-      "Mobile App Development",
-      "Fintech Solutions",
-      "Loyalty Program Services",
-      "Games & Digital Activations",
-      "Emerging Tech & Innovation",
-      "UI/UX",
-      "AI & Data Intelligence",
-      "FINTECH",
-    ],
-  };
-
-  const projects = [
-    {
-      title: "NEO Digital Payment",
-      image: "/fintech-imgs/fintech1.webp",
-      industry: "Fintech & Banking",
-      region: "LEBANON",
-      service: "Fintech Solutions",
-      isComingSoon: false,
-    },
-    {
-      title: "CASH UNITED - Agent POS",
-      image: "/fintech-imgs/fintech2.webp",
-      industry: "Fintech & Banking",
-      region: "UAE",
-      service: "Fintech Solutions",
-      isComingSoon: false,
-    },
-    {
-      title: "EVO Wallet Lebanon",
-      image: "/fintech-imgs/fintech3.webp",
-      industry: "Fintech & Banking",
-      region: "LEBANON",
-      service: "Mobile App Development",
-      isComingSoon: false,
-    },
-    {
-      title: "AFRICELL Mobile Money",
-      image: "/fintech-imgs/fintech4.webp",
-      industry: "Telecom",
-      region: "AFRICA",
-      service: "Fintech Solutions",
-      isComingSoon: false,
-    },
-    {
-      title: "Patchi Sales App",
-      image: "/appdev-imgs/appdev3.webp",
-      industry: "Ecommerce, Retail & QSR",
-      region: "LEBANON",
-      service: "Mobile App Development",
-      isComingSoon: false,
-    },
-    {
-      title: "Debbas",
-      image: "/appdev-imgs/appdev1.webp",
-      industry: "Corporate & Enterprise",
-      region: "SAUDI ARABIA",
-      service: "Website Development",
-      isComingSoon: false,
-    },
-    {
-      title: "Life App",
-      image: "/appdev-imgs/appdev2.webp",
-      industry: "Healthcare & Wellness",
-      region: "UK",
-      service: "Mobile App Development",
-      isComingSoon: false,
-    },
-    {
-      title: "Enterprise Insights",
-      image: "/appdev-imgs/appdev4.webp",
-      industry: "Corporate & Enterprise",
-      region: "USA",
-      service: "AI & Data Intelligence",
-      isComingSoon: false,
-    },
-    {
-      title: "Courier Network",
-      image: "/appdev-imgs/appdev5.webp",
-      industry: "Transportation & Logistics",
-      region: "UAE",
-      service: "Mobile App Development",
-      isComingSoon: false,
-    },
-    {
-      title: "QSR Loyalty",
-      image: "/appdev-imgs/appdev6.webp",
-      industry: "Ecommerce, Retail & QSR",
-      region: "KUWAIT",
-      service: "Loyalty Program Services",
-      isComingSoon: false,
-    },
-    {
-      title: "Civic Portal",
-      image: "/appdev-imgs/appdev7.webp",
-      industry: "Government & NGO",
-      region: "QATAR",
-      service: "Website Development",
-      isComingSoon: false,
-    },
-    {
-      title: "Media Room",
-      image: "/appdev-imgs/appdev8.webp",
-      industry: "Media & Entertainment",
-      region: "FRANCE",
-      service: "UI/UX",
-      isComingSoon: true,
-    },
-    {
-      title: "Travel Concierge",
-      image: "/fintech-imgs/fintech5.webp",
-      industry: "Travel",
-      region: "USA | UK | EU",
-      service: "Emerging Tech & Innovation",
-      isComingSoon: true,
-    },
-  ];
 
   const [activeTab, setActiveTab] =
-    useState("Recent Projects");
+    useState("");
 
   const [baseView, setBaseView] =
-    useState("Recent Projects");
+    useState("");
 
   const [direction, setDirection] =
     useState("down");
@@ -201,20 +50,48 @@ const WorkCategoryMenu = () => {
   const [filterType, setFilterType] =
     useState(null);
 
-  const previousTab = useRef(
-    "Recent Projects"
-  );
 
-  const submenuTabs = [
-    "By Industry",
-    "By Region",
-    "By Service",
-  ];
 
+  const previousTab = useRef("");
+
+
+
+  // DYNAMIC SUBMENU TABS
+const submenuTabs = useMemo(
+  () => Object.keys(subCategories),
+  [subCategories]
+);
+
+
+  // SET DEFAULT TAB
+  useEffect(() => {
+
+    if (
+      tabs.length > 0 &&
+      !activeTab
+    ) {
+
+      setActiveTab(tabs[0]);
+
+      setBaseView(tabs[0]);
+
+    }
+
+  }, [tabs, activeTab]);
+
+
+
+  // CHECK SUBMENU
   const hasSubmenu =
     submenuTabs.includes(activeTab);
 
-  const resolveFilterType = (tab) => {
+
+
+  // RESOLVE FILTER TYPE
+  const resolveFilterType = (
+    tab
+  ) => {
+
     if (tab === "By Industry") {
       return "industry";
     }
@@ -230,62 +107,151 @@ const WorkCategoryMenu = () => {
     return null;
   };
 
-  const handleTabClick = (tab) => {
+
+
+  // HANDLE TAB CLICK
+  const handleTabClick = (
+    tab
+  ) => {
+
     setActiveTab(tab);
 
-    if (submenuTabs.includes(tab)) {
-      setFilterType(resolveFilterType(tab));
+
+
+    if (
+      submenuTabs.includes(tab)
+    ) {
+
+      setFilterType(
+        resolveFilterType(tab)
+      );
+
       setSelectedFilter(null);
+
       return;
     }
 
+
+
     setFilterType(null);
+
     setSelectedFilter(null);
+
     setBaseView(tab);
   };
 
+
+
+  // BASE PROJECTS
   const baseProjects =
-    baseView === "ALL Projects"
+
+    baseView ===
+    "ALL Projects"
+
       ? projects
-      : baseView === "Coming Soon"
+
+      : baseView ===
+        "Coming Soon"
+
       ? projects.filter(
-          (project) => project.isComingSoon
+          (project) =>
+            project.isComingSoon
         )
+
+      : baseView ===
+        "Recent Projects"
+
+      ? projects.filter(
+          (project) =>
+            project.isRecentProject
+        )
+
       : projects;
 
-  const handleFilterSelect = (item) => {
+
+
+  // FILTER SELECT
+  const handleFilterSelect = (
+    item
+  ) => {
+
     setSelectedFilter(item);
 
-    if (baseView === "Recent Projects") {
-      setBaseView("ALL Projects");
+
+
+    if (
+      baseView ===
+      "Recent Projects"
+    ) {
+
+      setBaseView(
+        "ALL Projects"
+      );
     }
   };
 
+
+
+  // FILTER PROJECTS
   const projectsToRender =
-    selectedFilter && filterType
-      ? baseProjects.filter((project) => {
-          if (filterType === "industry") {
-            return project.industry === selectedFilter;
-          }
 
-          if (filterType === "region") {
-            return project.region === selectedFilter;
-          }
+    selectedFilter &&
+    filterType
 
-          if (filterType === "service") {
-            return project.service === selectedFilter;
-          }
+      ? baseProjects.filter(
+          (project) => {
 
-          return true;
-        })
+            if (
+              filterType ===
+              "industry"
+            ) {
+
+              return (
+                project.industry ===
+                selectedFilter
+              );
+            }
+
+            if (
+              filterType ===
+              "region"
+            ) {
+
+              return (
+                project.region ===
+                selectedFilter
+              );
+            }
+
+            if (
+              filterType ===
+              "service"
+            ) {
+
+              return (
+                project.service ===
+                selectedFilter
+              );
+            }
+
+            return true;
+          }
+        )
+
       : baseProjects;
 
+
+
+  // MENU ANIMATION
   useEffect(() => {
 
-    const currentTabName = activeTab;
+    const currentTabName =
+      activeTab;
 
     const previousTabName =
       previousTab.current;
+
+
 
     const currentIndex =
       submenuTabs.indexOf(
@@ -297,16 +263,25 @@ const WorkCategoryMenu = () => {
         previousTabName
       );
 
+
+
     const currentHasSubmenu =
       currentIndex !== -1;
 
     const previousHasSubmenu =
       previousIndex !== -1;
 
+
+
     if (!currentHasSubmenu) {
-      previousTab.current = activeTab;
+
+      previousTab.current =
+        activeTab;
+
       return;
     }
+
+
 
     if (previousHasSubmenu) {
 
@@ -314,41 +289,60 @@ const WorkCategoryMenu = () => {
         previousTabName
       );
 
+
+
       if (
         currentIndex >
         previousIndex
       ) {
+
         setDirection("up");
       }
 
       else {
+
         setDirection("down");
       }
     }
 
     else {
+
       setPreviousMenu(null);
+
       setDirection("down");
     }
 
+
+
     setIsAnimating(true);
 
-    const timer = setTimeout(() => {
 
-      setIsAnimating(false);
 
-      setPreviousMenu(null);
+    const timer =
+      setTimeout(() => {
 
-    }, 900);
+        setIsAnimating(false);
 
-    previousTab.current = activeTab;
+        setPreviousMenu(null);
+
+      }, 900);
+
+
+
+    previousTab.current =
+      activeTab;
+
+
 
     return () =>
       clearTimeout(timer);
 
-  }, [activeTab]);
+  }, [activeTab, submenuTabs]);
+
+
 
   return (
+
     <main id="AOS">
 
       <div className="max-w-[1500px] w-full px-[15px] mx-auto mt-[45px]">
@@ -358,30 +352,61 @@ const WorkCategoryMenu = () => {
           <WorkTabs
             tabs={tabs}
             activeTab={activeTab}
-            setActiveTab={handleTabClick}
+            setActiveTab={
+              handleTabClick
+            }
           />
+
+
 
           <WorkSubmenu
             activeTab={activeTab}
-            subCategories={subCategories}
-            previousMenu={previousMenu}
-            isAnimating={isAnimating}
+            subCategories={
+              subCategories
+            }
+            previousMenu={
+              previousMenu
+            }
+            isAnimating={
+              isAnimating
+            }
             direction={direction}
-            hasSubmenu={hasSubmenu}
-            selectedFilter={selectedFilter}
-            onSelectFilter={handleFilterSelect}
+            hasSubmenu={
+              hasSubmenu
+            }
+            selectedFilter={
+              selectedFilter
+            }
+            onSelectFilter={
+              handleFilterSelect
+            }
           />
+
+
 
           {baseView ===
           "Recent Projects" ? (
-            <RecentProjectsSection />
+
+            <RecentProjectsSection
+              projects={
+                projectsToRender
+              }
+            />
+
           ) : (
+
             <section className="mt-[18px]">
+
               <div className="project-section-animate">
+
                 <ProjectGrid
-                  projects={projectsToRender}
+                  projects={
+                    projectsToRender
+                  }
                 />
+
               </div>
+
             </section>
           )}
 
