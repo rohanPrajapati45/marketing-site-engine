@@ -276,33 +276,46 @@ function Home() {
       return idx;
     }
 
-    function navigateToSection(direction) {
-      if (isSnapping.current) return false;
+    const navigateToSection = (direction) => {
+      if (isSnapping.current) return;
 
       const currentIndex = getCurrentIndex();
 
       const targetIndex = Math.min(
         sectionEls.current.length - 1,
-        Math.max(0, direction > 0 ? currentIndex + 1 : currentIndex - 1),
+        Math.max(0, currentIndex + direction),
       );
 
-      if (targetIndex !== currentIndex) {
-        snapToSlide(targetIndex);
+      if (targetIndex === currentIndex) return;
 
-        return true;
-      }
+      isSnapping.current = true;
 
-      return false;
-    }
+      const target = sectionEls.current[targetIndex];
+
+      window.scrollTo({
+        top: target.offsetTop,
+        behavior: "smooth",
+      });
+
+      // HARD LOCK
+      setTimeout(() => {
+        isSnapping.current = false;
+      }, 1200);
+    };
 
     function onWheel(event) {
-      event.preventDefault();
-
-      if (isSnapping.current) return;
+      // ALWAYS BLOCK DURING SNAP
+      if (isSnapping.current) {
+        event.preventDefault();
+        return;
+      }
 
       const delta = event.deltaY;
 
-      if (Math.abs(delta) < 2) return;
+      // IGNORE TINY MOVES
+      if (Math.abs(delta) < 15) return;
+
+      event.preventDefault();
 
       navigateToSection(delta > 0 ? 1 : -1);
     }
@@ -443,19 +456,17 @@ function Home() {
         }
 
         return (
-          <div key={section._id} id={section._id}>
-            <Component
-              section={section}
-              heroTheme={heroTheme}
-              showHeroText={showHeroText}
-              typingRef={typingRef}
-              popupPhase={popupPhase}
-              openPopup={openPopup}
-              closePopup={closePopup}
-              gifRef={gifRef}
-              heroVideoRef={heroVideoRef}
-            />
-          </div>
+          <Component
+            section={section}
+            heroTheme={heroTheme}
+            showHeroText={showHeroText}
+            typingRef={typingRef}
+            popupPhase={popupPhase}
+            openPopup={openPopup}
+            closePopup={closePopup}
+            gifRef={gifRef}
+            heroVideoRef={heroVideoRef}
+          />
         );
       })}
     </div>
