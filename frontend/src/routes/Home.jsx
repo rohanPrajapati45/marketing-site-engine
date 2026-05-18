@@ -26,22 +26,25 @@ function Home() {
     dispatch(getPageBySlug("home"));
   }, [dispatch]);
 
-  const pageSections = page?.sections || [];
-  const sections = pageSections.map((section, index) => ({
-    ...section,
-    id:
-      section.type === "hero-section" || section.type === "hero"
-        ? "hero"
-        : section.type === "cta-section" || section.type === "cta"
-        ? "cta"
-        : `project-${index}`,
-    label:
-      section.type === "hero-section" || section.type === "hero"
-        ? "Hero"
-        : section.type === "cta-section" || section.type === "cta"
-        ? section.data?.heading || "Call To Action"
-        : section.data?.clientName || `Project ${index}`,
-  }));
+  const pageSections = page?.sections;
+  const sections = useMemo(() => {
+    const list = pageSections || [];
+    return list.map((section, index) => ({
+      ...section,
+      id:
+        section.type === "hero-section" || section.type === "hero"
+          ? "hero"
+          : section.type === "cta-section" || section.type === "cta"
+          ? "cta"
+          : `project-${index}`,
+      label:
+        section.type === "hero-section" || section.type === "hero"
+          ? "Hero"
+          : section.type === "cta-section" || section.type === "cta"
+          ? section.data?.heading || "Call To Action"
+          : section.data?.clientName || `Project ${index}`,
+    }));
+  }, [pageSections]);
 
   const [popupPhase, setPopupPhase] = useState("closed");
 
@@ -55,12 +58,17 @@ function Home() {
     }
 
     const sectionId = sections[activeSectionIndex]?.id;
-    const sectionEl =
+    const wrapperEl =
       typeof document !== "undefined"
         ? document.getElementById(sectionId)
         : null;
 
-    return sectionEl?.dataset?.theme || sections[activeSectionIndex]?.theme || "dark";
+    // Check the wrapper first, then look for a child with data-theme
+    const themeEl = wrapperEl?.dataset?.theme
+      ? wrapperEl
+      : wrapperEl?.querySelector("[data-theme]");
+
+    return themeEl?.dataset?.theme || sections[activeSectionIndex]?.theme || "dark";
   }, [activeSectionIndex, themeTick, sections]);
 
   const { typingRef, showHeroText } = useTypingAnimation();
@@ -119,20 +127,22 @@ function Home() {
   useEffect(() => {
     const sectionId = sections[activeSectionIndex]?.id;
 
-    const sectionEl =
+    const wrapperEl =
       typeof document !== "undefined"
         ? document.getElementById(sectionId)
         : null;
 
-    if (!sectionEl) return;
+    if (!wrapperEl) return;
 
     const observer = new MutationObserver(() => {
       setThemeTick((tick) => tick + 1);
     });
 
-    observer.observe(sectionEl, {
+    // Watch both the wrapper and its children for data-theme changes
+    observer.observe(wrapperEl, {
       attributes: true,
       attributeFilter: ["data-theme"],
+      subtree: true,
     });
 
     return () => observer.disconnect();
@@ -211,6 +221,9 @@ function Home() {
   // SNAP SCROLL
   useEffect(() => {
     if (!sections.length) return;
+
+    // Reset snap lock whenever this effect re-runs to prevent deadlock
+    isSnapping.current = false;
 
     let rafId = null;
 
@@ -474,17 +487,19 @@ function Home() {
         }
 
         return (
-          <Component
-            section={section}
-            heroTheme={heroTheme}
-            showHeroText={showHeroText}
-            typingRef={typingRef}
-            popupPhase={popupPhase}
-            openPopup={openPopup}
-            closePopup={closePopup}
-            gifRef={gifRef}
-            heroVideoRef={heroVideoRef}
-          />
+          <div key={section.id} id={section.id}>
+            <Component
+              section={section}
+              heroTheme={heroTheme}
+              showHeroText={showHeroText}
+              typingRef={typingRef}
+              popupPhase={popupPhase}
+              openPopup={openPopup}
+              closePopup={closePopup}
+              gifRef={gifRef}
+              heroVideoRef={heroVideoRef}
+            />
+          </div>
         );
       })}
     </div>

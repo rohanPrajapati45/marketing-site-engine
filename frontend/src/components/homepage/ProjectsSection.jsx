@@ -68,7 +68,7 @@ export default function ProjectsSection({ section }) {
   }, [section.id]);
 
   return (
-    <section id={section.id} className="project-slide" data-theme={theme}>
+    <section className="project-slide" data-theme={theme}>
       {/* BG IMAGE */}
 
       <img src={mockupImage} alt={mockupAlt} className="slide-bg" />
