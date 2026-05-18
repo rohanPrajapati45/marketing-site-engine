@@ -95,14 +95,6 @@ const caseStudySchema = new mongoose.Schema(
       required: true,
     },
 
-    // Maps to: style={{ background: caseStudy.accentColor }}
-    // The 4px colored line below the hero image
-    accentColor: {
-      type: String,
-      required: true,
-      default: '#000000',
-    },
-
     // Maps to: <p className="cs-hero-overview">{caseStudy.overview}</p>
     overview: {
       type: String,
