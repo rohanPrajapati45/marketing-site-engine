@@ -68,29 +68,7 @@ function Home() {
 
   const setHideNav = outletContext?.setHideNav ?? (() => {});
 
-  // LOADING
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
-  }
-
-  // ERROR
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-500">
-        {error}
-      </div>
-    );
-  }
-
-  // NO PAGE
-  if (!page) {
-    return null;
-  }
-
+  // POPUP FUNCTIONS
   const openPopup = () => {
     if (popupPhase !== "closed") return;
 
@@ -111,6 +89,7 @@ function Home() {
     }, 600);
   };
 
+  // NAV HIDE
   useEffect(() => {
     setHideNav(popupPhase !== "closed");
 
@@ -119,6 +98,7 @@ function Home() {
     };
   }, [popupPhase, setHideNav]);
 
+  // THEME OBSERVER
   useEffect(() => {
     const sectionId = sections[activeSectionIndex]?._id;
 
@@ -141,12 +121,14 @@ function Home() {
     return () => observer.disconnect();
   }, [activeSectionIndex, sections]);
 
+  // HTML DATA THEME
   useEffect(() => {
     if (typeof document === "undefined") return;
 
     document.documentElement.dataset.homeTheme = currentTheme;
   }, [currentTheme]);
 
+  // CLEANUP
   useEffect(() => {
     return () => {
       if (typeof document === "undefined") return;
@@ -155,6 +137,7 @@ function Home() {
     };
   }, []);
 
+  // TIMER CLEANUP
   useEffect(() => {
     return () => {
       if (popupTimerRef.current) {
@@ -163,6 +146,7 @@ function Home() {
     };
   }, []);
 
+  // SCROLLBAR CLICK
   const handleSectionClick = (index) => {
     setActiveSectionIndex(index);
 
@@ -173,6 +157,8 @@ function Home() {
 
   // ACTIVE SECTION OBSERVER
   useEffect(() => {
+    if (!sections.length) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -203,6 +189,8 @@ function Home() {
 
   // SNAP SCROLL
   useEffect(() => {
+    if (!sections.length) return;
+
     let rafId = null;
 
     function collectSections() {
@@ -300,6 +288,7 @@ function Home() {
 
       if (targetIndex !== currentIndex) {
         snapToSlide(targetIndex);
+
         return true;
       }
 
@@ -405,6 +394,29 @@ function Home() {
       }
     };
   }, [sections]);
+
+  // LOADING
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
+  // ERROR
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
+  }
+
+  // NO PAGE
+  if (!page) {
+    return null;
+  }
 
   return (
     <div className="home-page">
