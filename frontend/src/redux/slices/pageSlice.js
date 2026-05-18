@@ -10,11 +10,7 @@ export const getPageBySlug = createAsyncThunk(
     try {
 
       const response = await axios.get(
-<<<<<<< HEAD
         `http://localhost:8080/pages/${slug}`
-=======
-        `http://localhost:3000/pages/${slug}`
->>>>>>> e9f4b006f55e7ee1b7cef12b68cfe9dac2adf4e5
       );
 
       return response.data.data;
