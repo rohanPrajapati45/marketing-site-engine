@@ -32,7 +32,7 @@ const SectionScrollBar = ({ sections, activeIndex, onDotClick, theme = 'dark' })
           height: 2px;
           background: ${lineColor};
           width: 15px;
-          border-radius: 2px;
+          border-radius: 10px;
           transition:
             width 0.25s ease,
             height 0.25s ease,
@@ -51,6 +51,8 @@ const SectionScrollBar = ({ sections, activeIndex, onDotClick, theme = 'dark' })
 
         .scrollbar-item:not(.is-active):hover .scrollbar-line {
           width: 26px;
+          height: 5px;
+          padding: 7px 7px;
           background: ${hoverColor};
         }
 
