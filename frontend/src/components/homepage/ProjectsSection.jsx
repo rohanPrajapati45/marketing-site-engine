@@ -41,7 +41,7 @@ export default function ProjectsSection({ section }) {
   // CONTENT ANIMATION
   // CONTENT ANIMATION
   useEffect(() => {
-    const sectionEl = document.getElementById(section._id);
+    const sectionEl = document.getElementById(section.id);
 
     if (!sectionEl) return;
 
@@ -65,10 +65,10 @@ export default function ProjectsSection({ section }) {
     observer.observe(contentEl);
 
     return () => observer.disconnect();
-  }, [section._id]);
+  }, [section.id]);
 
   return (
-    <section id={section._id} className="project-slide" data-theme={theme}>
+    <section id={section.id} className="project-slide" data-theme={theme}>
       {/* BG IMAGE */}
 
       <img src={mockupImage} alt={mockupAlt} className="slide-bg" />

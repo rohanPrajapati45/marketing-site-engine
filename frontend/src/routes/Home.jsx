@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +13,7 @@ import SectionScrollBar from "../components/homepage/SectionScrollBar";
 import { useTypingAnimation } from "../hooks/useTypingAnimation";
 import { useVideoTheme } from "../hooks/useMediaTheme";
 
+// eslint-disable-next-line no-unused-vars
 const typingPrefix = "For";
 
 function Home() {
@@ -24,7 +26,22 @@ function Home() {
     dispatch(getPageBySlug("home"));
   }, [dispatch]);
 
-  const sections = page?.sections || [];
+  const pageSections = page?.sections || [];
+  const sections = pageSections.map((section, index) => ({
+    ...section,
+    id:
+      section.type === "hero-section" || section.type === "hero"
+        ? "hero"
+        : section.type === "cta-section" || section.type === "cta"
+        ? "cta"
+        : `project-${index}`,
+    label:
+      section.type === "hero-section" || section.type === "hero"
+        ? "Hero"
+        : section.type === "cta-section" || section.type === "cta"
+        ? section.data?.heading || "Call To Action"
+        : section.data?.clientName || `Project ${index}`,
+  }));
 
   const [popupPhase, setPopupPhase] = useState("closed");
 
@@ -33,16 +50,17 @@ function Home() {
   const [themeTick, setThemeTick] = useState(0);
 
   const currentTheme = useMemo(() => {
-    const sectionId = sections[activeSectionIndex]?._id;
+    if (themeTick) {
+      // `themeTick` is intentionally included so this memo re-evaluates when the theme attribute changes.
+    }
 
+    const sectionId = sections[activeSectionIndex]?.id;
     const sectionEl =
       typeof document !== "undefined"
         ? document.getElementById(sectionId)
         : null;
 
-    return (
-      sectionEl?.dataset?.theme || sections[activeSectionIndex]?.theme || "dark"
-    );
+    return sectionEl?.dataset?.theme || sections[activeSectionIndex]?.theme || "dark";
   }, [activeSectionIndex, themeTick, sections]);
 
   const { typingRef, showHeroText } = useTypingAnimation();
@@ -65,8 +83,6 @@ function Home() {
   });
 
   const outletContext = useOutletContext();
-
-  const setHideNav = outletContext?.setHideNav ?? (() => {});
 
   // POPUP FUNCTIONS
   const openPopup = () => {
@@ -91,16 +107,17 @@ function Home() {
 
   // NAV HIDE
   useEffect(() => {
+    const setHideNav = outletContext?.setHideNav ?? (() => {});
     setHideNav(popupPhase !== "closed");
 
     return () => {
       setHideNav(false);
     };
-  }, [popupPhase, setHideNav]);
+  }, [popupPhase, outletContext]);
 
   // THEME OBSERVER
   useEffect(() => {
-    const sectionId = sections[activeSectionIndex]?._id;
+    const sectionId = sections[activeSectionIndex]?.id;
 
     const sectionEl =
       typeof document !== "undefined"
@@ -128,16 +145,20 @@ function Home() {
     document.documentElement.dataset.homeTheme = currentTheme;
   }, [currentTheme]);
 
-  // CLEANUP
+  // HIDE DEFAULT BROWSER SCROLLBAR ON HOME
   useEffect(() => {
-    return () => {
-      if (typeof document === "undefined") return;
+    if (typeof document === "undefined") return;
 
-      delete document.documentElement.dataset.homeTheme;
+    document.documentElement.classList.add("no-scrollbar");
+    document.body.classList.add("no-scrollbar");
+
+    return () => {
+      document.documentElement.classList.remove("no-scrollbar");
+      document.body.classList.remove("no-scrollbar");
     };
   }, []);
 
-  // TIMER CLEANUP
+  // CLEANUP
   useEffect(() => {
     return () => {
       if (popupTimerRef.current) {
@@ -150,7 +171,7 @@ function Home() {
   const handleSectionClick = (index) => {
     setActiveSectionIndex(index);
 
-    document.getElementById(sections[index]?._id)?.scrollIntoView({
+    document.getElementById(sections[index]?.id)?.scrollIntoView({
       behavior: "smooth",
     });
   };
@@ -164,7 +185,7 @@ function Home() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = sections.findIndex(
-              (section) => section._id === entry.target.id,
+              (section) => section.id === entry.target.id,
             );
 
             if (index !== -1) {
@@ -179,7 +200,7 @@ function Home() {
     );
 
     const observed = sections
-      .map((section) => document.getElementById(section._id))
+      .map((section) => document.getElementById(section.id))
       .filter(Boolean);
 
     observed.forEach((el) => observer.observe(el));
@@ -195,7 +216,7 @@ function Home() {
 
     function collectSections() {
       sectionEls.current = sections
-        .map((s) => document.getElementById(s._id))
+        .map((s) => document.getElementById(s.id))
         .filter(Boolean);
     }
 
@@ -258,22 +279,21 @@ function Home() {
     function getCurrentIndex() {
       collectSections();
 
-      const scrollY = window.scrollY;
-
       const els = sectionEls.current;
-
       if (!els.length) return 0;
 
-      let idx = 0;
+      let closestIndex = 0;
+      let closestDistance = Math.abs(els[0].getBoundingClientRect().top);
 
-      for (let i = els.length - 1; i >= 0; i--) {
-        if (scrollY >= els[i].offsetTop - window.innerHeight / 3) {
-          idx = i;
-          break;
+      for (let i = 1; i < els.length; i++) {
+        const distance = Math.abs(els[i].getBoundingClientRect().top);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = i;
         }
       }
 
-      return idx;
+      return closestIndex;
     }
 
     const navigateToSection = (direction) => {
@@ -288,63 +308,60 @@ function Home() {
 
       if (targetIndex === currentIndex) return;
 
-      isSnapping.current = true;
-
-      const target = sectionEls.current[targetIndex];
-
-      window.scrollTo({
-        top: target.offsetTop,
-        behavior: "smooth",
-      });
-
-      // HARD LOCK
-      //done
-      setTimeout(() => {
-        isSnapping.current = false;
-      }, 1200);
+      snapToSlide(targetIndex);
     };
 
     function onWheel(event) {
-      // ALWAYS BLOCK DURING SNAP
       if (isSnapping.current) {
         event.preventDefault();
         return;
       }
 
-      const delta = event.deltaY;
+      let delta = event.deltaY;
+      if (event.deltaMode === 1) {
+        delta *= 10;
+      }
 
-      // IGNORE TINY MOVES
-      if (Math.abs(delta) < 15) return;
+      if (Math.abs(delta) < 4) return;
 
       event.preventDefault();
-
+      event.stopPropagation();
       navigateToSection(delta > 0 ? 1 : -1);
     }
 
     function onKeyDown(event) {
       const key = event.key;
+      const code = event.code;
 
       if (
         key === "ArrowDown" ||
         key === "ArrowRight" ||
         key === "PageDown" ||
-        key === " "
+        key === " " ||
+        key === "Spacebar" ||
+        code === "Space"
       ) {
         event.preventDefault();
-
+        event.stopPropagation();
         navigateToSection(1);
-      } else if (key === "ArrowUp" || key === "ArrowLeft" || key === "PageUp") {
+      } else if (
+        key === "ArrowUp" ||
+        key === "ArrowLeft" ||
+        key === "PageUp"
+      ) {
         event.preventDefault();
-
+        event.stopPropagation();
         navigateToSection(-1);
       } else if (key === "Home") {
         event.preventDefault();
+        event.stopPropagation();
 
         if (!isSnapping.current) {
           snapToSlide(0);
         }
       } else if (key === "End") {
         event.preventDefault();
+        event.stopPropagation();
 
         if (!isSnapping.current) {
           snapToSlide(sectionEls.current.length - 1);
