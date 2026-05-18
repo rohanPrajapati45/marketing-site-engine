@@ -108,29 +108,30 @@ const services = [
   },
 ];
 
-export default function StickySidebarSection() {
+export default function StickySidebarSection({ section }) {
+  const { services = [] } = section.data;
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [sidebarOffset, setSidebarOffset] = useState(0);
-    const [isLocked, setIsLocked] = useState(false);
-    useEffect(() => {
-  const handleScroll = () => {
-    const scrollTop = window.scrollY;
-    const docHeight =
-      document.documentElement.scrollHeight - window.innerHeight;
+  const [isLocked, setIsLocked] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
 
-    const scrollProgress = scrollTop / docHeight; // 0 → 1
+      const scrollProgress = scrollTop / docHeight; // 0 → 1
 
-    if (scrollProgress >= 0.7) {
-      setIsLocked(true);
-    } else {
-      setIsLocked(false);
-    }
-  };
+      if (scrollProgress >= 0.7) {
+        setIsLocked(true);
+      } else {
+        setIsLocked(false);
+      }
+    };
 
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const sectionRefs = useRef([]);
 
@@ -149,7 +150,7 @@ export default function StickySidebarSection() {
       },
       {
         threshold: 0.5,
-      }
+      },
     );
 
     sections.forEach((section) => {
@@ -163,8 +164,8 @@ export default function StickySidebarSection() {
 
   return (
     <section className="flex">
-     {/* SIDEBAR */}
-        <aside
+      {/* SIDEBAR */}
+      <aside
         className="
             sticky
             top-0
@@ -176,19 +177,20 @@ export default function StickySidebarSection() {
             xl:block
         "
         style={{
-            background:
-            "linear-gradient(to bottom, #2D2E32, #0D0F13)",
+          background: "linear-gradient(to bottom, #2D2E32, #0D0F13)",
         }}
-        >
+      >
         {/* INNER CONTENT */}
-        <div className="flex h-full  px-10 py-22"
-        style={{
-           transform: `translateY(${activeIndex * 80}px)`,
-           transition: "transform 800ms cubic-bezier(0.5,1,0.1,1)", 
-        }}>
-            <div className="w-full">
+        <div
+          className="flex h-full  px-10 py-22"
+          style={{
+            transform: `translateY(${activeIndex * 80}px)`,
+            transition: "transform 800ms cubic-bezier(0.5,1,0.1,1)",
+          }}
+        >
+          <div className="w-full">
             {services.map((service, index) => (
-                <div
+              <div
                 key={service.title}
                 className={`
                     group
@@ -200,15 +202,15 @@ export default function StickySidebarSection() {
                     duration-500
                     ease-[cubic-bezier(0.22,1,0.36,1)]
                     ${
-                    activeIndex === index
+                      activeIndex === index
                         ? "translate-x-[1px]"
                         : "translate-x-0"
                     }
                 `}
-                >
+              >
                 {/* SMALL DEFAULT LINE */}
                 <span
-                    className="
+                  className="
                     absolute
                     left-[230px]
                     top-1/2
@@ -216,20 +218,20 @@ export default function StickySidebarSection() {
                     -translate-y-1/2
                     bg-white/25
                     "
-                    style={{
+                  style={{
                     width: activeIndex === index ? "56px" : "22px",
                     transition:
-                        "width 500ms cubic-bezier(0.22,1,0.36,1), background-color 500ms cubic-bezier(0.22,1,0.36,1)",
+                      "width 500ms cubic-bezier(0.22,1,0.36,1), background-color 500ms cubic-bezier(0.22,1,0.36,1)",
                     backgroundColor:
-                        activeIndex === index
+                      activeIndex === index
                         ? "rgba(255,255,255,0.9)"
                         : "rgba(255,255,255,0.25)",
-                    }}
+                  }}
                 />
 
                 {/* TEXT */}
                 <span
-                    className={`
+                  className={`
                     w-full
                     pr-[50px]
                     text-right
@@ -240,83 +242,83 @@ export default function StickySidebarSection() {
                     ease-[cubic-bezier(0.22,1,0.36,1)]
                     uppercase
                     ${
-                        activeIndex === index
+                      activeIndex === index
                         ? "font-medium text-[#f4f4f4]"
                         : "font-medium text-white/35"
                     }
                     `}
                 >
-                    {service.navTitle}
+                  {service.navTitle}
                 </span>
-                </div>
+              </div>
             ))}
-            </div>
+          </div>
         </div>
-        </aside>
+      </aside>
 
       {/* CONTENT */}
       <div className="flex-1 bg-[#f4f4f4]">
-  {services.map((service, index) => {
-    const isReverse = index % 2 !== 0;
+        {services.map((service, index) => {
+          const isReverse = index % 2 !== 0;
 
-    return (
-      <section
-        key={service.title}
-        ref={(el) => (sectionRefs.current[index] = el)}
-        className={`flex transition-all duration-500 ${
-            activeIndex === index ? "text-[#111]" : "text-[#999]"
-        }`}
-        >
-        <div
-            className={`grid h-[630px] w-full items-start overflow-hidden xl:grid-cols-2 ${
-            isReverse ? "xl:[&>*:first-child]:order-2" : ""
-            }`}
-        >
-            {/* TEXT SIDE */}
-            <div className="flex h-full py-10">
-        <div className="w-full px-5 xl:px-8">
-            <h1 className="mb-3 text-[40px] font-bold">
-            {service.title}
-            </h1>
+          return (
+            <section
+              key={service.title}
+              ref={(el) => (sectionRefs.current[index] = el)}
+              className={`flex transition-all duration-500 ${
+                activeIndex === index ? "text-[#111]" : "text-[#999]"
+              }`}
+            >
+              <div
+                className={`grid h-[630px] w-full items-start overflow-hidden xl:grid-cols-2 ${
+                  isReverse ? "xl:[&>*:first-child]:order-2" : ""
+                }`}
+              >
+                {/* TEXT SIDE */}
+                <div className="flex h-full py-10">
+                  <div className="w-full px-5 xl:px-8">
+                    <h1 className="mb-3 text-[40px] font-bold">
+                      {service.title}
+                    </h1>
 
-            <p className="mb-12 text-[18px] leading-[1.8] ">
-            {service.description}
-            </p>
+                    <p className="mb-12 text-[18px] leading-[1.8] ">
+                      {service.description}
+                    </p>
 
-            <ul className=" font-[600] ">
-            {service.items.map((item) => (
-                <li
-                key={item}
-                className="flex items-start text-[16px] leading-[1.7]"
-                >
-                <span className="mt-[0px] shrink-0">—</span>
+                    <ul className=" font-[600] ">
+                      {service.items.map((item) => (
+                        <li
+                          key={item}
+                          className="flex items-start text-[16px] leading-[1.7]"
+                        >
+                          <span className="mt-[0px] shrink-0">—</span>
 
-                <span>{item}</span>
-                </li>
-            ))}
-            </ul>
-        </div>
-        </div>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
 
-        {/* IMAGE SIDE */}
-        <div className="relative h-full">
-        <div className="h-full overflow-hidden">
-            <img
-            src={service.image}
-            alt={service.title}
-            className={`block h-full w-full object-cover transition-all duration-700 ease-out ${
-                activeIndex === index
-                ? "scale-100 opacity-100"
-                : "scale-100 opacity-75"
-            }`}
-            />
-        </div>
-        </div>
-    </div>
-    </section>
-    );
-  })}
-</div>
+                {/* IMAGE SIDE */}
+                <div className="relative h-full">
+                  <div className="h-full overflow-hidden">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className={`block h-full w-full object-cover transition-all duration-700 ease-out ${
+                        activeIndex === index
+                          ? "scale-100 opacity-100"
+                          : "scale-100 opacity-75"
+                      }`}
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+          );
+        })}
+      </div>
     </section>
   );
 }

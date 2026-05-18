@@ -16,6 +16,7 @@ import WorkWithClients from "../components/agency_components/WorkWithClients";
 import HeroSection from "../components/homepage/hero/HeroSection";
 import ProjectsSection from "../components/homepage/ProjectsSection";
 import SectionScrollBar from "../components/homepage/SectionScrollBar";
+import StickySidebarSection from "../components/what-we-do/StickySidebarSection";
 
 export const componentMap = {
 
@@ -38,5 +39,8 @@ export const componentMap = {
   //home page
   "hero-section":HeroSection,
   "project-section":ProjectsSection,
+
+  //what-we-do
+  "sticky-services": StickySidebarSection,
 
 };

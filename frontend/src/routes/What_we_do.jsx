@@ -1,14 +1,63 @@
-import React from "react";
-import Hero from "../components/what-we-do/Hero";
-import StickySidebarSection from "../components/what-we-do/StickySidebarSection";
-import SolutionsCTA from "../components/what-we-do/SolutionsCTA";
+import React, { useEffect } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { getPageBySlug } from "../redux/slices/pageSlice";
+
+import { componentMap } from "../utils/componentMap";
 
 function What_we_do() {
-  return <div>
-      <Hero/>
-      <StickySidebarSection/>
-      <SolutionsCTA/>
+  const dispatch = useDispatch();
+
+  const { page, loading, error } = useSelector((state) => state.page);
+
+  // FETCH PAGE
+  useEffect(() => {
+    dispatch(getPageBySlug("what-we-do"));
+  }, [dispatch]);
+
+  // LOADING
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading...
+      </div>
+    );
+  }
+
+  // ERROR
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
+  }
+
+  // NO PAGE
+  if (!page) {
+    return null;
+  }
+
+  return (
+    <div>
+      {page.sections?.map((section) => {
+        const Component = section.data?.cardType
+          ? componentMap[section.data.cardType]
+          : componentMap[section.type];
+
+        if (!Component) {
+          console.warn(
+            `No component found for ${section.data?.cardType || section.type}`,
+          );
+
+          return null;
+        }
+
+        return <Component key={section._id} section={section} />;
+      })}
     </div>
+  );
 }
 
 export default What_we_do;
