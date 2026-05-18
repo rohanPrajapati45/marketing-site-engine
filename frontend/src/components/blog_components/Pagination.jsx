@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 
-function Pagination() {
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const totalPages = 5;
-
+function Pagination({ currentPage, totalPages, onPageChange }) {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };

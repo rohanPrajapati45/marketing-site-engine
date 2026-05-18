@@ -27,6 +27,8 @@ import adminRouter from './routes/adminPageRouter.js';
 import sectionRouter from './routes/adminSectionRouter.js';
 import publicRouter from './routes/publicPageRouter.js';
 import utilityRouter from './routes/utilityRouter.js';
+import blogRouter from './routes/blogPage/adminBlogRouter.js';
+import blogPublicRouter from './routes/blogPage/publicBlogRouter.js';
 
 const app=express();
 
@@ -71,6 +73,9 @@ app.use('/admin',adminRouter);
 app.use('/admin',sectionRouter);
 app.use('/admin',utilityRouter);
 app.use('/',publicRouter);
+
+app.use('/admin',blogRouter);
+app.use('/',blogPublicRouter);
 
 
 const startServer = async () => {
