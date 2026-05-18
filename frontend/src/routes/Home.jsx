@@ -298,6 +298,7 @@ function Home() {
       });
 
       // HARD LOCK
+      //done
       setTimeout(() => {
         isSnapping.current = false;
       }, 1200);
