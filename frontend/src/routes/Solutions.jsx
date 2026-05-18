@@ -1,12 +1,50 @@
-import { useSolutions } from '../hooks/useSolutions';
-import SolutionsPageHeader from '../components/solutions/SolutionsPageHeader';
-import SolutionSection from '../components/solutions/SolutionSection';
-import '../styles/solution.css';
+import React, {
+  useEffect,
+} from "react";
+
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
+
+import {
+  getPageBySlug,
+} from "../redux/slices/pageSlice";
+
+import {
+  componentMap,
+} from "../utils/componentMap";
+
+import "../styles/solution.css";
 
 function Solutions() {
-  const { header, solutions, loading, error } = useSolutions();
 
+  const dispatch = useDispatch();
+
+  const {
+    page,
+    loading,
+    error,
+  } = useSelector(
+    (state) => state.page
+  );
+
+
+
+  // FETCH PAGE
+  useEffect(() => {
+
+    dispatch(
+      getPageBySlug("solutions")
+    );
+
+  }, [dispatch]);
+
+
+
+  // LOADING
   if (loading) {
+
     return (
       <div className="solutions-page">
         <div className="solutions-loading">
@@ -16,25 +54,67 @@ function Solutions() {
     );
   }
 
+
+
+  // ERROR
   if (error) {
+
     return (
       <div className="solutions-page">
         <div className="solutions-error">
-          <p>{error || 'Failed to load solutions. Please try again.'}</p>
+          <p>{error}</p>
         </div>
       </div>
     );
   }
 
-  return (
-    <div className="solutions-page">
-      <SolutionsPageHeader header={header} />
 
-      {solutions.map((solution) => (
-        <SolutionSection key={solution.id} solution={solution} />
-      ))}
+
+  // NO PAGE
+  if (!page) {
+    return null;
+  }
+
+
+
+  return (
+
+    <div className="solutions-page">
+
+      {page.sections?.map(
+        (section) => {
+
+          const Component =
+            componentMap[
+              section.type
+            ];
+
+
+
+          if (!Component) {
+
+            console.warn(
+              `No component found for ${section.type}`
+            );
+
+            return null;
+          }
+
+
+
+          return (
+            <Component
+              key={section._id}
+              section={section}
+            />
+          );
+        }
+      )}
+
+
 
       <section className="solutions-footer-spacer" />
+
     </div>
   );
 }

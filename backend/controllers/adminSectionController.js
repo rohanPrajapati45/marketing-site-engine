@@ -31,7 +31,14 @@ export const allowedSectionTypes = [
   "empty",
   "hero-section",
   "project-section",
+<<<<<<< HEAD
   "sticky-services",
+=======
+  "work-category-menu",
+  "solution-section",
+  "contact-hero",
+  "branch-section",
+>>>>>>> home
 ];
 
 
