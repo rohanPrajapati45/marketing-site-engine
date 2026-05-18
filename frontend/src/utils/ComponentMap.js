@@ -17,6 +17,9 @@ import HeroSection from "../components/homepage/hero/HeroSection";
 import ProjectsSection from "../components/homepage/ProjectsSection";
 import SectionScrollBar from "../components/homepage/SectionScrollBar";
 import WorkCategoryMenu from "../components/Work_page/WorkCategoryMenu";
+import SoluctionSection from "../components/solutions/SolutionSection";
+import Branch from "../components/Contact/Branch";
+import ContactInfo from "../components/Contact/ContactInfo";
 
 export const componentMap = {
 
@@ -42,4 +45,11 @@ export const componentMap = {
 
   //work page
   "work-category-menu": WorkCategoryMenu,
+
+  //solutions page
+  "solution-section": SoluctionSection,
+
+  //contact page
+  "contact-hero": ContactInfo,
+  "branch-section": Branch,
 };

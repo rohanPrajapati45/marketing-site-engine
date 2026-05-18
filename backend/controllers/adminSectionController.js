@@ -32,6 +32,9 @@ export const allowedSectionTypes = [
   "hero-section",
   "project-section",
   "work-category-menu",
+  "solution-section",
+  "contact-hero",
+  "branch-section",
 ];
 
 
