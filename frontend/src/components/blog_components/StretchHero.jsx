@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function StrechHero() {
+function StretchHero({ blog }) {
   const sectionRef = useRef(null);
   const [height, setHeight] = useState(200);
 
@@ -30,7 +30,7 @@ function StrechHero() {
     <section ref={sectionRef} className="relative h-[62vh] overflow-hidden">
       {/* Background Image */}
       <img
-        src="https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/blogs/950877162.png"
+        src={blog.coverImage}
         alt="TEDMOB Ranked Number 1 Web and App Development Company in Lebanon"
         className="absolute inset-0 w-full h-full object-cover"
       />
@@ -55,12 +55,11 @@ function StrechHero() {
         <div className="w-full px-5 md:px-10 lg:px-16 pb-8 md:pb-12 flex justify-center items-center">
           <div className="max-w-5xl">
             <h1 className="text-white text-3xl md:text-5xl lg:text-5xl leading-tight font-[300]">
-              TEDMOB Ranked Number 1 Web and App Development Company in Lebanon
+              {blog.title}
             </h1>
 
             <p className="text-gray-300 mt-5 text-sm md:text-lg font-[300]">
-              TEDMOB Ranked Number 1 Web and App Development Company in Lebanon
-              | 09, Apr 2026
+              {blog.title}| {new Date(blog.publishedAt).toLocaleDateString()}
             </p>
           </div>
         </div>
@@ -69,4 +68,4 @@ function StrechHero() {
   );
 }
 
-export default StrechHero;
+export default StretchHero;

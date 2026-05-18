@@ -63,6 +63,7 @@ const initialState = {
   blogs: [],
 
   blog: null,
+  singleBlog: null,
 
   loading: false,
 
@@ -147,36 +148,32 @@ const blogSlice = createSlice({
     // GET SINGLE BLOG
     builder
       .addCase(
-        getSingleBlog.pending,
-        (state) => {
+  getSingleBlog.pending,
+  (state) => {
+    state.loading = true;
+  },
+)
 
-          state.loading = true;
+.addCase(
+  getSingleBlog.fulfilled,
+  (state, action) => {
 
-          state.error = null;
-        },
-      )
+    state.loading = false;
 
-      .addCase(
-        getSingleBlog.fulfilled,
-        (state, action) => {
+    state.singleBlog =
+      action.payload.data;
+  },
+)
 
-          state.loading = false;
+.addCase(
+  getSingleBlog.rejected,
+  (state, action) => {
 
-          state.blog =
-            action.payload.data;
-        },
-      )
+    state.loading = false;
 
-      .addCase(
-        getSingleBlog.rejected,
-        (state, action) => {
-
-          state.loading = false;
-
-          state.error =
-            action.payload;
-        },
-      );
+    state.error = action.payload;
+  },
+)
   },
 });
 
