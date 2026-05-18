@@ -27,7 +27,7 @@ const HeroSection = ({
     showreelLabelLine2,
   } = section.data;
   return (
-    <section id="hero" data-theme={heroTheme}>
+    <section data-theme={heroTheme}>
       <HeroVideo heroVideoRef={heroVideoRef} videoUrl={videoUrl} />
       <HeroText
         showHeroText={showHeroText}
