@@ -7,14 +7,25 @@ import ShowreelButton from "./ShowreelButton";
 const HeroSection = ({
   heroTheme,
   showHeroText,
-  typingPrefix,
   typingRef,
   popupPhase,
   openPopup,
   closePopup,
   gifRef,
   heroVideoRef,
+  section,
 }) => {
+  const {
+    headingLine1,
+    headingLine2,
+    headingLine3,
+    typingPrefix,
+    videoUrl,
+    showreelGif,
+    showreelVideo,
+    showreelLabelLine1,
+    showreelLabelLine2,
+  } = section.data;
   return (
     <section id="hero" data-theme={heroTheme}>
       <HeroVideo heroVideoRef={heroVideoRef} videoUrl={videoUrl} />

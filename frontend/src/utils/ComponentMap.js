@@ -13,6 +13,9 @@ import Statistics from "../components/agency_components/Statistics";
 import TeamActivities from "../components/agency_components/TeamActivities";
 import WhatWeDo from "../components/agency_components/WhatWeDo";
 import WorkWithClients from "../components/agency_components/WorkWithClients";
+import HeroSection from "../components/homepage/hero/HeroSection";
+import ProjectsSection from "../components/homepage/ProjectsSection";
+import SectionScrollBar from "../components/homepage/SectionScrollBar";
 
 export const componentMap = {
 
@@ -31,4 +34,9 @@ export const componentMap = {
   "large-logo-card": Partners,
   "max5liner-card": WhatWeDo,
   "unique-card":Industries,
+
+  //home page
+  "hero-section":HeroSection,
+  "project-section":ProjectsSection,
+
 };
