@@ -25,6 +25,7 @@ const WorkCategoryMenu = ({
     tabs = [],
     subCategories = {},
     projects = [],
+    recentProjectsConfig = {},
   } = section.data || {};
 
 
@@ -87,23 +88,14 @@ const submenuTabs = useMemo(
 
 
 
-  // RESOLVE FILTER TYPE
+  // RESOLVE FILTER TYPE — dynamic from tab name
+  // "By Industry" → "industry", "By Region" → "region", "By Custom Thing" → "custom_thing"
   const resolveFilterType = (
     tab
   ) => {
-
-    if (tab === "By Industry") {
-      return "industry";
+    if (submenuTabs.includes(tab)) {
+      return tab.replace(/^By\s+/i, '').toLowerCase().replace(/\s+/g, '_');
     }
-
-    if (tab === "By Region") {
-      return "region";
-    }
-
-    if (tab === "By Service") {
-      return "service";
-    }
-
     return null;
   };
 
@@ -176,66 +168,20 @@ const submenuTabs = useMemo(
   ) => {
 
     setSelectedFilter(item);
-
-
-
-    if (
-      baseView ===
-      "Recent Projects"
-    ) {
-
-      setBaseView(
-        "ALL Projects"
-      );
-    }
   };
 
 
 
-  // FILTER PROJECTS
+  // FILTER PROJECTS — dynamic: checks project[filterType] against selectedFilter
   const projectsToRender =
 
     selectedFilter &&
     filterType
 
-      ? baseProjects.filter(
-          (project) => {
-
-            if (
-              filterType ===
-              "industry"
-            ) {
-
-              return (
-                project.industry ===
-                selectedFilter
-              );
-            }
-
-            if (
-              filterType ===
-              "region"
-            ) {
-
-              return (
-                project.region ===
-                selectedFilter
-              );
-            }
-
-            if (
-              filterType ===
-              "service"
-            ) {
-
-              return (
-                project.service ===
-                selectedFilter
-              );
-            }
-
-            return true;
-          }
+      ? projects.filter(
+          (project) =>
+            project[filterType] ===
+            selectedFilter
         )
 
       : baseProjects;
@@ -390,6 +336,12 @@ const submenuTabs = useMemo(
             <RecentProjectsSection
               projects={
                 projectsToRender
+              }
+              recentConfig={
+                recentProjectsConfig
+              }
+              activeFilter={
+                selectedFilter
               }
             />
 

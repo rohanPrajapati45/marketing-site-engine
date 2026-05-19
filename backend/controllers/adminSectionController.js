@@ -45,15 +45,15 @@ export const createSection = async (req, res) => {
     const { type, data } = req.body;
 
     const {
-    cards,
-    cardType,
-    ...sectionData
+      cards,
+      cardType,
+      ...sectionData
     } = data || {};
 
-    
-const { pageId } = req.params;
 
-const page = await Page.findById(pageId);
+    const { pageId } = req.params;
+
+    const page = await Page.findById(pageId);
 
 
     if (!page) {
@@ -64,20 +64,20 @@ const page = await Page.findById(pageId);
     }
 
     if (!allowedSectionTypes.includes(type)) {
-    return res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid section type",
-    });
+      });
     }
 
     if (
-    cardType &&
-    !cardModels[cardType]
+      cardType &&
+      !cardModels[cardType]
     ) {
-    return res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid card type",
-    });
+      });
     }
 
     const lastSection = await Section.findOne({
@@ -95,27 +95,28 @@ const page = await Page.findById(pageId);
     });
 
     // CARD MODEL EXISTS
-    
+
     if (cardType) {
 
-    const CardModel = cardModels[cardType];
+      const CardModel = cardModels[cardType];
 
-    const cardDoc = await CardModel.create({
+      const cardDoc = await CardModel.create({
         sectionId: section._id,
         cards: cards || [],
-    });
+      });
 
-    section.data = {
+      section.data = {
         ...sectionData,
         cardType,
         cardId: cardDoc._id,
-    };
+      };
 
     } else {
 
-    section.data = sectionData;
+      section.data = sectionData;
     }
 
+    section.markModified('data');
     await section.save();
 
 
@@ -140,9 +141,9 @@ export const updateSection = async (req, res) => {
 
     const { enabled, order, data } = req.body;
     const {
-        cards,
-        cardType,
-        ...sectionData
+      cards,
+      cardType,
+      ...sectionData
     } = data || {};
 
     const section = await Section.findById(sectionId);
@@ -172,17 +173,22 @@ export const updateSection = async (req, res) => {
     };
 
     // UPDATE CARD DATA
-    if (section.data.cardType){
-      const CardModel =
-  cardModels[section.data.cardType];
-
-        if (cards !== undefined) {
+    if (cards !== undefined) {
+      if (section.data.cardType && cardModels[section.data.cardType]) {
+        // Card-model-based sections (standard with stat-card, std-card, etc.)
+        const CardModel = cardModels[section.data.cardType];
         await CardModel.findOneAndUpdate(
-            { sectionId: section._id },
-            { cards },
-            { new: true }
+          { sectionId: section._id },
+          { cards },
+          { new: true }
         );
-        }
+      } else {
+        // Inline-card sections (gallery, slide-gallery, cta) — store cards directly in section.data
+        section.data = {
+          ...section.data,
+          cards,
+        };
+      }
     }
 
     await section.save();
@@ -216,11 +222,11 @@ export const deleteSection = async (req, res) => {
     // DELETE CARD DOCUMENTS
     if (section.data.cardType) {
       const CardModel =
-  cardModels[section.data.cardType];
+        cardModels[section.data.cardType];
 
-        await CardModel.findOneAndDelete({
+      await CardModel.findOneAndDelete({
         sectionId: section._id,
-        });
+      });
     }
 
     // DELETE SECTION

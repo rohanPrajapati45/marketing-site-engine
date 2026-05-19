@@ -1,149 +1,85 @@
 import React from "react";
-
 import RecentProjectCarousel from "./RecentProjectCarousel";
 
-const RecentProjectsSection = () => {
+const RecentProjectsSection = ({ projects = [], recentConfig = {}, activeFilter = null }) => {
+  const { categories = [], maxPerCategory = 5 } = recentConfig;
 
-  const sections = [
-    {
-      category: "FINTECH",
+  // projects prop is already filtered by WorkCategoryMenu (isRecentProject or by filter)
+  // Do NOT filter again for isRecentProject here
 
-      projects: [
-        {
-          title: "NEO Digital Payment",
-          image:
-            "/fintech-imgs/fintech1.webp",
-          link: "#",
-        },
+  const buildSections = () => {
+    // If a filter is active, show all matching projects as a single group
+    if (activeFilter) {
+      const items = projects.map((p) => ({
+        title: p.title,
+        image: p.image,
+        link: p.projectlink || "#",
+      }));
+      if (items.length === 0) return [];
+      return [{ category: activeFilter, projects: items }];
+    }
 
-        {
-          title: "CASH UNITED - Agent POS",
-          image:
-            "/fintech-imgs/fintech2.webp",
-          link: "#",
-        },
+    // If admin configured categories, group by those
+    if (categories.length > 0) {
+      return categories
+        .map((cat) => {
+          const matched = projects.filter(
+            (p) =>
+              p.industry === cat.name ||
+              p.region === cat.name ||
+              p.service === cat.name
+          );
+          if (matched.length === 0) return null;
+          return {
+            category: cat.name,
+            projects: matched.slice(0, cat.max || maxPerCategory).map((p) => ({
+              title: p.title,
+              image: p.image,
+              link: p.projectlink || "#",
+            })),
+          };
+        })
+        .filter(Boolean);
+    }
 
-        {
-          title: "EVO Wallet Lebanon",
-          image:
-            "/fintech-imgs/fintech3.webp",
-          link: "#",
-        },
+    // Fallback: auto-group by industry
+    const grouped = {};
+    projects.forEach((p) => {
+      const key = p.industry || "Other";
+      if (!grouped[key]) grouped[key] = [];
+      grouped[key].push({
+        title: p.title,
+        image: p.image,
+        link: p.projectlink || "#",
+      });
+    });
 
-        {
-          title: "AFRICELL MOBILE MONEY",
-          image:
-            "/fintech-imgs/fintech4.webp",
-          link: "#",
-        },
+    return Object.entries(grouped).map(([category, items]) => ({
+      category,
+      projects: items.slice(0, maxPerCategory),
+    }));
+  };
 
-        {
-          title: "AFRICELL MOBILE MONEY",
-          image:
-            "/fintech-imgs/fintech5.webp",
-          link: "#",
-        },
+  const sections = buildSections();
 
-        {
-          title: "AFRICELL MOBILE MONEY",
-          image:
-            "/fintech-imgs/fintech6.webp",
-          link: "#",
-        },
-
-        {
-          title: "AFRICELL MOBILE MONEY",
-          image:
-            "/fintech-imgs/fintech7.webp",
-          link: "#",
-        },
-
-        {
-          title: "AFRICELL MOBILE MONEY",
-          image:
-            "/fintech-imgs/fintech8.webp",
-          link: "#",
-        },
-      ],
-    },
-
-    {
-      category: "APP DEVELOPMENT",
-
-      projects: [
-        {
-          title: "DEBBAS",
-          image:
-            "/appdev-imgs/appdev1.webp",
-          link: "#",
-        },
-
-        {
-          title: "LIFE APP",
-          image:
-            "/appdev-imgs/appdev2.webp",
-          link: "#",
-        },
-
-        {
-          title: "PATCHI SALES APP",
-          image:
-            "/appdev-imgs/appdev3.webp",
-          link: "#",
-        },
-
-        {
-          title: "Business App",
-          image:
-            "/appdev-imgs/appdev4.webp",
-          link: "#",
-        },
-
-        {
-          title: "Business App",
-          image:
-            "/appdev-imgs/appdev5.webp",
-          link: "#",
-        },
-
-        {
-          title: "Business App",
-          image:
-            "/appdev-imgs/appdev6.webp",
-          link: "#",
-        },
-
-        {
-          title: "Business App",
-          image:
-            "/appdev-imgs/appdev7.webp",
-          link: "#",
-        },
-
-        {
-          title: "Business App",
-          image:
-            "/appdev-imgs/appdev8.webp",
-          link: "#",
-        },
-      ],
-    },
-  ];
+  if (sections.length === 0) {
+    return (
+      <section className="mt-[18px]">
+        <p className="text-center text-[#999] text-sm py-10">No recent projects to display</p>
+      </section>
+    );
+  }
 
   return (
     <section className="mt-[1px]">
-
       {sections.map((section, index) => (
         <RecentProjectCarousel
-          key={index}
+          key={section.category + index}
           category={section.category}
           projects={section.projects}
-          autoSlideDelay={
-            3200 + (index * 900)
-          }
+          autoSlideDelay={3200 + index * 900}
         />
       ))}
-
     </section>
   );
 };

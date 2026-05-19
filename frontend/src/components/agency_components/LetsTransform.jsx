@@ -1,7 +1,7 @@
 import Btn_slide from "../Btn_slide";
 
 function LetsTransform({ section }) {
-  const { title, subtitle, buttons = [] } = section.data;
+  const { title, subtitle, cards = [] } = section.data;
 
   return (
     <section
@@ -50,7 +50,7 @@ function LetsTransform({ section }) {
             gap-5 sm:gap-7
           "
         >
-          {buttons.map((item, index) => (
+          {cards.map((item, index) => (
             <a
               key={index}
               href={item.link}

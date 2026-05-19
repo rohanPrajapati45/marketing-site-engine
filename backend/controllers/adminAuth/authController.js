@@ -5,6 +5,81 @@ import cookieParser from "cookie-parser";
 import { generateOTP } from "../../config/otp.js";
 import { Resend } from 'resend';
 
+// ── OTP-based Login Flow ──
+export const sendLoginOtp = async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
+        const admin = await adminModel.findOne({ email });
+        if (!admin) {
+            // Return same message to avoid email enumeration
+            return res.status(200).json({ message: "If the email is registered, an OTP has been sent" });
+        }
+        const otp = generateOTP();
+        const otpExpiry = Date.now() + 5 * 60 * 1000;
+        admin.otp = otp;
+        admin.otpExpiry = otpExpiry;
+        await admin.save();
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        await resend.emails.send({
+            from: 'onboarding@resend.dev',
+            to: email,
+            subject: 'Admin Login OTP',
+            html: `<p>Your login OTP is <strong>${otp}</strong>. It is valid for 5 minutes.</p>`,
+        });
+        return res.status(200).json({ message: "If the email is registered, an OTP has been sent" });
+    } catch (error) {
+        return res.status(500).json({ message: "Failed to send login OTP", error: error.message });
+    }
+};
+
+export const verifyLoginOtp = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        if (!email || !otp) {
+            return res.status(400).json({ message: "Email and OTP are required" });
+        }
+        const admin = await adminModel.findOne({ email });
+        if (!admin) {
+            return res.status(400).json({ message: "Invalid email or OTP" });
+        }
+        if (admin.otp !== otp) {
+            return res.status(400).json({ message: "Invalid email or OTP" });
+        }
+        if (Date.now() > admin.otpExpiry) {
+            return res.status(400).json({ message: "OTP has expired" });
+        }
+        admin.otp = undefined;
+        admin.otpExpiry = undefined;
+        await admin.save();
+        const token = jwt.sign({ id: admin._id, isMainAdmin: admin.isMainAdmin }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 24 * 60 * 60 * 1000,
+        });
+        return res.status(200).json({ message: "Login successful", admin: { email: admin.email, isMainAdmin: admin.isMainAdmin } });
+    } catch (error) {
+        return res.status(500).json({ message: "Failed to verify login OTP", error: error.message });
+    }
+};
+
+// ── Get current admin (auth persistence) ──
+export const getMe = async (req, res) => {
+    try {
+        const admin = await adminModel.findById(req.admin.id).select('-password -otp -otpExpiry');
+        if (!admin) {
+            return res.status(404).json({ message: "Admin not found" });
+        }
+        return res.status(200).json({ message: "Admin found", admin: { email: admin.email, isMainAdmin: admin.isMainAdmin } });
+    } catch (error) {
+        return res.status(500).json({ message: "Failed to get admin", error: error.message });
+    }
+};
+
 export const registerAdmin = async (req, res) => {
     try{
         if (!req.admin.isMainAdmin) {
@@ -49,7 +124,7 @@ export const loginAdmin = async (req, res) => {
             sameSite: "strict",
             maxAge: 24 * 60 * 60 * 1000,
         });
-        res.status(200).json({ message: "Admin logged in successfully"});
+        res.status(200).json({ message: "Admin logged in successfully", admin: { email: admin.email, isMainAdmin: admin.isMainAdmin } });
     }
     catch(error){
         res.status(500).json({ message: "Failed to login admin", error: error.message });

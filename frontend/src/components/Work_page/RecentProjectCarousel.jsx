@@ -35,7 +35,7 @@ const RecentProjectCarousel = ({
       cards[0].offsetWidth + gap;
 
     const maxIndex =
-      projects.length - 3;
+      Math.max(0, projects.length - 3);
 
     const interval = setInterval(() => {
 
@@ -235,7 +235,7 @@ const RecentProjectCarousel = ({
 
         {Array.from({
           length:
-            projects.length - 2,
+            Math.max(0, projects.length - 2),
         }).map((_, index) => (
 
           <button

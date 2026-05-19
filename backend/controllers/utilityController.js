@@ -1,3 +1,6 @@
+import Page from "../models/Page.js";
+import Section from "../models/Section.js";
+
 // REORDER SECTIONS
 export const reorderSections = async (req, res) => {
   try {

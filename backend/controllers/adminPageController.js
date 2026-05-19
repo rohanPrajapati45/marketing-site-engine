@@ -65,21 +65,18 @@ export const getSinglePage = async (req, res) => {
 
         const sectionObj = section.toObject();
 
-        
-        if (section.data.cardType) {
-
-        const CardModel =
-            cardModels[section.data.cardType];
-
-        const cardData = await CardModel.findById(
-            section.data.cardId
-        );
-
-        sectionObj.data.cards =
-            cardData?.cards || [];
+        // Only fetch cards from separate CardModel for standard sections with cardType
+        try {
+          if (section.data?.cardType && cardModels[section.data.cardType]) {
+            const CardModel = cardModels[section.data.cardType];
+            const cardData = await CardModel.findById(section.data.cardId);
+            sectionObj.data.cards = cardData?.cards || [];
+          }
+          // gallery/slide-gallery/cta sections already have cards inline in section.data
+        } catch (err) {
+          console.error(`Error loading cards for section ${section._id}:`, err.message);
+          sectionObj.data.cards = sectionObj.data.cards || [];
         }
-
-
 
         return sectionObj;
       })
