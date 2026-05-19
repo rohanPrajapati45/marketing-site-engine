@@ -30,7 +30,7 @@ function Nav({ replaySplash, isHome, isContact, theme }) {
               onClick={() => {
                 replaySplash();
               }}
-              src={isContact ? whiteLogo : logo}
+              src={logo}
               alt="Tedmob Logo"
               className="nav-logo-img logo-dark h-5 w-auto object-contain"
             />

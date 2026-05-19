@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import {
+  useMemo,
   useState,
   useEffect,
   useRef,
@@ -37,6 +38,9 @@ function Contact() {
 
   const [activeCityIndex, setActiveCityIndex] =
     useState(0);
+
+  const [branchThemes, setBranchThemes] =
+    useState({});
 
   const formRef = useRef(null);
 
@@ -79,6 +83,79 @@ function Contact() {
       clearInterval(interval);
 
   }, [branchSections.length]);
+
+  const contactHeroSection = useMemo(
+    () =>
+      page?.sections?.find(
+        (section) =>
+          section.type === 'contact-hero'
+      ),
+    [page]
+  );
+
+  useEffect(() => {
+    let active = true;
+
+    const loadThemes = async () => {
+      const { getImageTheme } = await import(
+        '../hooks/useMediaTheme'
+      );
+      const themes = {};
+
+      const branches =
+        contactHeroSection?.data
+          ?.branchesData || [];
+
+      for (const branch of branches) {
+        if (!branch?.cityImage) continue;
+
+        const detectedTheme =
+          await getImageTheme(
+            branch.cityImage
+          );
+        themes[branch.id] = detectedTheme;
+      }
+
+      if (active) {
+        setBranchThemes(themes);
+      }
+    };
+
+    loadThemes();
+
+    return () => {
+      active = false;
+    };
+  }, [contactHeroSection]);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return;
+    }
+
+    const branches =
+      contactHeroSection?.data
+        ?.branchesData || [];
+
+    const activeBranch =
+      branches[activeCityIndex];
+    if (!activeBranch) {
+      document.documentElement.dataset.homeTheme =
+        'light';
+      return;
+    }
+
+    const theme =
+      branchThemes[activeBranch.id] ||
+      'dark';
+
+    document.documentElement.dataset.homeTheme =
+      theme;
+  }, [
+    activeCityIndex,
+    branchThemes,
+    contactHeroSection,
+  ]);
 
   // REVEAL ANIMATION
   useEffect(() => {

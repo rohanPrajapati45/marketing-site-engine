@@ -99,6 +99,15 @@
   text-decoration: none;
 }
 
+html[data-home-theme="light"] .contact-hero .hero-content,
+html[data-home-theme="light"] .contact-hero .hero-heading,
+html[data-home-theme="light"] .contact-hero .hero-email-row,
+html[data-home-theme="light"] .contact-hero .hero-email-row a,
+html[data-home-theme="light"] .contact-hero .hero-phone-row,
+html[data-home-theme="light"] .contact-hero .hero-phone-row a {
+  color: #111;
+}
+
 .hero-phone-icon {
   font-size: 18px;
   flex-shrink: 0;
