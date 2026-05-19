@@ -65,18 +65,17 @@ export const getSinglePage = async (req, res) => {
 
         const sectionObj = section.toObject();
 
-        
-        if (section.data.cardType) {
+        if (section.data?.cardType && section.data?.cardId) {
+          const CardModel = cardModels[section.data.cardType];
 
-        const CardModel =
-            cardModels[section.data.cardType];
+          if (CardModel) {
+            const cardData = await CardModel.findById(
+              section.data.cardId
+            );
 
-        const cardData = await CardModel.findById(
-            section.data.cardId
-        );
-
-        sectionObj.data.cards =
-            cardData?.cards || [];
+            sectionObj.data.cards =
+              cardData?.cards || [];
+          }
         }
 
 
@@ -216,14 +215,16 @@ export const deletePage = async (req, res) => {
     for (const section of sections) {
 
       
-    if (section.data.cardType) {
+  if (section.data?.cardType) {
 
-    const CardModel =
-        cardModels[section.data.cardType];
+  const CardModel =
+    cardModels[section.data.cardType];
 
+  if (CardModel) {
     await CardModel.findOneAndDelete({
-        sectionId: section._id,
+      sectionId: section._id,
     });
+  }
     }
 
       await Section.findByIdAndDelete(section._id);

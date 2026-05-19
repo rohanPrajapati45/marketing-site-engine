@@ -176,7 +176,7 @@ export const updateSection = async (req, res) => {
       const CardModel =
   cardModels[section.data.cardType];
 
-        if (cards !== undefined) {
+      if (CardModel && cards !== undefined) {
         await CardModel.findOneAndUpdate(
             { sectionId: section._id },
             { cards },
@@ -214,13 +214,15 @@ export const deleteSection = async (req, res) => {
     }
 
     // DELETE CARD DOCUMENTS
-    if (section.data.cardType) {
+    if (section.data?.cardType) {
       const CardModel =
   cardModels[section.data.cardType];
 
+      if (CardModel) {
         await CardModel.findOneAndDelete({
         sectionId: section._id,
         });
+      }
     }
 
     // DELETE SECTION
