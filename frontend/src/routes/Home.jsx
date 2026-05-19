@@ -51,27 +51,6 @@ function Home() {
 
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
 
-  const [themeTick, setThemeTick] = useState(0);
-
-  const currentTheme = useMemo(() => {
-    if (themeTick) {
-      // `themeTick` is intentionally included so this memo re-evaluates when the theme attribute changes.
-    }
-
-    const sectionId = sections[activeSectionIndex]?.id;
-    const wrapperEl =
-      typeof document !== "undefined"
-        ? document.getElementById(sectionId)
-        : null;
-
-    // Check the wrapper first, then look for a child with data-theme
-    const themeEl = wrapperEl?.dataset?.theme
-      ? wrapperEl
-      : wrapperEl?.querySelector("[data-theme]");
-
-    return themeEl?.dataset?.theme || sections[activeSectionIndex]?.theme || "dark";
-  }, [activeSectionIndex, themeTick, sections]);
-
   const { typingRef, showHeroText } = useTypingAnimation();
 
   const gifRef = useRef(null);
@@ -90,6 +69,52 @@ function Home() {
     sampleSize: 32,
     intersectionThreshold: 0.6,
   });
+
+  const [sectionThemes, setSectionThemes] = useState({});
+
+  useEffect(() => {
+    let active = true;
+
+    const loadThemes = async () => {
+      const { getImageTheme } = await import("../hooks/useMediaTheme");
+      const themes = {};
+
+      for (const section of sections) {
+        if (section.id === "hero") continue;
+
+        const imageUrl =
+          section.data?.mockupImageUrl || section.data?.mockupImage;
+        if (!imageUrl) continue;
+
+        const detectedTheme = await getImageTheme(imageUrl);
+        themes[section.id] = detectedTheme;
+      }
+
+      if (active) {
+        setSectionThemes(themes);
+      }
+    };
+
+    if (sections.length) {
+      loadThemes();
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [sections]);
+
+  const currentTheme = useMemo(() => {
+    const activeSection = sections[activeSectionIndex];
+
+    if (!activeSection) return "dark";
+
+    if (activeSection.id === "hero") {
+      return heroTheme;
+    }
+
+    return sectionThemes[activeSection.id] || "dark";
+  }, [activeSectionIndex, sections, heroTheme, sectionThemes]);
 
   const outletContext = useOutletContext();
 
@@ -123,31 +148,6 @@ function Home() {
       setHideNav(false);
     };
   }, [popupPhase, outletContext]);
-
-  // THEME OBSERVER
-  useEffect(() => {
-    const sectionId = sections[activeSectionIndex]?.id;
-
-    const wrapperEl =
-      typeof document !== "undefined"
-        ? document.getElementById(sectionId)
-        : null;
-
-    if (!wrapperEl) return;
-
-    const observer = new MutationObserver(() => {
-      setThemeTick((tick) => tick + 1);
-    });
-
-    // Watch both the wrapper and its children for data-theme changes
-    observer.observe(wrapperEl, {
-      attributes: true,
-      attributeFilter: ["data-theme"],
-      subtree: true,
-    });
-
-    return () => observer.disconnect();
-  }, [activeSectionIndex, sections]);
 
   // HTML DATA THEME
   useEffect(() => {
@@ -488,7 +488,15 @@ function Home() {
         }
 
         return (
-          <div key={section.id} id={section.id}>
+          <div
+            key={section.id}
+            id={section.id}
+            data-theme={
+              section.id === "hero"
+                ? heroTheme
+                : sectionThemes[section.id] || "dark"
+            }
+          >
             <Component
               section={section}
               heroTheme={heroTheme}

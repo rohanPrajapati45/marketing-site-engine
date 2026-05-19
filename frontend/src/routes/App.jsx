@@ -22,6 +22,11 @@ const App = () => {
   useEffect(() => {
     if (pathname !== "/") {
       setDynamicTheme(null);
+
+      if (typeof document !== "undefined" && !isContact) {
+        document.documentElement.dataset.homeTheme = "light";
+      }
+
       return;
     }
 
@@ -39,7 +44,7 @@ const App = () => {
     setDynamicTheme(document.documentElement.dataset.homeTheme);
 
     return () => observer.disconnect();
-  }, [pathname]);
+  }, [pathname, isContact]);
 
   const theme =
     pathname === "/"
@@ -52,9 +57,14 @@ const App = () => {
             bg: "bg-black",
             navbar: "navbar-theme text-white",
           }
-      : pathname.startsWith("/blog-details/")
-        ? pageThemes["/blog-details/:id"]
-        : pageThemes[pathname] || pageThemes["/"];
+      : pathname === "/contact"
+        ? {
+            bg: "bg-transparent",
+            navbar: "navbar-theme bg-transparent",
+          }
+        : pathname.startsWith("/blog-details/")
+          ? pageThemes["/blog-details/:id"]
+          : pageThemes[pathname] || pageThemes["/"];
 
   const replaySplash = () => {
     setShowSplash(true);
