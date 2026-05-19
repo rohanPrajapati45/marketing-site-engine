@@ -6,7 +6,7 @@ import {
 import axios from "axios";
 
 const API =
-  "http://localhost:3000";
+  "http://localhost:8080";
 
 // GET BLOGS
 export const getBlogs =
