@@ -9,6 +9,7 @@ import { getPageBySlug } from "../redux/slices/pageSlice";
 import { componentMap } from "../utils/componentMap";
 
 import SectionScrollBar from "../components/homepage/SectionScrollBar";
+import Footer from "../components/Footer";
 
 import { useTypingAnimation } from "../hooks/useTypingAnimation";
 import { useVideoTheme } from "../hooks/useMediaTheme";
@@ -502,6 +503,8 @@ function Home() {
           </div>
         );
       })}
+
+      <Footer />
     </div>
   );
 }
