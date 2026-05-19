@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router';
-import { Plus, Edit, Trash2, Star, Eye, EyeOff } from 'lucide-react';
+import { Plus, Edit, Trash2, Star } from 'lucide-react';
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -27,21 +27,33 @@ const Blogs = () => {
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this blog?')) return;
+    // Optimistic: remove from UI immediately
+    const previousBlogs = [...blogs];
+    setBlogs(blogs.filter(b => b._id !== id));
     try {
       await axiosInstance.delete(`/admin/blogs/${id}`);
-      fetchBlogs();
     } catch (err) {
+      // Rollback on failure
+      setBlogs(previousBlogs);
       alert('Failed to delete blog');
     }
   };
 
   const handleToggle = async (blog, field) => {
+    // Optimistic: toggle in UI immediately
+    const newValue = !blog[field];
+    setBlogs(blogs.map(b =>
+      b._id === blog._id ? { ...b, [field]: newValue } : b
+    ));
     try {
       await axiosInstance.put(`/admin/blogs/${blog._id}`, {
-        [field]: !blog[field]
+        [field]: newValue
       });
-      fetchBlogs();
     } catch (err) {
+      // Rollback on failure
+      setBlogs(blogs.map(b =>
+        b._id === blog._id ? { ...b, [field]: blog[field] } : b
+      ));
       alert(`Failed to update ${field}`);
     }
   };
@@ -75,7 +87,7 @@ const Blogs = () => {
               <tr><td colSpan="4" className="px-6 py-4 text-center text-gray-500">No blogs found.</td></tr>
             )}
             {blogs.map((blog) => (
-              <tr key={blog._id} className="hover:bg-gray-50">
+              <tr key={blog._id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center">
                     {blog.coverImage && (

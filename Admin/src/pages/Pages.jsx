@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPages, createPage, deletePage } from '../redux/slices/pageSlice';
 import { useNavigate } from 'react-router';
-import { Plus, Edit, Trash2, Settings, ExternalLink } from 'lucide-react';
+import { Plus, Settings, ExternalLink, Trash2 } from 'lucide-react';
 
 const Pages = () => {
   const dispatch = useDispatch();
@@ -23,9 +23,16 @@ const Pages = () => {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    await dispatch(createPage(formData));
-    setShowModal(false);
-    dispatch(fetchPages()); // Refresh
+    const result = await dispatch(createPage(formData));
+    if (!result.error) {
+      setShowModal(false);
+      setFormData({
+        title: '',
+        slug: '',
+        isPublished: false,
+        seo: { metaTitle: '', metaDescription: '' }
+      });
+    }
   };
 
   const handleDelete = async (id) => {

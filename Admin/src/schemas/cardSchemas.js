@@ -1,40 +1,58 @@
+// ═══════════════════════════════════════════════════════════════
+// CARD SCHEMAS — defines form fields for each card inside a section
+// ═══════════════════════════════════════════════════════════════
+
 export const cardSchemas = {
-  "stat-card": [
-    { name: "title", type: "text", label: "Title" },
-    { name: "value", type: "text", label: "Value (e.g., 99%)" },
-    { name: "description", type: "textarea", label: "Description" },
+  // Standard section card types (admin selectable)
+  'stat-card': [
+    { name: 'title',  type: 'text',     label: 'Title' },
+    { name: 'number', type: 'number',   label: 'Number' },
+    { name: 'lines',  type: 'textarea', label: 'Lines (one per line)' },
   ],
-  "std-card": [
-    { name: "title", type: "text", label: "Title" },
-    { name: "description", type: "textarea", label: "Description" },
-    { name: "image", type: "image", label: "Image URL" },
+
+  'std-card': [
+    { name: 'title',       type: 'text',     label: 'Title' },
+    { name: 'description', type: 'textarea', label: 'Description' },
   ],
-  "team-card": [
-    { name: "name", type: "text", label: "Name" },
-    { name: "role", type: "text", label: "Role" },
-    { name: "image", type: "image", label: "Profile Image" },
-    { name: "linkedin", type: "text", label: "LinkedIn URL" },
+
+  'team-card': [
+    { name: 'name',  type: 'text',  label: 'Name' },
+    { name: 'role',  type: 'text',  label: 'Role' },
+    { name: 'image', type: 'image', label: 'Image URL' },
   ],
-  "small-logo-card": [
-    { name: "logo", type: "image", label: "Logo URL" },
-    { name: "altText", type: "text", label: "Alt Text" },
+
+  'small-logo-card': [
+    { name: 'name',  type: 'text',  label: 'Name' },
+    { name: 'image', type: 'image', label: 'Image URL' },
   ],
-  "mid-logo-card": [
-    { name: "logo", type: "image", label: "Logo URL" },
-    { name: "title", type: "text", label: "Title" },
+
+  'mid-logo-card': [
+    { name: 'image', type: 'image', label: 'Image URL' },
+    { name: 'link',  type: 'text',  label: 'Link' },
   ],
-  "large-logo-card": [
-    { name: "logo", type: "image", label: "Logo URL" },
-    { name: "description", type: "textarea", label: "Description" },
+
+  'large-logo-card': [
+    { name: 'image', type: 'image', label: 'Image URL' },
+    { name: 'link',  type: 'text',  label: 'Link' },
   ],
-  "max5liner-card": [
-    { name: "title", type: "text", label: "Title" },
-    { name: "lines", type: "textarea", label: "Lines (newline separated)" },
+
+  'unique-card': [
+    { name: 'title', type: 'text', label: 'Title' },
+    { name: 'icon',  type: 'text', label: 'Icon URL (.svg)' },
   ],
-  "unique-card": [
-    { name: "title", type: "text", label: "Title" },
-    { name: "subtitle", type: "text", label: "Subtitle" },
-    { name: "image", type: "image", label: "Image URL" },
-    { name: "link", type: "text", label: "Link" },
+
+  // Fixed card schemas for non-standard section types
+  'gallery-card': [
+    { name: 'image', type: 'image', label: 'Image URL' },
+  ],
+
+  'slide-gallery-card': [
+    { name: 'image', type: 'image', label: 'Image URL' },
+    { name: 'alt',   type: 'text',  label: 'Alt Text' },
+  ],
+
+  'cta-card': [
+    { name: 'text', type: 'text', label: 'Text' },
+    { name: 'link', type: 'text', label: 'Link' },
   ],
 };

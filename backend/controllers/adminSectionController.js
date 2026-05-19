@@ -118,11 +118,15 @@ const page = await Page.findById(pageId);
 
     await section.save();
 
-
+    // Return the section with cards populated for immediate UI update
+    const responseSection = section.toObject();
+    if (cardType) {
+      responseSection.data.cards = cards || [];
+    }
 
     return res.status(201).json({
       success: true,
-      data: section,
+      data: responseSection,
     });
   } catch (error) {
     return res.status(500).json({
@@ -164,32 +168,92 @@ export const updateSection = async (req, res) => {
       section.order = order;
     }
 
+    // ─── HANDLE CARDTYPE SWITCHING ───
+    const oldCardType = section.data?.cardType;
+    const newCardType = cardType !== undefined ? cardType : oldCardType;
+    const cardTypeChanged = oldCardType && newCardType && oldCardType !== newCardType;
 
-    // UPDATE SECTION DATA
-    section.data = {
-      ...section.data,
-      ...sectionData,
-    };
+    if (cardTypeChanged) {
+      // 1. Delete old card document
+      const OldCardModel = cardModels[oldCardType];
+      if (OldCardModel) {
+        await OldCardModel.findOneAndDelete({ sectionId: section._id });
+      }
 
-    // UPDATE CARD DATA
-    if (section.data.cardType){
-      const CardModel =
-  cardModels[section.data.cardType];
+      // 2. Create new empty card document
+      const NewCardModel = cardModels[newCardType];
+      if (NewCardModel) {
+        const newCardDoc = await NewCardModel.create({
+          sectionId: section._id,
+          cards: [],
+        });
 
-      if (CardModel && cards !== undefined) {
-        await CardModel.findOneAndUpdate(
-            { sectionId: section._id },
-            { cards },
-            { new: true }
-        );
-        }
+        // 3. Update section data with new cardType and cardId
+        section.data = {
+          ...section.data,
+          ...sectionData,
+          cardType: newCardType,
+          cardId: newCardDoc._id,
+        };
+      }
+    } else {
+      // Normal section data update (no cardType change)
+      section.data = {
+        ...section.data,
+        ...sectionData,
+      };
+
+      // Preserve/set cardType if provided
+      if (cardType !== undefined) {
+        section.data.cardType = cardType;
+      }
     }
 
+    // UPDATE CARD DATA (only if cardType did NOT change — switching resets cards)
+    if (!cardTypeChanged && section.data.cardType) {
+      const CardModel = cardModels[section.data.cardType];
+
+      if (CardModel && cards !== undefined) {
+        // Auto-assign order to cards that are missing it
+        let maxOrder = 0;
+        cards.forEach((c) => {
+          if (c.order !== undefined && c.order !== null) {
+            maxOrder = Math.max(maxOrder, Number(c.order));
+          }
+        });
+        const orderedCards = cards.map((c) => {
+          if (c.order === undefined || c.order === null) {
+            maxOrder += 1;
+            return { ...c, order: maxOrder };
+          }
+          return c;
+        });
+
+        await CardModel.findOneAndUpdate(
+            { sectionId: section._id },
+            { cards: orderedCards },
+            { new: true, upsert: true }
+        );
+      }
+    }
+
+    // Mark data as modified since it's a Mixed type
+    section.markModified('data');
     await section.save();
+
+    // Build response with cards populated
+    const responseSection = section.toObject();
+    if (responseSection.data?.cardType && responseSection.data?.cardId) {
+      const CardModel = cardModels[responseSection.data.cardType];
+      if (CardModel) {
+        const cardDoc = await CardModel.findById(responseSection.data.cardId);
+        responseSection.data.cards = cardDoc?.cards || [];
+      }
+    }
 
     return res.status(200).json({
       success: true,
-      data: section,
+      data: responseSection,
     });
   } catch (error) {
     return res.status(500).json({
