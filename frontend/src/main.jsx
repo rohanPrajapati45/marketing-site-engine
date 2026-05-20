@@ -29,6 +29,10 @@ const router = createBrowserRouter([
         path: "/:pageSlug/:blogSlug",
         element: <Blog_details />,
       },
+      {
+        path: "/contact",
+        element: <Contact />,
+      },
 
       // GENERIC CMS PAGE
       {
