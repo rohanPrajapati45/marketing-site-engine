@@ -9,6 +9,7 @@ import UniqueCard from "../models/cards/UniqueCard.js";
 import SmallLogo from "../models/cards/SmallLogo.js";
 import MidLogo from "../models/cards/MidLogo.js";
 import LargeLogo from "../models/cards/LargeLogo.js";
+import { logActivity } from "../utils/activityLogger.js";
 
 const cardModels = {
   "stat-card": StatCard,
@@ -126,6 +127,13 @@ export const createPage = async (req, res) => {
       isPublished,
     });
 
+    await logActivity(req, {
+      action: "page.create",
+      entityType: "page",
+      entityId: page._id.toString(),
+      summary: `Created page ${page.slug}`,
+    });
+
     return res.status(201).json({
       success: true,
       data: page,
@@ -177,6 +185,15 @@ export const updatePage = async (req, res) => {
 
     await page.save();
 
+    await logActivity(req, {
+      action: isPublished !== undefined ? "page.publish" : "page.update",
+      entityType: "page",
+      entityId: page._id.toString(),
+      summary: isPublished !== undefined
+        ? `Set page ${page.slug} to ${isPublished ? "published" : "draft"}`
+        : `Updated page ${page.slug}`,
+    });
+
     return res.status(200).json({
       success: true,
       data: page,
@@ -227,6 +244,13 @@ export const deletePage = async (req, res) => {
     }
 
     await Page.findByIdAndDelete(pageId);
+
+    await logActivity(req, {
+      action: "page.delete",
+      entityType: "page",
+      entityId: page._id.toString(),
+      summary: `Deleted page ${page.slug}`,
+    });
 
     return res.status(200).json({
       success: true,

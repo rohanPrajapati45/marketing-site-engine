@@ -1,8 +1,15 @@
 import projectModel from "../../models/workPage/projectModel.js";
+import { logActivity } from "../../utils/activityLogger.js";
 
 export const createProject = async (req, res) =>{
     try{
         const project = await projectModel.create(req.body);
+        await logActivity(req, {
+            action: "work.project.create",
+            entityType: "workProject",
+            entityId: project._id.toString(),
+            summary: `Created project ${project.title || project._id}`,
+        });
         res.status(201).json({message: "Project created successfully", project});
     }
     catch(error){
@@ -40,6 +47,12 @@ export const updateProject = async (req, res) => {
         if(!project){
             return res.status(404).json({message: "Project not found"});
         }
+        await logActivity(req, {
+            action: "work.project.update",
+            entityType: "workProject",
+            entityId: project._id.toString(),
+            summary: `Updated project ${project.title || project._id}`,
+        });
         res.status(200).json({message: "Project updated successfully", project});
     }
     catch(error){
@@ -53,6 +66,12 @@ export const deleteProject = async (req, res) => {
         if(!project){
             return res.status(404).json({message: "Project not found"});
         }
+        await logActivity(req, {
+            action: "work.project.delete",
+            entityType: "workProject",
+            entityId: project._id.toString(),
+            summary: `Deleted project ${project.title || project._id}`,
+        });
         res.status(200).json({message: "Project deleted successfully"});
     }
     catch(error){

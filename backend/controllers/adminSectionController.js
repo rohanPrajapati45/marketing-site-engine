@@ -9,6 +9,7 @@ import UniqueCard from "../models/cards/UniqueCard.js";
 import SmallLogo from "../models/cards/SmallLogo.js";
 import MidLogo from "../models/cards/MidLogo.js";
 import LargeLogo from "../models/cards/LargeLogo.js";
+import { logActivity } from "../utils/activityLogger.js";
 
 const cardModels = {
   "stat-card": StatCard,
@@ -119,6 +120,14 @@ export const createSection = async (req, res) => {
     section.markModified('data');
     await section.save();
 
+    await logActivity(req, {
+      action: "section.create",
+      entityType: "section",
+      entityId: section._id.toString(),
+      summary: `Created ${section.type} section`,
+      metadata: { pageId: page._id.toString() },
+    });
+
 
 
     return res.status(201).json({
@@ -193,6 +202,27 @@ export const updateSection = async (req, res) => {
 
     await section.save();
 
+    let action = "section.update";
+    let summary = `Updated ${section.type} section`;
+    if (enabled !== undefined) {
+      action = "section.toggle";
+      summary = `${enabled ? "Enabled" : "Disabled"} ${section.type} section`;
+    } else if (order !== undefined) {
+      action = "section.reorder";
+      summary = `Reordered ${section.type} section`;
+    } else if (cards !== undefined) {
+      action = "section.cards.update";
+      summary = `Updated cards for ${section.type} section`;
+    }
+
+    await logActivity(req, {
+      action,
+      entityType: "section",
+      entityId: section._id.toString(),
+      summary,
+      metadata: { pageId: section.page?.toString() },
+    });
+
     return res.status(200).json({
       success: true,
       data: section,
@@ -231,6 +261,14 @@ export const deleteSection = async (req, res) => {
 
     // DELETE SECTION
     await Section.findByIdAndDelete(sectionId);
+
+    await logActivity(req, {
+      action: "section.delete",
+      entityType: "section",
+      entityId: section._id.toString(),
+      summary: `Deleted ${section.type} section`,
+      metadata: { pageId: section.page?.toString() },
+    });
 
     return res.status(200).json({
       success: true,

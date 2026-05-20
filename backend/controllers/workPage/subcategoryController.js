@@ -1,5 +1,6 @@
 import subcategoryModel from "../../models/workPage/subcategoryModel.js";
 import categoryModel from "../../models/workPage/categoryModel.js";
+import { logActivity } from "../../utils/activityLogger.js";
 
 export const createSubCategory = async (req, res) => {
   try {
@@ -18,6 +19,12 @@ export const createSubCategory = async (req, res) => {
     const subcategory = await subcategoryModel.create({
       name,
       category,
+    });
+    await logActivity(req, {
+      action: "work.subcategory.create",
+      entityType: "workSubcategory",
+      entityId: subcategory._id.toString(),
+      summary: `Created subcategory ${subcategory.name || subcategory._id}`,
     });
     console.log("SubCategory Created:", subcategory.name);
     return res.status(201).json({
@@ -63,6 +70,12 @@ export const updateSubCategory = async (req, res) => {
         if(!subcategory){
             return res.status(404).json({message: "SubCategory not found"});
         }
+        await logActivity(req, {
+          action: "work.subcategory.update",
+          entityType: "workSubcategory",
+          entityId: subcategory._id.toString(),
+          summary: `Updated subcategory ${subcategory.name || subcategory._id}`,
+        });
         res.status(200).json({message: "SubCategory updated successfully", subcategory});
     }
     catch(error){
@@ -76,6 +89,12 @@ export const deleteSubCategory = async (req, res) => {
         if(!subcategory){
             return res.status(404).json({message: "SubCategory not found"});
         }
+        await logActivity(req, {
+          action: "work.subcategory.delete",
+          entityType: "workSubcategory",
+          entityId: subcategory._id.toString(),
+          summary: `Deleted subcategory ${subcategory.name || subcategory._id}`,
+        });
         res.status(200).json({message: "SubCategory deleted successfully"});
     }
     catch(error){
