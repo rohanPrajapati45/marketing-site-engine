@@ -83,7 +83,7 @@ const pageSlice = createSlice({
       })
       .addCase(fetchAllPages.fulfilled, (state, action) => {
         state.loading = false;
-        state.pages = action.payload.data;
+        state.pages = [...(action.payload.data || [])].sort((a, b) => (a.navOrder || 0) - (b.navOrder || 0));
       })
       .addCase(fetchAllPages.rejected, (state, action) => {
         state.loading = false;

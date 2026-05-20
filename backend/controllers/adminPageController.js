@@ -25,7 +25,7 @@ const cardModels = {
 // GET ALL PAGES
 export const getAllPages = async (req, res) => {
   try {
-    const pages = await Page.find().sort({ createdAt: -1 });
+    const pages = await Page.find().sort({ navOrder: 1, createdAt: -1 });
 
     return res.status(200).json({
       success: true,
@@ -110,6 +110,7 @@ export const createPage = async (req, res) => {
       isPublished,
       navTitle,
       showInNavbar,
+      navOrder,
     } = req.body;
 
     // CHECK EXISTING PAGE
@@ -181,6 +182,7 @@ export const updatePage = async (req, res) => {
       isPublished,
       navTitle,
       showInNavbar,
+      navOrder,
     } = req.body;
 
     if (slug !== undefined) {
@@ -207,6 +209,10 @@ export const updatePage = async (req, res) => {
     // UPDATE SHOW IN NAVBAR
     if (showInNavbar !== undefined) {
       page.showInNavbar = showInNavbar;
+    }
+
+    if (navOrder !== undefined) {
+      page.navOrder = navOrder;
     }
 
     await page.save();
