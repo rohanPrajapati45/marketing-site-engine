@@ -14,6 +14,7 @@ import Blog_details from "./routes/Blog_details.jsx";
 import CaseStudy from "./routes/CaseStudy.jsx";
 import { store } from "./redux/store.js";
 import { Provider } from "react-redux";
+import DynamicPage from "./routes/DynamicPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,37 +25,21 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
-      {
-        path: "/work",
-        element: <Work />,
-      },
-      {
-        path: "/work/:slug",
-        element: <CaseStudy />,
-      },
-      {
-        path: "/agency",
-        element: <Agency />,
-      },
-      {
-        path: "/what-we-do",
-        element: <What_we_do />,
-      },
-      {
-        path: "/solutions",
-        element: <Solutions />,
-      },
+
       {
         path: "/blog",
         element: <Blog />,
       },
-      {
-        path: "/contact",
-        element: <Contact />,
-      },
+
       {
         path: "/blog/:slug",
         element: <Blog_details />,
+      },
+
+      // GENERIC CMS PAGE
+      {
+        path: "/:slug",
+        element: <DynamicPage />,
       },
     ],
   },
