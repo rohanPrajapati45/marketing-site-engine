@@ -1,9 +1,21 @@
 import React, { useEffect, useRef } from "react";
 
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-function BlogCards({ blogs = [] }) {
+import { getBlogs } from "../../redux/slices/blogSlice";
+
+function BlogCards({ blogs = [], section = null }) {
   const cardsRef = useRef([]);
+  const dispatch = useDispatch();
+
+  const { blogs: reduxBlogs, loading } = useSelector((state) => state.blog);
+
+  useEffect(() => {
+    if (section) {
+      dispatch(getBlogs(1));
+    }
+  }, [dispatch, section]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,13 +39,14 @@ function BlogCards({ blogs = [] }) {
 
     return () => observer.disconnect();
   }, [blogs]);
+  const finalBlogs = section ? reduxBlogs : blogs;
 
   return (
     <section className="w-full px-5 md:px-8 lg:px-10 py-10 bg-[#fafafa]">
       {/* GRID */}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14">
-        {blogs.map((blog, index) => (
+        {finalBlogs.map((blog, index) => (
           <Link
             key={blog._id}
             to={`/blog/${blog.slug}`}

@@ -69,6 +69,11 @@ export const sectionTypeInfo = {
     description: "Individual office location card with city, address, phone, and Google Maps link.",
     icon: "📍",
   },
+  "content-blog": {
+    label: "Blog Content",
+    description: "Manage blog posts directly from a CMS page section without a separate blog area.",
+    icon: "📝",
+  },
 };
 
 // ══════════════════════════════════════════════════════════════

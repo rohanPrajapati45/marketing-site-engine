@@ -36,6 +36,7 @@ export const allowedSectionTypes = [
   "solution-section",
   "contact-hero",
   "branch-section",
+  "content-blog",
 ];
 
 

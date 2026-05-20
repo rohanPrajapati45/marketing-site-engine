@@ -111,6 +111,9 @@ const blogSlice = createSlice({
       })
       .addCase(deleteBlog.fulfilled, (state, action) => {
         state.blogs = state.blogs.filter(b => b._id !== action.payload);
+        if (state.currentBlog?._id === action.payload) {
+          state.currentBlog = null;
+        }
       });
   },
 });
