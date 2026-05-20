@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 
 const homeProjectSchema = new mongoose.Schema(
-  {
+  [
+    {
     // ── ORDER ──
     // Admin drags to reorder — this controls display sequence
     // Also used to generate section id="project-1" in frontend
@@ -87,7 +88,8 @@ const homeProjectSchema = new mongoose.Schema(
       required: true,
       default: '/work',
     },
-  },
+  }
+],
   {
     timestamps: true,
   }
