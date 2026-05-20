@@ -16,7 +16,7 @@ import Toggle from "./ui/Toggle";
 import { Plus, Search, Edit2, Trash2, Star, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
-const BlogManagementPanel = () => {
+const BlogManagementPanel = ({ sectionId }) => {
   const dispatch = useDispatch();
   const { blogs, loading } = useSelector((state) => state.blogs);
   const [search, setSearch] = useState("");
@@ -28,8 +28,8 @@ const BlogManagementPanel = () => {
   const [localBlogs, setLocalBlogs] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchAllBlogs());
-  }, [dispatch]);
+    dispatch(fetchAllBlogs(sectionId));
+  }, [dispatch, sectionId]);
 
   useEffect(() => {
     setLocalBlogs(blogs || []);
@@ -113,8 +113,8 @@ const BlogManagementPanel = () => {
     if (!form.content.trim()) return toast.error("Content is required");
 
     const action = editingBlog
-      ? updateBlog({ blogId: editingBlog._id, data: form })
-      : createBlog(form);
+      ? updateBlog({ blogId: editingBlog._id, data: { ...form, sectionId } })
+      : createBlog({ ...form, sectionId });
 
     const res = await dispatch(action);
 
@@ -140,7 +140,7 @@ const BlogManagementPanel = () => {
     const res = await dispatch(
       updateBlog({
         blogId: blog._id,
-        data: { isPublished: !blog.isPublished },
+        data: { isPublished: !blog.isPublished, sectionId },
       }),
     );
     if (res.meta.requestStatus !== "fulfilled") {
@@ -158,7 +158,10 @@ const BlogManagementPanel = () => {
       ),
     );
     const res = await dispatch(
-      updateBlog({ blogId: blog._id, data: { featured: !blog.featured } }),
+      updateBlog({
+        blogId: blog._id,
+        data: { featured: !blog.featured, sectionId },
+      }),
     );
     if (res.meta.requestStatus !== "fulfilled") {
       setLocalBlogs(blogs || []);

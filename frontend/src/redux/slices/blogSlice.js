@@ -13,12 +13,18 @@ export const getBlogs =
   createAsyncThunk(
     "blog/getBlogs",
 
-    async (page = 1, thunkAPI) => {
+    async ({ page = 1, sectionId = null } = {}, thunkAPI) => {
       try {
 
         const response =
           await axios.get(
-            `${API}/blogs?page=${page}`,
+            `${API}/blogs`,
+            {
+              params: {
+                page,
+                ...(sectionId ? { sectionId } : {}),
+              },
+            },
           );
 
         return response.data;

@@ -3,9 +3,11 @@ import api from '../../utils/api';
 
 export const fetchAllBlogs = createAsyncThunk(
   'blogs/fetchAll',
-  async (_, thunkAPI) => {
+  async (sectionId, thunkAPI) => {
     try {
-      const res = await api.get('/admin/blogs');
+      const res = await api.get('/admin/blogs', {
+        params: sectionId ? { sectionId } : {},
+      });
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.data?.message || 'Failed to fetch blogs');

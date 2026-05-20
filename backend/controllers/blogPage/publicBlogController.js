@@ -10,20 +10,23 @@ export const getPublicBlogs =
       const page =
         Number(req.query.page) || 1;
 
+      const { sectionId } = req.query;
+
       const limit = 6;
 
       const skip =
         (page - 1) * limit;
 
+      const filter = {
+        isPublished: true,
+        ...(sectionId ? { sectionId } : {}),
+      };
+
       const totalBlogs =
-        await Blog.countDocuments({
-          isPublished: true,
-        });
+        await Blog.countDocuments(filter);
 
       const blogs =
-        await Blog.find({
-          isPublished: true,
-        })
+        await Blog.find(filter)
           .sort({
             publishedAt: -1,
           })

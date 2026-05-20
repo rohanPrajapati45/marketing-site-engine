@@ -41,7 +41,7 @@ const EditSectionModal = ({ isOpen, onClose, section, onSubmit }) => {
             </div>
           </div>
 
-          <BlogManagementPanel />
+          <BlogManagementPanel sectionId={section._id} />
         </div>
       </Modal>
     );

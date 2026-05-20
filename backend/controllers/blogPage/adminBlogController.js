@@ -31,8 +31,12 @@ export const getAllBlogs =
   async (req, res) => {
     try {
 
+      const { sectionId } = req.query;
+
+      const filter = sectionId ? { sectionId } : {};
+
       const blogs =
-        await Blog.find()
+        await Blog.find(filter)
         .sort({ createdAt: -1 });
 
       return res.status(200).json({

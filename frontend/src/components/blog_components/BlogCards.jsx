@@ -13,7 +13,7 @@ function BlogCards({ blogs = [], section = null }) {
 
   useEffect(() => {
     if (section) {
-      dispatch(getBlogs(1));
+      dispatch(getBlogs({ page: 1, sectionId: section._id }));
     }
   }, [dispatch, section]);
 
