@@ -55,8 +55,8 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT;
 
 app.use("/", navigationRouter);
+app.use('/api/auth', authRoutes);
 
-// app.use('/api/auth', authRoutes);
 // app.use('/api/services', serviceRoutes);
 // app.use('/api/categories', categoryRoutes);
 // app.use('/api/subcategories', subcategoryRoutes);
