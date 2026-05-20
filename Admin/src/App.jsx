@@ -1,21 +1,19 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute';
-import AdminLayout from './layouts/AdminLayout';
-import LoginPage from './pages/LoginPage';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import VerifyOtpPage from './pages/VerifyOtpPage';
-import ResetPasswordPage from './pages/ResetPasswordPage';
-import DashboardPage from './pages/DashboardPage';
-import PagesListPage from './pages/PagesListPage';
-import PageBuilderPage from './pages/PageBuilderPage';
-import BlogsListPage from './pages/BlogsListPage';
-import BlogEditorPage from './pages/BlogEditorPage';
-import ServicesListPage from './pages/ServicesListPage';
-import WorkPortfolioPage from './pages/WorkPortfolioPage';
-import MediaPage from './pages/MediaPage';
-import AdminsPage from './pages/AdminsPage';
-import ActivityPage from './pages/ActivityPage';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminLayout from "./layouts/AdminLayout";
+import LoginPage from "./pages/LoginPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import VerifyOtpPage from "./pages/VerifyOtpPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import DashboardPage from "./pages/DashboardPage";
+import PagesListPage from "./pages/PagesListPage";
+import PageBuilderPage from "./pages/PageBuilderPage";
+import ServicesListPage from "./pages/ServicesListPage";
+import WorkPortfolioPage from "./pages/WorkPortfolioPage";
+import MediaPage from "./pages/MediaPage";
+import AdminsPage from "./pages/AdminsPage";
+import ActivityPage from "./pages/ActivityPage";
 
 const App = () => {
   return (
@@ -32,9 +30,12 @@ const App = () => {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/pages" element={<PagesListPage />} />
           <Route path="/pages/:pageId" element={<PageBuilderPage />} />
-          <Route path="/blogs" element={<BlogsListPage />} />
-          <Route path="/blogs/new" element={<BlogEditorPage />} />
-          <Route path="/blogs/:blogId/edit" element={<BlogEditorPage />} />
+          <Route path="/blogs" element={<Navigate to="/pages" replace />} />
+          <Route path="/blogs/new" element={<Navigate to="/pages" replace />} />
+          <Route
+            path="/blogs/:blogId/edit"
+            element={<Navigate to="/pages" replace />}
+          />
           <Route path="/services" element={<ServicesListPage />} />
           <Route path="/work" element={<WorkPortfolioPage />} />
           <Route path="/media" element={<MediaPage />} />

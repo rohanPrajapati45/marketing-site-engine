@@ -20,6 +20,21 @@ const pageSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    navTitle: {
+      type: String,
+      required: true,
+      },
+
+    showInNavbar: {
+      type: Boolean,
+      default: true,
+      },
+
+    navOrder: {
+      type: Number,
+      required: true,
+      }
   },
   { timestamps: true }
 );

@@ -37,6 +37,7 @@ export const allowedSectionTypes = [
   "solution-section",
   "contact-hero",
   "branch-section",
+  "content-blog",
 ];
 
 
@@ -183,7 +184,7 @@ export const updateSection = async (req, res) => {
 
     // UPDATE CARD DATA
     if (cards !== undefined) {
-      if (section.data.cardType && cardModels[section.data.cardType]) {
+      if (section.data?.cardType && cardModels[section.data.cardType]) {
         // Card-model-based sections (standard with stat-card, std-card, etc.)
         const CardModel = cardModels[section.data.cardType];
         await CardModel.findOneAndUpdate(
@@ -250,7 +251,7 @@ export const deleteSection = async (req, res) => {
     }
 
     // DELETE CARD DOCUMENTS
-    if (section.data.cardType) {
+    if (section.data?.cardType && cardModels[section.data.cardType]) {
       const CardModel =
         cardModels[section.data.cardType];
 

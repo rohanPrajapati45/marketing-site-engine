@@ -26,6 +26,12 @@ const blogSchema =
         required: true,
       },
 
+      sectionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Section",
+        index: true,
+      },
+
       content: {
         type: String,
         required: true,

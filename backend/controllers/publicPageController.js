@@ -56,7 +56,7 @@ export const getPublicPage = async (req, res) => {
       sections.map(async (section) => {
 
         const sectionObj = section.toObject();
-
+        sectionObj.pageSlug = page.slug;
 
 
         // CARD BASED SECTION

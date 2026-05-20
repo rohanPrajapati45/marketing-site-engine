@@ -30,8 +30,12 @@ import utilityRouter from './routes/utilityRouter.js';
 import blogRouter from './routes/blogPage/adminBlogRouter.js';
 import blogPublicRouter from './routes/blogPage/publicBlogRouter.js';
 import mediaRouter from './routes/mediaRouter.js';
+<<<<<<< HEAD
 import { optionalAdmin } from './middleware/auth/optionalAuthMiddleware.js';
 import { mediaApiRouter } from './routes/mediaRouter.js';
+=======
+import navigationRouter from './routes/navigationRouter.js';
+>>>>>>> dynamic-nav
 
 const app = express();
 
@@ -52,6 +56,8 @@ app.get('/', (req, res) => {
 })
 
 const PORT = process.env.PORT;
+
+app.use("/", navigationRouter);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/services', serviceRoutes);
@@ -82,7 +88,11 @@ app.use('/', publicRouter);
 
 app.use('/admin', optionalAdmin, blogRouter);
 app.use('/', blogPublicRouter);
+<<<<<<< HEAD
 app.use('/admin', optionalAdmin, mediaRouter);
+=======
+
+>>>>>>> dynamic-nav
 app.use('/admin', mediaRouter);
 app.use('/api/media', mediaApiRouter);
 
