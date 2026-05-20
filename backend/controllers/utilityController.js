@@ -1,5 +1,6 @@
 import Page from "../models/Page.js";
 import Section from "../models/Section.js";
+import { logActivity } from "../utils/activityLogger.js";
 
 // REORDER SECTIONS
 export const reorderSections = async (req, res) => {
@@ -41,6 +42,13 @@ export const reorderSections = async (req, res) => {
     );
 
 
+
+    await logActivity(req, {
+      action: "section.reorder",
+      entityType: "page",
+      entityId: page._id.toString(),
+      summary: `Reordered sections for page ${page.slug}`,
+    });
 
     return res.status(200).json({
       success: true,
@@ -116,6 +124,13 @@ export const reorderCards = async (req, res) => {
     await cardDoc.save();
 
 
+
+    await logActivity(req, {
+      action: "section.cards.reorder",
+      entityType: "section",
+      entityId: section._id.toString(),
+      summary: "Reordered cards",
+    });
 
     return res.status(200).json({
       success: true,

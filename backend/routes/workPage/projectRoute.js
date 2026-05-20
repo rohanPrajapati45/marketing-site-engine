@@ -9,11 +9,12 @@ import {
     updateProject,
     deleteProject
 } from "../../controllers/workPage/projectController.js";
+import { optionalAdmin } from "../../middleware/auth/optionalAuthMiddleware.js";
 
-router.post("/create", createProject);
+router.post("/create", optionalAdmin, createProject);
 router.get("/all", getAllProjects);
 router.get("/:id", getProjectById);
-router.put("/update/:id", updateProject);
-router.delete("/delete/:id", deleteProject);
+router.put("/update/:id", optionalAdmin, updateProject);
+router.delete("/delete/:id", optionalAdmin, deleteProject);
 
 export default router;

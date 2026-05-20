@@ -14,6 +14,8 @@ import BlogEditorPage from './pages/BlogEditorPage';
 import ServicesListPage from './pages/ServicesListPage';
 import WorkPortfolioPage from './pages/WorkPortfolioPage';
 import MediaPage from './pages/MediaPage';
+import AdminsPage from './pages/AdminsPage';
+import ActivityPage from './pages/ActivityPage';
 
 const App = () => {
   return (
@@ -36,6 +38,8 @@ const App = () => {
           <Route path="/services" element={<ServicesListPage />} />
           <Route path="/work" element={<WorkPortfolioPage />} />
           <Route path="/media" element={<MediaPage />} />
+          <Route path="/admins" element={<AdminsPage />} />
+          <Route path="/activity" element={<ActivityPage />} />
         </Route>
       </Route>
 

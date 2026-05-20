@@ -30,6 +30,7 @@ import utilityRouter from './routes/utilityRouter.js';
 import blogRouter from './routes/blogPage/adminBlogRouter.js';
 import blogPublicRouter from './routes/blogPage/publicBlogRouter.js';
 import mediaRouter from './routes/mediaRouter.js';
+import { optionalAdmin } from './middleware/auth/optionalAuthMiddleware.js';
 
 const app = express();
 
@@ -73,14 +74,14 @@ app.use('/api/solutions/header', solutionsHeaderRoute);
 app.use('/api/solutions', solutionRoute);
 app.use('/api/solutions/demo-requests', demoRequestRoute);
 
-app.use('/admin', adminRouter);
-app.use('/admin', sectionRouter);
-app.use('/admin', utilityRouter);
+app.use('/admin', optionalAdmin, adminRouter);
+app.use('/admin', optionalAdmin, sectionRouter);
+app.use('/admin', optionalAdmin, utilityRouter);
 app.use('/', publicRouter);
 
-app.use('/admin', blogRouter);
+app.use('/admin', optionalAdmin, blogRouter);
 app.use('/', blogPublicRouter);
-app.use('/admin', mediaRouter);
+app.use('/admin', optionalAdmin, mediaRouter);
 
 
 const startServer = async () => {

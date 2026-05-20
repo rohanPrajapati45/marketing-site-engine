@@ -1,4 +1,5 @@
 import Blog from "../../models/blogPage/blog.js";
+import { logActivity } from "../../utils/activityLogger.js";
 
 
 
@@ -9,6 +10,13 @@ export const createBlog =
 
       const blog =
         await Blog.create(req.body);
+
+        await logActivity(req, {
+          action: "blog.create",
+          entityType: "blog",
+          entityId: blog._id.toString(),
+          summary: `Created blog ${blog.slug || blog.title || blog._id}`,
+        });
 
       return res.status(201).json({
         success: true,
@@ -98,6 +106,27 @@ export const updateBlog =
           }
         );
 
+        const isPublished = req.body?.isPublished;
+        const featured = req.body?.featured;
+        let action = "blog.update";
+        let summary = `Updated blog ${blog?.slug || blog?.title || blog?._id}`;
+        if (isPublished !== undefined) {
+          action = "blog.publish";
+          summary = `${isPublished ? "Published" : "Unpublished"} blog ${blog?.slug || blog?.title || blog?._id}`;
+        } else if (featured !== undefined) {
+          action = "blog.feature";
+          summary = `${featured ? "Featured" : "Unfeatured"} blog ${blog?.slug || blog?.title || blog?._id}`;
+        }
+
+        if (blog) {
+          await logActivity(req, {
+            action,
+            entityType: "blog",
+            entityId: blog._id.toString(),
+            summary,
+          });
+        }
+
       return res.status(200).json({
         success: true,
         data: blog,
@@ -119,9 +148,18 @@ export const deleteBlog =
   async (req, res) => {
     try {
 
-      await Blog.findByIdAndDelete(
+      const blog = await Blog.findByIdAndDelete(
         req.params.blogId
       );
+
+      if (blog) {
+        await logActivity(req, {
+          action: "blog.delete",
+          entityType: "blog",
+          entityId: blog._id.toString(),
+          summary: `Deleted blog ${blog.slug || blog.title || blog._id}`,
+        });
+      }
 
       return res.status(200).json({
         success: true,

@@ -40,7 +40,7 @@ const WorkCategoryEditor = ({ data, onChange }) => {
         ))}
       </div>
       {activeTab === 'tabs' && <TabsManager tabs={tabs} onChange={(v) => update('tabs', v)} />}
-      {activeTab === 'subcats' && <SubCatsManager subCategories={subCategories} onChange={(v) => update('subCategories', v)} />}
+      {activeTab === 'subcats' && <SubCatsManager tabs={tabs} subCategories={subCategories} onChange={(v) => update('subCategories', v)} />}
       {activeTab === 'projects' && <ProjectsManager projects={projects} onChange={(v) => update('projects', v)} subCategories={subCategories} />}
       {activeTab === 'recent' && <RecentConfig config={recentConfig} onChange={(v) => update('recentProjectsConfig', v)} allOptions={allSubcatOptions} />}
     </div>
@@ -82,11 +82,15 @@ const TabsManager = ({ tabs, onChange }) => {
 };
 
 // ── SUBCATEGORIES MANAGER ──
-const SubCatsManager = ({ subCategories, onChange }) => {
-  const [newGroup, setNewGroup] = useState('');
+const SubCatsManager = ({ tabs = [], subCategories, onChange }) => {
+  const [selectedTab, setSelectedTab] = useState(tabs[0] || '');
   const [newItems, setNewItems] = useState({});
 
-  const addGroup = () => { if (newGroup.trim()) { onChange({ ...subCategories, [newGroup.trim()]: [] }); setNewGroup(''); } };
+  const addGroup = () => {
+    if (!selectedTab) return;
+    if (subCategories[selectedTab]) return;
+    onChange({ ...subCategories, [selectedTab]: [] });
+  };
   const removeGroup = (key) => { const c = { ...subCategories }; delete c[key]; onChange(c); };
   const addItem = (key) => {
     const val = newItems[key]?.trim();
@@ -101,6 +105,9 @@ const SubCatsManager = ({ subCategories, onChange }) => {
   return (
     <div className="space-y-3">
       <p className="text-xs text-[var(--text-muted)]">Define filter categories and their options. These appear as filter buttons when a tab is selected.</p>
+      {tabs.length === 0 && (
+        <p className="text-xs text-[var(--text-muted)]">Add menu tabs first so you can assign subcategories to them.</p>
+      )}
       {Object.entries(subCategories).map(([key, items]) => (
         <div key={key} className="bg-[var(--surface)] border border-[var(--border)] rounded-xl p-3 space-y-2">
           <div className="flex items-center justify-between">
@@ -122,8 +129,13 @@ const SubCatsManager = ({ subCategories, onChange }) => {
         </div>
       ))}
       <div className="flex gap-2">
-        <input type="text" value={newGroup} onChange={e => setNewGroup(e.target.value)} onKeyDown={e => e.key === 'Enter' && (e.preventDefault(), addGroup())} placeholder="New group (e.g. By Industry)" className={inputCls} />
-        <button type="button" onClick={addGroup} className={btnPrimary}>Add Group</button>
+        <select value={selectedTab} onChange={e => setSelectedTab(e.target.value)} className={inputCls}>
+          <option value="">Select a menu tab...</option>
+          {tabs.map(tab => (
+            <option key={tab} value={tab}>{tab}</option>
+          ))}
+        </select>
+        <button type="button" onClick={addGroup} className={btnPrimary} disabled={!selectedTab || !!subCategories[selectedTab]}>Add Group</button>
       </div>
     </div>
   );

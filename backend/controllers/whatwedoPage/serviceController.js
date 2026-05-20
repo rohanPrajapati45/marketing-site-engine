@@ -1,8 +1,15 @@
 import serviceModel from "../../models/whatwedoPage/serviceModel.js";
+import { logActivity } from "../../utils/activityLogger.js";
 
 export const createService = async (req, res) =>{
     try{
         const service = await serviceModel.create(req.body);
+        await logActivity(req, {
+            action: "service.create",
+            entityType: "service",
+            entityId: service._id.toString(),
+            summary: `Created service ${service.title || service._id}`,
+        });
         res.status(201).json({message: "Service created successfully", service});
     }
     catch(error){
@@ -39,6 +46,12 @@ export const updateService = async (req, res) => {
         if(!service){
             return res.status(404).json({message: "Service not found"});
         }   
+        await logActivity(req, {
+            action: "service.update",
+            entityType: "service",
+            entityId: service._id.toString(),
+            summary: `Updated service ${service.title || service._id}`,
+        });
         res.status(200).json({message: "Service updated successfully", service});
     }
     catch(error){
@@ -52,6 +65,12 @@ export const deleteService = async (req, res) => {
         if(!service){
             return res.status(404).json({message: "Service not found"});
         }
+        await logActivity(req, {
+            action: "service.delete",
+            entityType: "service",
+            entityId: service._id.toString(),
+            summary: `Deleted service ${service.title || service._id}`,
+        });
         res.status(200).json({message: "Service deleted successfully"});
     }
     catch(error){
