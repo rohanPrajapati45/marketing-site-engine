@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API = import.meta.env.VITE_BASE_URL;
 
 
 export const getPageBySlug = createAsyncThunk(
@@ -10,7 +11,7 @@ export const getPageBySlug = createAsyncThunk(
     try {
 
       const response = await axios.get(
-        `http://localhost:3000/pages/${slug}`
+        `${API}/pages/${slug}`
       );
 
       return response.data.data;

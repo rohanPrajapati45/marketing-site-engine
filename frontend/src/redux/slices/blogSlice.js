@@ -6,7 +6,7 @@ import {
 import axios from "axios";
 
 const API =
-  "http://localhost:8080";
+  import.meta.env.VITE_BASE_URL;
 
 // GET BLOGS
 export const getBlogs =
