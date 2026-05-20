@@ -5,6 +5,8 @@ import SplashScreen from "../components/SplashScreen";
 import Btn_slide from "../components/Btn_slide";
 import { Outlet, useLocation } from "react-router-dom";
 import { pageThemes } from "../styles/themes";
+import { useDispatch } from "react-redux";
+import { getNavigation } from "../redux/slices/navigationSlice";
 
 const App = () => {
   const location = useLocation();
@@ -18,6 +20,11 @@ const App = () => {
   const pathname = location.pathname;
 
   const [dynamicTheme, setDynamicTheme] = useState(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getNavigation());
+  }, [dispatch]);
 
   useEffect(() => {
     if (pathname !== "/") {

@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/logo/tedmob_logo_dark.svg";
 import whiteLogo from "../assets/logo/tedmob_logo_white.svg";
+import { useSelector } from "react-redux";
 
 function Nav({ replaySplash, isHome, isContact, theme }) {
+  const { navItems } = useSelector((state) => state.navigation);
   return (
     <div
       className={
@@ -43,54 +45,20 @@ function Nav({ replaySplash, isHome, isContact, theme }) {
           </Link>
         </div>
         <ul className="flex gap-12 shrink-0 list-none">
-          <li>
-            <Link
-              to="/work"
-              className="no-underline font-semibold text-[0.95rem]"
-            >
-              WORK
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="agency"
-              className="no-underline font-semibold text-[0.95rem]"
-            >
-              AGENCY
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="what-we-do"
-              className="no-underline font-semibold text-[0.95rem]"
-            >
-              WHAT WE DO
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="solutions"
-              className="no-underline font-semibold text-[0.95rem]"
-            >
-              SOLUTIONS
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="blog"
-              className="no-underline font-semibold text-[0.95rem]"
-            >
-              BLOG
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="contact"
-              className="no-underline font-semibold text-[0.95rem]"
-            >
-              CONTACT
-            </Link>
-          </li>
+          {navItems.map((item) => {
+            const route = item.slug === "home" ? "/" : `/${item.slug}`;
+
+            return (
+              <li key={item._id}>
+                <Link
+                  to={route}
+                  className="no-underline font-semibold text-[0.95rem]"
+                >
+                  {item.navTitle}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

@@ -30,6 +30,7 @@ import utilityRouter from './routes/utilityRouter.js';
 import blogRouter from './routes/blogPage/adminBlogRouter.js';
 import blogPublicRouter from './routes/blogPage/publicBlogRouter.js';
 import mediaRouter from './routes/mediaRouter.js';
+import navigationRouter from './routes/navigationRouter.js';
 
 const app = express();
 
@@ -50,6 +51,8 @@ app.get('/', (req, res) => {
 })
 
 const PORT = process.env.PORT;
+
+app.use("/", navigationRouter);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/services', serviceRoutes);

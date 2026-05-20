@@ -108,8 +108,11 @@ export const createPage = async (req, res) => {
       title,
       seo,
       isPublished,
+      navTitle,
+      showInNavbar,
     } = req.body;
 
+    // CHECK EXISTING PAGE
     const existingPage = await Page.findOne({ slug });
 
     if (existingPage) {
@@ -119,18 +122,37 @@ export const createPage = async (req, res) => {
       });
     }
 
+    // GET NEXT NAV ORDER
+    const lastNavPage = await Page.findOne().sort({
+      navOrder: -1,
+    });
+
+    const nextNavOrder =
+      lastNavPage?.navOrder + 1 || 1;
+
+    // CREATE PAGE
     const page = await Page.create({
       slug,
       title,
       seo,
       isPublished,
+
+      navTitle:
+        navTitle || title || slug,
+
+      showInNavbar:
+        showInNavbar ?? true,
+
+      navOrder: nextNavOrder,
     });
 
     return res.status(201).json({
       success: true,
       data: page,
     });
+
   } catch (error) {
+
     return res.status(500).json({
       success: false,
       message: error.message,
@@ -157,6 +179,8 @@ export const updatePage = async (req, res) => {
       title,
       seo,
       isPublished,
+      navTitle,
+      showInNavbar,
     } = req.body;
 
     if (slug !== undefined) {
@@ -173,6 +197,16 @@ export const updatePage = async (req, res) => {
 
     if (isPublished !== undefined) {
       page.isPublished = isPublished;
+    }
+
+    // UPDATE NAV TITLE
+    if (navTitle !== undefined) {
+      page.navTitle = navTitle;
+    }
+
+    // UPDATE SHOW IN NAVBAR
+    if (showInNavbar !== undefined) {
+      page.showInNavbar = showInNavbar;
     }
 
     await page.save();
