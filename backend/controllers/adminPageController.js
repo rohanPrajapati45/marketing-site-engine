@@ -245,17 +245,13 @@ export const deletePage = async (req, res) => {
     });
 
     for (const section of sections) {
+      if (section.data?.cardType && cardModels[section.data.cardType]) {
+        const CardModel = cardModels[section.data.cardType];
 
-      
-    if (section.data.cardType) {
-
-    const CardModel =
-        cardModels[section.data.cardType];
-
-    await CardModel.findOneAndDelete({
-        sectionId: section._id,
-    });
-    }
+        await CardModel.findOneAndDelete({
+          sectionId: section._id,
+        });
+      }
 
       await Section.findByIdAndDelete(section._id);
     }
