@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import Pagination from "./Pagination";
 
 import { getBlogs } from "../../redux/slices/blogSlice";
 
@@ -9,11 +10,32 @@ function BlogCards({ blogs = [], section = null }) {
   const cardsRef = useRef([]);
   const dispatch = useDispatch();
 
-  const { blogs: reduxBlogs, loading } = useSelector((state) => state.blog);
+  const [localBlogs, setLocalBlogs] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const fetchPage = async (page) => {
+    if (!section) return;
+    const res = await dispatch(getBlogs({ page, sectionId: section._id }));
+    if (res.meta.requestStatus === "fulfilled") {
+      const payload = res.payload || {};
+      const dataArr = Array.isArray(payload.data)
+        ? payload.data
+        : (payload.data?.blogs ?? payload.data ?? []);
+      setLocalBlogs(dataArr);
+      const pg =
+        payload.pagination?.currentPage ?? payload.data?.currentPage ?? 1;
+      const tp =
+        payload.pagination?.totalPages ?? payload.data?.totalPages ?? 1;
+      setCurrentPage(pg);
+      setTotalPages(tp);
+    }
+  };
 
   useEffect(() => {
     if (section) {
-      dispatch(getBlogs({ page: 1, sectionId: section._id }));
+      setCurrentPage(1);
+      fetchPage(1);
     }
   }, [dispatch, section]);
 
@@ -39,7 +61,7 @@ function BlogCards({ blogs = [], section = null }) {
 
     return () => observer.disconnect();
   }, [blogs]);
-  const finalBlogs = section ? reduxBlogs : blogs;
+  const finalBlogs = section ? localBlogs : blogs;
 
   return (
     <section className="w-full px-5 md:px-8 lg:px-10 py-10 bg-[#fafafa]">
@@ -79,6 +101,17 @@ function BlogCards({ blogs = [], section = null }) {
           </Link>
         ))}
       </div>
+
+      {/* Pagination for section-scoped blogs */}
+      {section && (
+        <div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={(p) => fetchPage(p)}
+          />
+        </div>
+      )}
     </section>
   );
 }
