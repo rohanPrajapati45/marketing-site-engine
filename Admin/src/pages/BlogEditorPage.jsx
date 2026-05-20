@@ -110,22 +110,6 @@ const BlogEditorPage = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-<<<<<<< HEAD
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Title *</label>
-            <input type="text" value={form.title} onChange={(e) => { handleChange('title', e.target.value); if (!isEdit) handleChange('slug', e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')); }} placeholder="Blog title" className={inputCls} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Slug *</label>
-            <input type="text" value={form.slug} onChange={(e) => handleChange('slug', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))} placeholder="blog-slug" className={inputCls} />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Excerpt *</label>
-            <textarea value={form.excerpt} onChange={(e) => handleChange('excerpt', e.target.value)} placeholder="Short description" rows={2} className={`${inputCls} resize-none`} />
-          </div>
-          <ImageUploader value={form.coverImage} onChange={(url) => handleChange('coverImage', url)} label="Cover Image *" folder="general" />
-=======
         <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6">
           <BlogFormFields
             form={form}
@@ -137,7 +121,6 @@ const BlogEditorPage = () => {
             inputCls={inputCls}
             isEdit={isEdit}
           />
->>>>>>> dynamic-nav
         </div>
 
         <button

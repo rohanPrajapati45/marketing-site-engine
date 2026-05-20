@@ -1,19 +1,10 @@
-<<<<<<< HEAD
-import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import {
-  LayoutDashboard,
-  FileText,
-  PenSquare,
-=======
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   LayoutDashboard,
   FileText,
   Briefcase,
->>>>>>> dynamic-nav
   ImageIcon,
   Users,
   Activity,
@@ -23,24 +14,20 @@ import {
 } from "lucide-react";
 
 const navItems = [
-<<<<<<< HEAD
-  { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
-  { to: '/pages', icon: FileText, label: 'Pages' },
-  { to: '/blogs', icon: PenSquare, label: 'Blogs' },
-  { to: '/media', icon: ImageIcon, label: 'Media' },
-=======
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/pages", icon: FileText, label: "Pages" },
-  { to: "/work", icon: Briefcase, label: "Work Portfolio" },
   { to: "/media", icon: ImageIcon, label: "Media" },
->>>>>>> dynamic-nav
 ];
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
   const location = useLocation();
   const { admin } = useSelector((state) => state.auth);
   const items = admin?.isMainAdmin
-    ? [...navItems, { to: '/activity', icon: Activity, label: 'Activity' }, { to: '/admins', icon: Users, label: 'Admins' }]
+    ? [
+        ...navItems,
+        { to: "/activity", icon: Activity, label: "Activity" },
+        { to: "/admins", icon: Users, label: "Admins" },
+      ]
     : navItems;
 
   const isActive = (path) => {

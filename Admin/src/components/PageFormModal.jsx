@@ -1,13 +1,7 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import Modal from './ui/Modal';
-import ImageUploader from './ImageUploader';
-import toast from 'react-hot-toast';
-=======
 import React, { useState } from "react";
 import Modal from "./ui/Modal";
+import ImageUploader from "./ImageUploader";
 import toast from "react-hot-toast";
->>>>>>> dynamic-nav
 
 const PageFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
   const isEdit = !!initialData;
@@ -137,9 +131,12 @@ const PageFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
               />
             </div>
             <div>
-<<<<<<< HEAD
-              <ImageUploader value={form.seo.ogImage} onChange={(url) => handleChange('seo.ogImage', url)} label="OG Image" folder="general" />
-=======
+              <ImageUploader
+                value={form.seo.ogImage}
+                onChange={(url) => handleChange("seo.ogImage", url)}
+                label="OG Image"
+                folder="general"
+              />
               <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">
                 OG Image URL
               </label>
@@ -150,7 +147,6 @@ const PageFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                 placeholder="https://..."
                 className="w-full px-3.5 py-2.5 bg-[var(--bg)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
               />
->>>>>>> dynamic-nav
             </div>
           </div>
         </div>

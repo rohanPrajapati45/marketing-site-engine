@@ -1,25 +1,11 @@
 {
-  "type": "string",
+  "type": "object",
+  "name": "Error",
+  "message": "Unknown API key your_api_key",
   "keys": [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "13",
-    "14",
-    "15",
-    "16",
-    "17",
-    "18"
+    "message",
+    "name",
+    "http_code"
   ],
-  "stringified": "\"Must supply api_key\""
+  "stringified": "{\"message\":\"Unknown API key your_api_key\",\"name\":\"Error\",\"http_code\":401}"
 }
