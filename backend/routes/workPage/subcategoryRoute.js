@@ -9,11 +9,12 @@ import {
     updateSubCategory,
     deleteSubCategory
 } from "../../controllers/workPage/subcategoryController.js";
+import { optionalAdmin } from "../../middleware/auth/optionalAuthMiddleware.js";
 
-router.post("/create", createSubCategory);
+router.post("/create", optionalAdmin, createSubCategory);
 router.get("/all", getAllSubCategories);
 router.get("/:id", getSubCategoryById);
-router.put("/update/:id", updateSubCategory);
-router.delete("/delete/:id", deleteSubCategory);
+router.put("/update/:id", optionalAdmin, updateSubCategory);
+router.delete("/delete/:id", optionalAdmin, deleteSubCategory);
 
 export default router;

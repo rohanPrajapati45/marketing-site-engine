@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import { generateOTP } from "../../config/otp.js";
 import { Resend } from 'resend';
+import { logActivity, logActivityDirect } from "../../utils/activityLogger.js";
 
 // ── OTP-based Login Flow ──
 export const sendLoginOtp = async (req, res) => {
@@ -54,12 +55,20 @@ export const verifyLoginOtp = async (req, res) => {
         admin.otp = undefined;
         admin.otpExpiry = undefined;
         await admin.save();
-        const token = jwt.sign({ id: admin._id, isMainAdmin: admin.isMainAdmin }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        const token = jwt.sign({ id: admin._id, email: admin.email, isMainAdmin: admin.isMainAdmin }, process.env.JWT_SECRET, { expiresIn: "1d" });
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 24 * 60 * 60 * 1000,
+        });
+        await logActivityDirect({
+            adminId: admin._id,
+            adminEmail: admin.email,
+            action: "auth.login",
+            entityType: "admin",
+            entityId: admin._id.toString(),
+            summary: "Admin logged in",
         });
         return res.status(200).json({ message: "Login successful", admin: { email: admin.email, isMainAdmin: admin.isMainAdmin } });
     } catch (error) {
@@ -80,6 +89,57 @@ export const getMe = async (req, res) => {
     }
 };
 
+export const listAdmins = async (req, res) => {
+    try {
+        if (!req.admin.isMainAdmin) {
+            return res.status(403).json({ message: "Access denied" });
+        }
+
+        const admins = await adminModel
+            .find({}, { email: 1, isMainAdmin: 1, createdAt: 1 })
+            .sort({ createdAt: -1 });
+
+        return res.status(200).json({ admins });
+    } catch (error) {
+        return res.status(500).json({ message: "Failed to load admins", error: error.message });
+    }
+};
+
+export const deleteAdmin = async (req, res) => {
+    try {
+        if (!req.admin.isMainAdmin) {
+            return res.status(403).json({ message: "Access denied" });
+        }
+
+        const { id } = req.params;
+        if (!id) {
+            return res.status(400).json({ message: "Admin id is required" });
+        }
+
+        const target = await adminModel.findById(id);
+        if (!target) {
+            return res.status(404).json({ message: "Admin not found" });
+        }
+
+        if (target.isMainAdmin) {
+            return res.status(400).json({ message: "Main admin cannot be deleted" });
+        }
+
+        await adminModel.deleteOne({ _id: target._id });
+
+        await logActivity(req, {
+            action: "admin.delete",
+            entityType: "admin",
+            entityId: target._id.toString(),
+            summary: `Deleted admin ${target.email}`,
+        });
+
+        return res.status(200).json({ message: "Admin deleted" });
+    } catch (error) {
+        return res.status(500).json({ message: "Failed to delete admin", error: error.message });
+    }
+};
+
 export const registerAdmin = async (req, res) => {
     try{
         if (!req.admin.isMainAdmin) {
@@ -95,6 +155,12 @@ export const registerAdmin = async (req, res) => {
             email,
             password: await bcrypt.hash(password, 10),
             isMainAdmin: false,
+        });
+        await logActivity(req, {
+            action: "admin.create",
+            entityType: "admin",
+            entityId: newAdmin._id.toString(),
+            summary: `Created admin ${newAdmin.email}`,
         });
         res.status(201).json({ message: "Admin registered successfully", admin: newAdmin.email });
     }
@@ -117,12 +183,20 @@ export const loginAdmin = async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ message: "incorrect email or password" });
         }
-        const token = jwt.sign({ id: admin._id, isMainAdmin: admin.isMainAdmin }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        const token = jwt.sign({ id: admin._id, email: admin.email, isMainAdmin: admin.isMainAdmin }, process.env.JWT_SECRET, { expiresIn: "1d" });
         res.cookie("token", token, {
             httpOnly: true,
             secure : process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 24 * 60 * 60 * 1000,
+        });
+        await logActivityDirect({
+            adminId: admin._id,
+            adminEmail: admin.email,
+            action: "auth.login",
+            entityType: "admin",
+            entityId: admin._id.toString(),
+            summary: "Admin logged in",
         });
         res.status(200).json({ message: "Admin logged in successfully", admin: { email: admin.email, isMainAdmin: admin.isMainAdmin } });
     }
@@ -131,12 +205,18 @@ export const loginAdmin = async (req, res) => {
     }
 }
 
-export const logoutAdmin = (req, res) => {
+export const logoutAdmin = async (req, res) => {
     try{
         res.clearCookie("token", {
             httpOnly: true,
             secure : process.env.NODE_ENV === "production",
             sameSite: "strict",
+        });
+        await logActivity(req, {
+            action: "auth.logout",
+            entityType: "admin",
+            entityId: req.admin?.id,
+            summary: "Admin logged out",
         });
         res.status(200).json({ message: "Admin logged out successfully" });
     }

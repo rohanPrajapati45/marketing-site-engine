@@ -1,8 +1,15 @@
 import categoryModel from "../../models/workPage/categoryModel.js";
+import { logActivity } from "../../utils/activityLogger.js";
 
 export const createCategory = async (req, res) =>{
     try{
         const category = await categoryModel.create(req.body);
+        await logActivity(req, {
+            action: "work.category.create",
+            entityType: "workCategory",
+            entityId: category._id.toString(),
+            summary: `Created category ${category.name || category._id}`,
+        });
         res.status(201).json({message: "Category created successfully", category});
     }
     catch(error){
@@ -39,6 +46,12 @@ export const updateCategory = async (req, res) => {
         if(!category){
             return res.status(404).json({message: "Category not found"});
         }
+        await logActivity(req, {
+            action: "work.category.update",
+            entityType: "workCategory",
+            entityId: category._id.toString(),
+            summary: `Updated category ${category.name || category._id}`,
+        });
         res.status(200).json({message: "Category updated successfully", category});
     }
     catch(error){
@@ -52,6 +65,12 @@ export const deleteCategory = async (req, res) => {
         if(!category){
             return res.status(404).json({message: "Category not found"});
         }
+        await logActivity(req, {
+            action: "work.category.delete",
+            entityType: "workCategory",
+            entityId: category._id.toString(),
+            summary: `Deleted category ${category.name || category._id}`,
+        });
         res.status(200).json({message: "Category deleted successfully"});
     }
     catch(error){

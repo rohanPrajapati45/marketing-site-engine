@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const ProjectCard = ({ project }) => {
-  const Wrapper = project.link ? "a" : "div";
+  const projectHref = project.projectlink || project.link;
+  const Wrapper = projectHref ? "a" : "div";
 
   const [visible, setVisible] = useState(false);
 
@@ -32,8 +33,10 @@ const ProjectCard = ({ project }) => {
     "aria-label": project.title,
   };
 
-  if (project.link) {
-    wrapperProps.href = project.link;
+  if (projectHref) {
+    wrapperProps.href = projectHref;
+    wrapperProps.target = "_blank";
+    wrapperProps.rel = "noreferrer";
   }
 
   return (

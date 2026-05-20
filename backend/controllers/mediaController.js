@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import multer from 'multer';
 import Media from '../models/Media.js';
+import { logActivity } from '../utils/activityLogger.js';
 
 // Configure Cloudinary
 cloudinary.config({
@@ -62,6 +63,12 @@ export const uploadMedia = async (req, res) => {
       uploadedMedia.push(media);
     }
 
+    await logActivity(req, {
+      action: "media.upload",
+      entityType: "media",
+      summary: `Uploaded ${uploadedMedia.length} media item(s)`,
+    });
+
     return res.status(201).json({
       success: true,
       data: uploadedMedia,
@@ -103,6 +110,13 @@ export const deleteMediaItem = async (req, res) => {
 
     // Delete from DB
     await Media.findByIdAndDelete(req.params.id);
+
+    await logActivity(req, {
+      action: "media.delete",
+      entityType: "media",
+      entityId: media._id.toString(),
+      summary: `Deleted media ${media.filename || media._id}`,
+    });
 
     return res.status(200).json({
       success: true,
