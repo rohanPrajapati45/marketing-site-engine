@@ -54,11 +54,10 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
             key={to}
             to={to}
             end={to === '/'}
-            className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
-              isActive(to)
-                ? 'bg-[var(--accent)]/10 text-[var(--accent)] shadow-sm'
-                : 'text-[var(--text-secondary)] hover:bg-[var(--hover)] hover:text-[var(--text-primary)]'
-            } ${collapsed ? 'justify-center px-2' : ''}`}
+            className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${isActive(to)
+              ? 'bg-[var(--accent)]/10 text-[var(--accent)] shadow-sm'
+              : 'text-[var(--text-secondary)] hover:bg-[var(--hover)] hover:text-[var(--text-primary)]'
+              } ${collapsed ? 'justify-center px-2' : ''}`}
           >
             <Icon size={20} className={`flex-shrink-0 transition-colors ${isActive(to) ? 'text-[var(--accent)]' : 'text-[var(--text-muted)] group-hover:text-[var(--text-secondary)]'}`} />
             {!collapsed && <span className="whitespace-nowrap">{label}</span>}

@@ -5,28 +5,28 @@ import ConfirmDialog from '../components/ui/ConfirmDialog';
 import toast from 'react-hot-toast';
 
 const FOLDERS = [
-  { value: '',            label: 'All Images' },
-  { value: 'hero',        label: '🎬 Hero' },
-  { value: 'projects',    label: '📁 Projects' },
-  { value: 'solutions',   label: '💡 Solutions' },
+  { value: '', label: 'All Images' },
+  { value: 'hero', label: '🎬 Hero' },
+  { value: 'projects', label: '📁 Projects' },
+  { value: 'solutions', label: '💡 Solutions' },
   { value: 'casestudies', label: '📖 Case Studies' },
-  { value: 'contact',     label: '📍 Contact' },
-  { value: 'general',     label: '🖼 General' },
+  { value: 'contact', label: '📍 Contact' },
+  { value: 'general', label: '🖼 General' },
 ];
 
 const UPLOAD_FOLDERS = FOLDERS.filter(f => f.value !== '');
 
 const MediaPage = () => {
-  const [items, setItems]             = useState([]);
-  const [loading, setLoading]         = useState(true);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeFolder, setActiveFolder] = useState('');
   const [uploadFolder, setUploadFolder] = useState('general');
-  const [uploading, setUploading]     = useState(false);
-  const [progress, setProgress]       = useState(0);
-  const [isDragging, setIsDragging]   = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [view, setView]               = useState('grid'); // grid | list
+  const [view, setView] = useState('grid'); // grid | list
   const inputRef = useRef(null);
 
   const loadMedia = async (folder = '') => {

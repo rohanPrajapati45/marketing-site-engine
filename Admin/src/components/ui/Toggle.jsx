@@ -16,13 +16,11 @@ const Toggle = ({ enabled, onChange, label, size = 'md' }) => {
         role="switch"
         aria-checked={enabled}
         onClick={() => onChange(!enabled)}
-        className={`${s.track} relative inline-flex items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] ${
-          enabled ? 'bg-[var(--accent)]' : 'bg-[var(--border)]'
-        }`}
+        className={`${s.track} relative inline-flex items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] ${enabled ? 'bg-[var(--accent)]' : 'bg-[var(--border)]'
+          }`}
       >
-        <span className={`${s.dot} inline-block rounded-full bg-white shadow-sm transform transition-transform duration-200 ${
-          enabled ? s.translate : 'translate-x-0.5'
-        }`} />
+        <span className={`${s.dot} inline-block rounded-full bg-white shadow-sm transform transition-transform duration-200 ${enabled ? s.translate : 'translate-x-0.5'
+          }`} />
       </button>
       {label && <span className="text-sm text-[var(--text-secondary)]">{label}</span>}
     </label>

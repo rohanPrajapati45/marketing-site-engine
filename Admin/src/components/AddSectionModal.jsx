@@ -42,11 +42,10 @@ const AddSectionModal = ({ isOpen, onClose, onSubmit }) => {
                 <button
                   key={t.value}
                   onClick={() => setSelectedType(t.value)}
-                  className={`w-full px-4 py-3 rounded-xl text-left transition-all border ${
-                    selectedType === t.value
+                  className={`w-full px-4 py-3 rounded-xl text-left transition-all border ${selectedType === t.value
                       ? 'border-[var(--accent)] bg-[var(--accent)]/10'
                       : 'border-[var(--border)] hover:border-[var(--accent)]/30'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start gap-3">
                     <span className="text-lg flex-shrink-0 mt-0.5">{t.icon}</span>
@@ -64,18 +63,18 @@ const AddSectionModal = ({ isOpen, onClose, onSubmit }) => {
 
           {/* Card type — only for "standard" sections */}
           {selectedType === 'standard' && (
-          <div>
-            <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">Card Type (optional)</label>
-            <select
-              value={selectedCardType}
-              onChange={(e) => setSelectedCardType(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-[var(--bg)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
-            >
-              {cardTypeOptions.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">Card Type (optional)</label>
+              <select
+                value={selectedCardType}
+                onChange={(e) => setSelectedCardType(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-[var(--bg)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
+              >
+                {cardTypeOptions.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </div>
           )}
 
           <div className="flex gap-3 pt-2">
