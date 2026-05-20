@@ -49,7 +49,7 @@ function BlogCards({ blogs = [], section = null }) {
         {finalBlogs.map((blog, index) => (
           <Link
             key={blog._id}
-            to={`/blog/${blog.slug}`}
+            to={`/${section?.pageSlug || "blog"}/${blog.slug}`}
             ref={(el) => (cardsRef.current[index] = el)}
             className="group block opacity-0 translate-y-20 transition-all duration-700 ease-out"
           >

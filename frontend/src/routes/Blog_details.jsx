@@ -11,15 +11,15 @@ import StretchHero from "../components/blog_components/StretchHero";
 import BlogContent from "../components/blog_components/BlogContent";
 
 function Blog_details() {
-  const { slug } = useParams();
+  const { blogSlug } = useParams();
 
   const dispatch = useDispatch();
 
   const { singleBlog, loading, error } = useSelector((state) => state.blog);
 
   useEffect(() => {
-    dispatch(getSingleBlog(slug));
-  }, [dispatch, slug]);
+    dispatch(getSingleBlog(blogSlug));
+  }, [dispatch, blogSlug]);
 
   if (loading) {
     return (
