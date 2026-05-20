@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 function Pagination({ currentPage, totalPages, onPageChange }) {
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    onPageChange(page);
   };
 
   return (
