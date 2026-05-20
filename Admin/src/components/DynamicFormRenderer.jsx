@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, ChevronDown, ChevronUp, GripVertical } from 'lucide-react';
+import { Plus, Trash2, ChevronDown, ChevronUp, GripVertical, X } from 'lucide-react';
 import ImageUploader from './ImageUploader';
 import WorkCategoryEditor from './WorkCategoryEditor';
 import StickyServicesEditor from './StickyServicesEditor';
@@ -146,7 +146,7 @@ const ObjectArrayEditor = ({ items, subFields, onChange, label }) => {
                 {(sf.options || []).map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             ) : sf.type === 'image' ? (
-              <ImageUploader value={editData[sf.name] || ''} onChange={(url) => setEditData(p => ({ ...p, [sf.name]: url }))} label="" />
+              <ImageUploader value={editData[sf.name] || ''} onChange={(url) => setEditData(p => ({ ...p, [sf.name]: url }))} label="" folder={sf.folder || 'general'} />
             ) : (
               <input type={sf.type === 'number' ? 'number' : 'text'} value={editData[sf.name] ?? ''} onChange={(e) => setEditData(p => ({ ...p, [sf.name]: sf.type === 'number' ? Number(e.target.value) : e.target.value }))} placeholder={sf.placeholder || ''} className="w-full px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-lg text-xs text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]" />
             )}
@@ -210,7 +210,46 @@ const DynamicFormRenderer = ({ schema, data, onChange }) => {
         );
 
       case 'image':
-        return <ImageUploader value={value} onChange={(url) => handleFieldChange(field.name, url)} label="" />;
+        return <ImageUploader value={value} onChange={(url) => handleFieldChange(field.name, url)} label="" folder={field.folder || 'general'} />;
+
+      case 'imageArray': {
+        const imgItems = Array.isArray(value) ? value : [];
+        return (
+          <div className="space-y-3">
+            {imgItems.map((imgUrl, idx) => (
+              <div key={idx} className="relative bg-[var(--bg)] border border-[var(--border)] rounded-xl p-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-medium text-[var(--text-muted)]">Image {idx + 1}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleFieldChange(field.name, imgItems.filter((_, i) => i !== idx))}
+                    className="p-1 rounded hover:bg-red-500/10 text-[var(--text-muted)] hover:text-red-400"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+                <ImageUploader
+                  value={imgUrl}
+                  onChange={(url) => {
+                    const updated = [...imgItems];
+                    updated[idx] = url;
+                    handleFieldChange(field.name, updated);
+                  }}
+                  label=""
+                  folder={field.folder || 'general'}
+                />
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => handleFieldChange(field.name, [...imgItems, ''])}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs text-[var(--accent)] hover:bg-[var(--accent)]/10 rounded-lg font-medium w-full justify-center border border-dashed border-[var(--border)] hover:border-[var(--accent)]"
+            >
+              <Plus size={14} /> Add Image
+            </button>
+          </div>
+        );
+      }
 
       case 'select':
         return (

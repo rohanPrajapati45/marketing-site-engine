@@ -30,6 +30,7 @@ import utilityRouter from './routes/utilityRouter.js';
 import blogRouter from './routes/blogPage/adminBlogRouter.js';
 import blogPublicRouter from './routes/blogPage/publicBlogRouter.js';
 import mediaRouter from './routes/mediaRouter.js';
+import { mediaApiRouter } from './routes/mediaRouter.js';
 
 const app = express();
 
@@ -81,7 +82,18 @@ app.use('/', publicRouter);
 app.use('/admin', blogRouter);
 app.use('/', blogPublicRouter);
 app.use('/admin', mediaRouter);
+app.use('/api/media', mediaApiRouter);
 
+// Global error handler — catches unhandled errors from middleware
+app.use((err, req, res, next) => {
+  console.error('=== GLOBAL ERROR HANDLER ===');
+  console.error('URL:', req.method, req.originalUrl);
+  console.error('Error:', err);
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Internal server error',
+  });
+});
 
 const startServer = async () => {
     try {

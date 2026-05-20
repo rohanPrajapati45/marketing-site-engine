@@ -6,6 +6,7 @@ import Modal from '../components/ui/Modal';
 import EmptyState from '../components/ui/EmptyState';
 import ConfirmDialog from '../components/ui/ConfirmDialog';
 import toast from 'react-hot-toast';
+import ImageUploader from '../components/ImageUploader';
 
 const ServiceFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
   const isEdit = !!initialData;
@@ -22,7 +23,7 @@ const ServiceFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => 
       <form onSubmit={(e) => { e.preventDefault(); if (!form.title.trim()) return toast.error('Title required'); onSubmit(form); }} className="space-y-4">
         <div><label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Title *</label><input type="text" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Service title" className={inputCls} /></div>
         <div><label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Nav Title *</label><input type="text" value={form.navTitle} onChange={e => setForm(p => ({ ...p, navTitle: e.target.value }))} placeholder="Short nav title" className={inputCls} /></div>
-        <div><label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Image URL *</label><input type="text" value={form.image} onChange={e => setForm(p => ({ ...p, image: e.target.value }))} placeholder="https://..." className={inputCls} /></div>
+        <div><label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Image URL *</label><ImageUploader value={form.image} onChange={(url) => setForm(p => ({ ...p, image: url }))} folder="general" label="" /></div>
         <div><label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Description *</label><textarea value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} rows={3} placeholder="Service description" className={`${inputCls} resize-none`} /></div>
         <div>
           <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Items</label>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, ChevronUp, ChevronDown, Edit2, GripVertical, X, Image } from 'lucide-react';
+import ImageUploader from './ImageUploader';
 
 const inputCls = "w-full px-3 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent";
 const btnPrimary = "px-3 py-2 bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white rounded-xl text-xs font-medium transition-colors";
@@ -75,10 +76,7 @@ const StickyServicesEditor = ({ data, onChange }) => {
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">Image URL *</label>
-          <input type="text" value={form.image} onChange={e => setForm(f => ({ ...f, image: e.target.value }))} placeholder="/whatwedo/whatwedo1.webp" className={inputCls} />
-        </div>
+        <ImageUploader label="Image" value={form.image} onChange={(url) => setForm(f => ({ ...f, image: url }))} folder="general" required />
 
         <div>
           <label className="block text-xs font-medium text-[var(--text-muted)] mb-1">Description</label>

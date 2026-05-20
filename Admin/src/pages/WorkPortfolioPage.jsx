@@ -11,6 +11,7 @@ import Badge from '../components/ui/Badge';
 import EmptyState from '../components/ui/EmptyState';
 import ConfirmDialog from '../components/ui/ConfirmDialog';
 import toast from 'react-hot-toast';
+import ImageUploader from '../components/ImageUploader';
 
 const inputCls = "w-full px-3.5 py-2.5 bg-[var(--bg)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent";
 const TAB_KEYS = ['categories', 'subcategories', 'projects'];
@@ -348,7 +349,7 @@ const FormModal = ({ isOpen, onClose, onSubmit, tab, initialData, categories, su
         {!isCat && !isSub && (
           <>
             <div><label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Title *</label><input type="text" value={projForm.title} onChange={e => setProjForm(p => ({ ...p, title: e.target.value }))} placeholder="Project name" className={inputCls} autoFocus /></div>
-            <div><label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Image URL *</label><input type="text" value={projForm.image} onChange={e => setProjForm(p => ({ ...p, image: e.target.value }))} placeholder="/images/project.webp" className={inputCls} /></div>
+            <ImageUploader label="Image" value={projForm.image} onChange={(url) => setProjForm(p => ({ ...p, image: url }))} folder="projects" required />
             <div><label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Project Link *</label><input type="text" value={projForm.projectlink} onChange={e => setProjForm(p => ({ ...p, projectlink: e.target.value }))} placeholder="/work/project-slug" className={inputCls} /></div>
             <div>
               <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5">Subcategories</label>

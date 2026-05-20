@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, ChevronUp, ChevronDown, Edit2, GripVertical, X, Star, Eye, EyeOff } from 'lucide-react';
+import ImageUploader from './ImageUploader';
 
 const inputCls = "w-full px-3 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent";
 const btnPrimary = "px-3 py-2 bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white rounded-xl text-xs font-medium transition-colors";
@@ -172,7 +173,7 @@ const ProjectsManager = ({ projects, onChange, subCategories = {} }) => {
       <div className="bg-[var(--surface)] border border-[var(--border)] rounded-xl p-4 space-y-3 animate-fade-in">
         <p className="text-sm font-semibold text-[var(--text-primary)]">{editIdx === -1 ? 'Add Project' : `Edit: ${form.title}`}</p>
         <div><label className="block text-xs font-medium text-[var(--text-muted)] mb-1">Title *</label><input type="text" value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Project name" className={inputCls} /></div>
-        <div><label className="block text-xs font-medium text-[var(--text-muted)] mb-1">Image URL *</label><input type="text" value={form.image} onChange={e => setForm(p => ({ ...p, image: e.target.value }))} placeholder="/images/project.webp" className={inputCls} /></div>
+        <ImageUploader label="Image" value={form.image} onChange={(url) => setForm(p => ({ ...p, image: url }))} folder="projects" required />
         <div><label className="block text-xs font-medium text-[var(--text-muted)] mb-1">Project Link *</label><input type="text" value={form.projectlink} onChange={e => setForm(p => ({ ...p, projectlink: e.target.value }))} placeholder="/work/project-slug" className={inputCls} /></div>
 
         <div className={`grid grid-cols-1 gap-3 ${catFields.length >= 3 ? 'sm:grid-cols-3' : catFields.length === 2 ? 'sm:grid-cols-2' : ''}`}>
