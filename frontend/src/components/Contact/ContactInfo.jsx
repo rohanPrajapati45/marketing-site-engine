@@ -26,16 +26,20 @@ const ContactInfo = ({ section, activeCityIndex }) => {
   return (
     <>
       <section className="contact-hero">
-        {branchesData?.map((branch, index) => (
-          <div
-            key={branch.id || branch.city || index}
-            className={`hero-slide ${
-              index === activeCityIndex ? "is-active" : ""
-            }`}
-          >
-            <img src={resolveImageUrl(branch.cityImage)} alt={branch.city} />
-          </div>
-        ))}
+        {branchesData?.map((branch, index) => {
+          if (!branch?.cityImage) return null;
+
+          return (
+            <div
+              key={branch.id || branch.city || index}
+              className={`hero-slide ${
+                index === activeCityIndex ? "is-active" : ""
+              }`}
+            >
+              <img src={resolveImageUrl(branch.cityImage)} alt={branch.city} />
+            </div>
+          );
+        })}
 
         <div className="hero-overlay" />
 

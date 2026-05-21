@@ -44,8 +44,24 @@ function Contact() {
   useEffect(() => {
     if (!contactBranches.length) return;
 
+    const findNextWithImage = (current) => {
+      if (!contactBranches.length) return 0;
+      let i = current;
+      for (let k = 0; k < contactBranches.length; k++) {
+        i = (i + 1) % contactBranches.length;
+        if (contactBranches[i]?.cityImage) return i;
+      }
+      return current;
+    };
+
+    // initialize to first branch that has an image
+    const firstWithImage = contactBranches.findIndex((b) => b?.cityImage);
+    if (firstWithImage !== -1) {
+      setActiveCityIndex(firstWithImage);
+    }
+
     const interval = setInterval(() => {
-      setActiveCityIndex((prev) => (prev + 1) % contactBranches.length);
+      setActiveCityIndex((prev) => findNextWithImage(prev));
     }, 3000);
 
     return () => clearInterval(interval);
