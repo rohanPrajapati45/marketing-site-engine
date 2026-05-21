@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { typedTexts } from './homeData';
 
-export function useTypingAnimation() {
+export function useTypingAnimation(enabled = true) {
   const typingRef = useRef(null);
   const timerRef = useRef(null);
   const isCompactRef = useRef(false);
@@ -18,6 +18,7 @@ export function useTypingAnimation() {
     updateCompactMode();
     window.addEventListener('resize', updateCompactMode);
 
+    if (!enabled) return;
     const words = typedTexts;
     let wordIndex = 0;
     let charIndex = 0;
@@ -66,7 +67,7 @@ export function useTypingAnimation() {
       if (timerRef.current) window.clearTimeout(timerRef.current);
       window.removeEventListener('resize', updateCompactMode);
     };
-  }, []);
+  }, [enabled]);
 
   return { typingRef, showHeroText };
 }

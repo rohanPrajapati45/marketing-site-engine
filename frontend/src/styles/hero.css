@@ -34,7 +34,8 @@
           margin-top: auto;
         }
 
-        #hero {
+        #hero,
+        .hero-section {
           position: relative;
           height: 100vh;
           min-height: 600px;
