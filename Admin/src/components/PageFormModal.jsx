@@ -15,6 +15,9 @@ const PageFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
       ogImage: initialData?.seo?.ogImage || "",
     },
     isPublished: initialData?.isPublished ?? true,
+    showInNavbar: initialData?.showInNavbar ?? true,
+    navbarFixed: initialData?.navbarFixed ?? false,
+    navbarTransparent: initialData?.navbarTransparent ?? false,
   });
 
   const handleChange = (field, value) => {
@@ -151,25 +154,99 @@ const PageFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={form.isPublished}
-              onChange={(e) => handleChange("isPublished", e.target.checked)}
-              className="sr-only"
-            />
-            <div
-              className={`w-10 h-5 rounded-full transition-colors relative ${form.isPublished ? "bg-emerald-500" : "bg-[var(--border)]"}`}
-            >
-              <div
-                className={`w-4 h-4 rounded-full bg-white absolute top-0.5 transition-transform ${form.isPublished ? "translate-x-5" : "translate-x-0.5"}`}
-              />
+        <div className="border-t border-[var(--border)] pt-4">
+          <p className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-3">
+            Page & Navbar Settings
+          </p>
+          <div className="space-y-3">
+            {/* Published */}
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={form.isPublished}
+                  onChange={(e) => handleChange("isPublished", e.target.checked)}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-10 h-5 rounded-full transition-colors relative ${form.isPublished ? "bg-emerald-500" : "bg-[var(--border)]"}`}
+                >
+                  <div
+                    className={`w-4 h-4 rounded-full bg-white absolute top-0.5 transition-transform ${form.isPublished ? "translate-x-5" : "translate-x-0.5"}`}
+                  />
+                </div>
+                <span className="text-sm text-[var(--text-secondary)]">
+                  {form.isPublished ? "Published" : "Draft"}
+                </span>
+              </label>
             </div>
-            <span className="text-sm text-[var(--text-secondary)]">
-              {form.isPublished ? "Published" : "Draft"}
-            </span>
-          </label>
+
+            {/* Show In Navbar */}
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={form.showInNavbar}
+                  onChange={(e) => handleChange("showInNavbar", e.target.checked)}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-10 h-5 rounded-full transition-colors relative ${form.showInNavbar ? "bg-emerald-500" : "bg-[var(--border)]"}`}
+                >
+                  <div
+                    className={`w-4 h-4 rounded-full bg-white absolute top-0.5 transition-transform ${form.showInNavbar ? "translate-x-5" : "translate-x-0.5"}`}
+                  />
+                </div>
+                <span className="text-sm text-[var(--text-secondary)]">
+                  Show In Navbar
+                </span>
+              </label>
+            </div>
+
+            {/* Navbar Fixed */}
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={form.navbarFixed}
+                  onChange={(e) => handleChange("navbarFixed", e.target.checked)}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-10 h-5 rounded-full transition-colors relative ${form.navbarFixed ? "bg-blue-500" : "bg-[var(--border)]"}`}
+                >
+                  <div
+                    className={`w-4 h-4 rounded-full bg-white absolute top-0.5 transition-transform ${form.navbarFixed ? "translate-x-5" : "translate-x-0.5"}`}
+                  />
+                </div>
+                <span className="text-sm text-[var(--text-secondary)]">
+                  Navbar Fixed
+                </span>
+              </label>
+            </div>
+
+            {/* Navbar Transparent */}
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={form.navbarTransparent}
+                  onChange={(e) => handleChange("navbarTransparent", e.target.checked)}
+                  className="sr-only"
+                />
+                <div
+                  className={`w-10 h-5 rounded-full transition-colors relative ${form.navbarTransparent ? "bg-purple-500" : "bg-[var(--border)]"}`}
+                >
+                  <div
+                    className={`w-4 h-4 rounded-full bg-white absolute top-0.5 transition-transform ${form.navbarTransparent ? "translate-x-5" : "translate-x-0.5"}`}
+                  />
+                </div>
+                <span className="text-sm text-[var(--text-secondary)]">
+                  Navbar Transparent
+                </span>
+              </label>
+            </div>
+          </div>
         </div>
 
         <div className="flex gap-3 pt-2">

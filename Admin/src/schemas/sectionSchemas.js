@@ -61,13 +61,8 @@ export const sectionTypeInfo = {
   },
   "contact-hero": {
     label: "Contact Hero",
-    description: "Contact page header with email addresses, phone numbers, and branch city tabs.",
+    description: "Contact page header with email addresses, phone numbers, and embedded branch offices.",
     icon: "📞",
-  },
-  "branch-section": {
-    label: "Branch / Office",
-    description: "Individual office location card with city, address, phone, and Google Maps link.",
-    icon: "📍",
   },
   "content-blog": {
     label: "Blog Content",
@@ -134,14 +129,6 @@ export const sectionSchemas = {
     { name: "caseStudyUrl", type: "text", label: "Case Study URL", placeholder: "/work/bokra" },
   ],
 
-  "branch-section": [
-    { name: "id", type: "number", label: "Branch ID", required: true, placeholder: "e.g. 1" },
-    { name: "city", type: "text", label: "City / Country Name", required: true, placeholder: "e.g. UAE" },
-    { name: "addressLines", type: "array", label: "Address Lines", itemType: "text", placeholder: "Add address line" },
-    { name: "phone", type: "text", label: "Phone Number", placeholder: "+971 50 1234567" },
-    { name: "mapsUrl", type: "text", label: "Google Maps URL", placeholder: "https://www.google.com/maps/place/..." },
-  ],
-
   "contact-hero": [
     { name: "contactInfo.heading", type: "text", label: "Contact Heading", required: true, placeholder: "Let's Talk" },
     {
@@ -159,11 +146,14 @@ export const sectionSchemas = {
       ],
     },
     {
-      name: "branchesData", type: "objectArray", label: "Branch City Tabs",
+      name: "branchesData", type: "objectArray", label: "Branch Offices",
       subFields: [
         { name: "id", type: "number", label: "ID", placeholder: "1" },
         { name: "city", type: "text", label: "City", placeholder: "LEBANON" },
         { name: "cityImage", type: "image", label: "City Image" },
+        { name: "address", type: "textarea", label: "Address", placeholder: "Line 1\nLine 2\nLine 3" },
+        { name: "phone", type: "text", label: "Phone", placeholder: "+961 4 545 466" },
+        { name: "mapsUrl", type: "text", label: "Google Maps URL", placeholder: "https://www.google.com/maps/place/..." },
       ],
     },
   ],

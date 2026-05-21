@@ -1,46 +1,22 @@
-/* eslint-disable no-unused-vars */
-import {
-  useMemo,
-  useState,
-  useEffect,
-  useRef,
-} from 'react';
+import { useMemo, useState, useEffect, useRef } from "react";
 
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 
-import {
-  getPageBySlug,
-} from '../redux/slices/pageSlice';
+import { getPageBySlug } from "../redux/slices/pageSlice";
 
-import {
-  componentMap,
-} from '../utils/componentMap';
+import { componentMap } from "../utils/ComponentMap";
 
-import '../styles/contactInfo.css';
-import '../styles/branch.css';
-import '../styles/contactForm.css';
-import '../styles/contactSubmission.css';
+import "../styles/contactInfo.css";
+import "../styles/branch.css";
+import "../styles/contactForm.css";
+import "../styles/contactSubmission.css";
 
 function Contact() {
-
   const dispatch = useDispatch();
 
-  const {
-    page,
-    loading,
-    error,
-  } = useSelector(
-    (state) => state.page
-  );
+  const { page, loading, error } = useSelector((state) => state.page);
 
-  const [activeCityIndex, setActiveCityIndex] =
-    useState(0);
-
-  const [branchThemes, setBranchThemes] =
-    useState({});
+  const [activeCityIndex, setActiveCityIndex] = useState(0);
 
   const formRef = useRef(null);
 
@@ -48,178 +24,80 @@ function Contact() {
 
   // FETCH CONTACT PAGE
   useEffect(() => {
-
-    dispatch(
-      getPageBySlug('contact')
-    );
-
+    dispatch(getPageBySlug("contact"));
   }, [dispatch]);
 
-  // BRANCH SECTIONS
-  const branchSections =
-    page?.sections?.filter(
-      (section) =>
-        section.type ===
-        'branch-section'
-    ) || [];
+  const contactHeroSection = useMemo(
+    () => page?.sections?.find((section) => section.type === "contact-hero"),
+    [page],
+  );
+
+  const contactBranches =
+    contactHeroSection?.data?.branchesData ||
+    contactHeroSection?.data?.contactInfo?.branchesData ||
+    [];
 
   // AUTO ACTIVE BRANCH
   useEffect(() => {
+    if (!contactBranches.length) return;
 
-    if (!branchSections.length)
-      return;
+    const findNextWithImage = (current) => {
+      if (!contactBranches.length) return 0;
+      let i = current;
+      for (let k = 0; k < contactBranches.length; k++) {
+        i = (i + 1) % contactBranches.length;
+        if (contactBranches[i]?.cityImage) return i;
+      }
+      return current;
+    };
+
+    // initialize to first branch that has an image
+    const firstWithImage = contactBranches.findIndex((b) => b?.cityImage);
+    if (firstWithImage !== -1) {
+      setActiveCityIndex(firstWithImage);
+    }
 
     const interval = setInterval(() => {
-
-      setActiveCityIndex(
-        (prev) =>
-          (prev + 1) %
-          branchSections.length
-      );
-
+      setActiveCityIndex((prev) => findNextWithImage(prev));
     }, 3000);
 
-    return () =>
-      clearInterval(interval);
-
-  }, [branchSections.length]);
-
-  const contactHeroSection = useMemo(
-    () =>
-      page?.sections?.find(
-        (section) =>
-          section.type === 'contact-hero'
-      ),
-    [page]
-  );
-
-  useEffect(() => {
-    let active = true;
-
-    const loadThemes = async () => {
-      const { getImageTheme } = await import(
-        '../hooks/useMediaTheme'
-      );
-      const themes = {};
-
-      const branches =
-        contactHeroSection?.data
-          ?.branchesData || [];
-
-      for (const branch of branches) {
-        if (!branch?.cityImage) continue;
-
-        const detectedTheme =
-          await getImageTheme(
-            branch.cityImage
-          );
-        themes[branch.id] = detectedTheme;
-      }
-
-      if (active) {
-        setBranchThemes(themes);
-      }
-    };
-
-    loadThemes();
-
-    return () => {
-      active = false;
-    };
-  }, [contactHeroSection]);
-
-  useEffect(() => {
-    if (typeof document === 'undefined') {
-      return;
-    }
-
-    const branches =
-      contactHeroSection?.data
-        ?.branchesData || [];
-
-    const activeBranch =
-      branches[activeCityIndex];
-    if (!activeBranch) {
-      document.documentElement.dataset.homeTheme =
-        'light';
-      return;
-    }
-
-    const theme =
-      branchThemes[activeBranch.id] ||
-      'dark';
-
-    document.documentElement.dataset.homeTheme =
-      theme;
-  }, [
-    activeCityIndex,
-    branchThemes,
-    contactHeroSection,
-  ]);
+    return () => clearInterval(interval);
+  }, [contactBranches.length]);
 
   // REVEAL ANIMATION
   useEffect(() => {
+    const revealEls = document.querySelectorAll(".contact-page .reveal");
 
-    const revealEls =
-      document.querySelectorAll(
-        '.contact-page .reveal'
-      );
+    if (!revealEls.length) return;
 
-    if (!revealEls.length)
-      return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
 
-    const observer =
-      new IntersectionObserver(
-        (entries) => {
-
-          entries.forEach(
-            (entry) => {
-
-              if (
-                entry.isIntersecting
-              ) {
-
-                entry.target.classList.add(
-                  'in-view'
-                );
-
-                observer.unobserve(
-                  entry.target
-                );
-
-              }
-
-            }
-          );
-
-        },
-        {
-          threshold: 0.1,
-        }
-      );
-
-    revealEls.forEach((el) =>
-      observer.observe(el)
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+      },
     );
 
-    return () =>
-      observer.disconnect();
+    revealEls.forEach((el) => observer.observe(el));
 
+    return () => observer.disconnect();
   }, []);
 
   const handleSubmit = (e) => {
-
     e.preventDefault();
 
-    alert(
-      'Form submitted! Connect your backend here.'
-    );
-
+    alert("Form submitted! Connect your backend here.");
   };
 
   // LOADING
   if (loading) {
-
     return (
       <div className="contact-page">
         <div className="solutions-loading">
@@ -231,7 +109,6 @@ function Contact() {
 
   // ERROR
   if (error) {
-
     return (
       <div className="contact-page">
         <div className="solutions-error">
@@ -247,58 +124,27 @@ function Contact() {
   }
 
   return (
-
     <div className="contact-page">
+      {page.sections?.map((section, index) => {
+        const Component = componentMap[section.type];
 
-      {page.sections?.map(
-        (section, index) => {
-           if (
-    section.type === 'branch-section' &&
-    index !==
-      page.sections.findIndex(
-        (s) =>
-          s.type === 'branch-section'
-      )
-  ) {
-    return null;
-  }
-          const Component =
-            componentMap[
-              section.type
-            ];
+        if (!Component) {
+          console.warn(`No component found for ${section.type}`);
 
-          if (!Component) {
-
-            console.warn(
-              `No component found for ${section.type}`
-            );
-
-            return null;
-          }
-
-          return (
-            <Component
-              key={section._id}
-              section={section}
-              activeCityIndex={
-                activeCityIndex
-              }
-              branchSections={
-                branchSections
-              }
-              formRef={formRef}
-              headingRef={
-                headingRef
-              }
-              handleSubmit={
-                handleSubmit
-              }
-            />
-          );
-
+          return null;
         }
-      )}
 
+        return (
+          <Component
+            key={section._id}
+            section={section}
+            activeCityIndex={activeCityIndex}
+            formRef={formRef}
+            headingRef={headingRef}
+            handleSubmit={handleSubmit}
+          />
+        );
+      })}
     </div>
   );
 }
