@@ -33,6 +33,7 @@ import mediaRouter from './routes/mediaRouter.js';
 import { optionalAdmin } from './middleware/auth/optionalAuthMiddleware.js';
 import { mediaApiRouter } from './routes/mediaRouter.js';
 import navigationRouter from './routes/navigationRouter.js';
+import footerRouter from './routes/footerRouter.js';
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT;
 
 app.use("/", navigationRouter);
+app.use('/api/footer', footerRouter);
 app.use('/api/auth', authRoutes);
 
 app.use('/api/services', serviceRoutes);

@@ -8,7 +8,7 @@
 .contact-hero {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 50vh;
   overflow: hidden;
 }
 
@@ -27,13 +27,36 @@
   opacity: 0;
   transition: opacity 1s ease-in-out;
   z-index: 0;
+  
 }
 
 .hero-slide.is-active {
   opacity: 1;
   z-index: 1;
 }
+/* TABLET */
 
+@media (min-width: 768px){
+
+  .contact-hero {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
+}
+}
+
+/* DESKTOP */
+
+@media (min-width: 1024px){
+
+  .contact-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+}
 .hero-slide img {
   width: 100%;
   height: 100%;
@@ -111,4 +134,59 @@
 .hero-phone-icon {
   font-size: 18px;
   flex-shrink: 0;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px){
+
+  .hero-content{
+
+    left: 24px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    padding-top: 0;
+
+    width: calc(100% - 48px);
+  }
+
+  .hero-heading{
+
+    font-size: 28px;
+
+    line-height: 1.15;
+
+    margin-bottom: 18px;
+  }
+
+  .hero-emails{
+
+    margin-bottom: 14px;
+  }
+
+  .hero-email-row{
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    font-weight: 500;
+  }
+
+  .hero-phone-row{
+
+    font-size: 14px;
+
+    gap: 8px;
+
+    margin-bottom: 8px;
+  }
+
+  .hero-phone-icon{
+
+    font-size: 14px;
+  }
 }

@@ -1,5 +1,6 @@
-// All hardcoded content from Home.jsx in one place
-// Later replaced by API call
+// src/hooks/homeData.js
+// Remove hardcoded sections[] — now built dynamically in Home.jsx
+// Keep only typedTexts and typingPrefix
 
 export const typedTexts = [
   "E-Commerce Solutions",
@@ -13,14 +14,9 @@ export const typedTexts = [
 
 export const typingPrefix = "For";
 
-export const sections = [
-  { id: 'hero',      label: 'Hero',            theme: 'dark'  },
-  { id: 'project-1', label: 'OMT',             theme: 'dark'  },
-  { id: 'project-2', label: 'Zain',            theme: 'dark'  },
-  { id: 'project-3', label: 'Z&V',             theme: 'dark'  },
-  { id: 'project-4', label: 'BOKRA',           theme: 'dark'  },
-  { id: 'project-5', label: 'CLIENT 5',        theme: 'dark'  },
-  { id: 'project-6', label: 'CLIENT 6',        theme: 'dark'  },
-  { id: 'project-7', label: 'CLIENT 7',        theme: 'dark'  },
-  { id: 'cta',       label: "Let's Transform", theme: 'light' },
-];
+// ── sections[] REMOVED from here ──
+// It is now built dynamically in Home.jsx
+// based on how many projects come from API
+// This means 2 projects → 4 sections total
+// This means 7 projects → 9 sections total
+// hero and cta are always first and last

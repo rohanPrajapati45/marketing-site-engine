@@ -12,6 +12,7 @@ export const solutionsData = [
       'As a full-service agency, we Build Custom eCommerce solutions in 4 WEEKS covering: Payment Gateway Integrations, Cash on Delivery, Delivery Service Integration, Stock Management and Customized eCommerce Features',
     inquiryLabel: 'For more inquiry fill the below',
     images: [
+      
       '/images/solutions/ecom-1.jpg',
       '/images/solutions/ecom-2.jpg',
       '/images/solutions/ecom-3.jpg',

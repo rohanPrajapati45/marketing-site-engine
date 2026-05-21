@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getImageTheme } from "../../hooks/useMediaTheme";
 
 import "../../styles/ProjectsSection.css";
 
 export default function ProjectsSection({ section }) {
+  const contentRef = useRef(null);
+
   const {
     titleBold,
     titleLines,
@@ -15,7 +17,7 @@ export default function ProjectsSection({ section }) {
     mockupImage,
     mockupAlt,
     caseStudyUrl,
-  } = section.data;
+  } = section?.data || {};
 
   const [theme, setTheme] = useState("dark");
 
@@ -41,11 +43,7 @@ export default function ProjectsSection({ section }) {
   // CONTENT ANIMATION
   // CONTENT ANIMATION
   useEffect(() => {
-    const sectionEl = document.getElementById(section.id);
-
-    if (!sectionEl) return;
-
-    const contentEl = sectionEl.querySelector(".slide-content");
+    const contentEl = contentRef.current;
 
     if (!contentEl) return;
 
@@ -65,7 +63,7 @@ export default function ProjectsSection({ section }) {
     observer.observe(contentEl);
 
     return () => observer.disconnect();
-  }, [section.id]);
+  }, []);
 
   return (
     <section className="project-slide" data-theme={theme}>
@@ -75,7 +73,7 @@ export default function ProjectsSection({ section }) {
 
       {/* CONTENT */}
 
-      <div className="slide-content">
+      <div className="slide-content" ref={contentRef}>
         {/* HEADING */}
 
         <div className="slide-heading">

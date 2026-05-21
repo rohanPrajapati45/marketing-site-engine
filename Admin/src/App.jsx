@@ -14,6 +14,7 @@ import WorkPortfolioPage from "./pages/WorkPortfolioPage";
 import MediaPage from "./pages/MediaPage";
 import AdminsPage from "./pages/AdminsPage";
 import ActivityPage from "./pages/ActivityPage";
+import FooterPage from "./pages/FooterPage";
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
           <Route path="/media" element={<MediaPage />} />
           <Route path="/admins" element={<AdminsPage />} />
           <Route path="/activity" element={<ActivityPage />} />
+          <Route path="/footer" element={<FooterPage />} />
         </Route>
       </Route>
 

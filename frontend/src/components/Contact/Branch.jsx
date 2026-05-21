@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+
+
 const Branch = ({
   branchSections = [],
   activeCityIndex = 0,
@@ -7,11 +10,46 @@ const Branch = ({
       ? branchSections
       : [];
 
+ const [currentSlide, setCurrentSlide] = useState(0);
+
+useEffect(() => {
+
+  if (window.innerWidth > 768) return;
+
+  const interval = setInterval(() => {
+
+    setCurrentSlide((prev) =>
+      prev === safeSections.length - 1
+        ? 0
+        : prev + 1
+    );
+
+  }, 3000);
+
+  return () => clearInterval(interval);
+
+}, [safeSections.length]);
+
   return (
 
     <section className="branches-section">
 
-      <div className="branches-grid">
+      <div className="branches-slider-wrapper">
+
+  <div
+    className="branches-grid"
+    style={{
+      width: window.innerWidth <= 768
+        ? `${safeSections.length * 100}%`
+        : "100%",
+
+      transform:
+        window.innerWidth <= 768
+          ? `translateX(-${currentSlide * (100 / safeSections.length)}%)`
+          : "translateX(0)",
+
+    }}
+  >
 
         {safeSections.map(
           (section, index) => {
@@ -59,7 +97,7 @@ const Branch = ({
                   href={branch.mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-directions"
+                 
                 >
                   <span>
                     Directions
@@ -72,7 +110,7 @@ const Branch = ({
 
           }
         )}
-
+</div>
       </div>
 
     </section>
