@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useMemo, useState, useEffect, useRef } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -18,8 +17,6 @@ function Contact() {
   const { page, loading, error } = useSelector((state) => state.page);
 
   const [activeCityIndex, setActiveCityIndex] = useState(0);
-
-  const [branchThemes, setBranchThemes] = useState({});
 
   const formRef = useRef(null);
 
@@ -66,48 +63,6 @@ function Contact() {
 
     return () => clearInterval(interval);
   }, [contactBranches.length]);
-
-  useEffect(() => {
-    let active = true;
-
-    const loadThemes = async () => {
-      const { getImageTheme } = await import("../hooks/useMediaTheme");
-      const themes = {};
-
-      for (const branch of contactBranches) {
-        if (!branch?.cityImage) continue;
-
-        const detectedTheme = await getImageTheme(branch.cityImage);
-        themes[branch.id] = detectedTheme;
-      }
-
-      if (active) {
-        setBranchThemes(themes);
-      }
-    };
-
-    loadThemes();
-
-    return () => {
-      active = false;
-    };
-  }, [contactBranches]);
-
-  useEffect(() => {
-    if (typeof document === "undefined") {
-      return;
-    }
-
-    const activeBranch = contactBranches[activeCityIndex];
-    if (!activeBranch) {
-      document.documentElement.dataset.homeTheme = "light";
-      return;
-    }
-
-    const theme = branchThemes[activeBranch.id] || "dark";
-
-    document.documentElement.dataset.homeTheme = theme;
-  }, [activeCityIndex, branchThemes, contactBranches]);
 
   // REVEAL ANIMATION
   useEffect(() => {
