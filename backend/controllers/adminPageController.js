@@ -111,6 +111,8 @@ export const createPage = async (req, res) => {
       isPublished,
       navTitle,
       showInNavbar,
+      navbarFixed,
+      navbarTransparent,
       navOrder,
     } = req.body;
 
@@ -144,6 +146,12 @@ export const createPage = async (req, res) => {
 
       showInNavbar:
         showInNavbar ?? true,
+
+      navbarFixed:
+        navbarFixed ?? false,
+
+      navbarTransparent:
+        navbarTransparent ?? false,
 
       navOrder: nextNavOrder,
     });
@@ -190,6 +198,8 @@ export const updatePage = async (req, res) => {
       isPublished,
       navTitle,
       showInNavbar,
+      navbarFixed,
+      navbarTransparent,
       navOrder,
     } = req.body;
 
@@ -217,6 +227,16 @@ export const updatePage = async (req, res) => {
     // UPDATE SHOW IN NAVBAR
     if (showInNavbar !== undefined) {
       page.showInNavbar = showInNavbar;
+    }
+
+    // UPDATE NAVBAR FIXED
+    if (navbarFixed !== undefined) {
+      page.navbarFixed = navbarFixed;
+    }
+
+    // UPDATE NAVBAR TRANSPARENT
+    if (navbarTransparent !== undefined) {
+      page.navbarTransparent = navbarTransparent;
     }
 
     if (navOrder !== undefined) {

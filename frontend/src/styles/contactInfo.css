@@ -99,12 +99,12 @@
   text-decoration: none;
 }
 
-html[data-home-theme="light"] .contact-hero .hero-content,
-html[data-home-theme="light"] .contact-hero .hero-heading,
-html[data-home-theme="light"] .contact-hero .hero-email-row,
-html[data-home-theme="light"] .contact-hero .hero-email-row a,
-html[data-home-theme="light"] .contact-hero .hero-phone-row,
-html[data-home-theme="light"] .contact-hero .hero-phone-row a {
+[data-theme="light"] .contact-hero .hero-content,
+[data-theme="light"] .contact-hero .hero-heading,
+[data-theme="light"] .contact-hero .hero-email-row,
+[data-theme="light"] .contact-hero .hero-email-row a,
+[data-theme="light"] .contact-hero .hero-phone-row,
+[data-theme="light"] .contact-hero .hero-phone-row a {
   color: #111;
 }
 
