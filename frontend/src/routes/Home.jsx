@@ -58,6 +58,9 @@ function Home() {
   const heroVideoRef = useRef(null);
  
   const isSnapping = useRef(false);
+  const snapToSlideRef = useRef(null);
+  const lastScrollTime = useRef(0);
+  const lastDeltaY = useRef(0);
  
   const sectionEls = useRef([]);
  
@@ -176,10 +179,14 @@ function Home() {
   // SCROLLBAR CLICK
   const handleSectionClick = (index) => {
     setActiveSectionIndex(index);
- 
-    document.getElementById(sections[index]?.id)?.scrollIntoView({
-      behavior: "smooth",
-    });
+
+    if (snapToSlideRef.current) {
+      snapToSlideRef.current(index);
+    } else {
+      document.getElementById(sections[index]?.id)?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
   };
  
   // ACTIVE SECTION OBSERVER
@@ -217,83 +224,89 @@ function Home() {
   // SNAP SCROLL
   useEffect(() => {
     if (!sections.length) return;
- 
+
     // Reset snap lock whenever this effect re-runs to prevent deadlock
     isSnapping.current = false;
- 
+
     let rafId = null;
- 
+    const cooldownDuration = 450; // Milliseconds cooldown after animation ends
+
     function collectSections() {
       sectionEls.current = sections
         .map((s) => document.getElementById(s.id))
         .filter(Boolean);
     }
- 
+
     collectSections();
- 
+
     function easeOutCubic(t) {
       return 1 - Math.pow(1 - t, 3);
     }
- 
+
     function animatedScrollTo(targetY, duration) {
       if (rafId) {
         cancelAnimationFrame(rafId);
       }
- 
+
       const startY = window.scrollY;
- 
+
       const distance = targetY - startY;
- 
+
       if (Math.abs(distance) < 1) {
         isSnapping.current = false;
+        lastScrollTime.current = Date.now();
         return;
       }
- 
+
       const startTime = performance.now();
- 
+
       function step(now) {
         const elapsed = now - startTime;
- 
+
         const progress = Math.min(elapsed / duration, 1);
- 
+
         const eased = easeOutCubic(progress);
- 
+
         window.scrollTo(0, startY + distance * eased);
- 
+
         if (progress < 1) {
           rafId = requestAnimationFrame(step);
         } else {
           isSnapping.current = false;
+          lastScrollTime.current = Date.now();
           rafId = null;
         }
       }
- 
+
       rafId = requestAnimationFrame(step);
     }
- 
+
     function snapToSlide(index) {
       collectSections();
- 
+
       const els = sectionEls.current;
- 
+
       if (index < 0 || index >= els.length) return;
- 
+
       isSnapping.current = true;
- 
+
       const targetY = els[index].offsetTop;
- 
-      animatedScrollTo(targetY, 1200);
+
+      animatedScrollTo(targetY, 750); // Eased transition duration reduced to 750ms for snappier experience
     }
- 
+
+    // Expose snapToSlide via ref so scrollbar dot click can trigger snapping securely
+    snapToSlideRef.current = snapToSlide;
+
     function getCurrentIndex() {
       collectSections();
- 
+
       const els = sectionEls.current;
       if (!els.length) return 0;
- 
+
       let closestIndex = 0;
       let closestDistance = Math.abs(els[0].getBoundingClientRect().top);
- 
+
       for (let i = 1; i < els.length; i++) {
         const distance = Math.abs(els[i].getBoundingClientRect().top);
         if (distance < closestDistance) {
@@ -301,47 +314,70 @@ function Home() {
           closestIndex = i;
         }
       }
- 
+
       return closestIndex;
     }
- 
+
     const navigateToSection = (direction) => {
       if (isSnapping.current) return;
- 
+      if (Date.now() - lastScrollTime.current < cooldownDuration) return;
+
       const currentIndex = getCurrentIndex();
- 
+
       const targetIndex = Math.min(
         sectionEls.current.length - 1,
         Math.max(0, currentIndex + direction),
       );
- 
+
       if (targetIndex === currentIndex) return;
- 
+
       snapToSlide(targetIndex);
     };
- 
+
+    let wheelTimeout = null;
+
     function onWheel(event) {
       if (isSnapping.current) {
         event.preventDefault();
         return;
       }
- 
+      if (Date.now() - lastScrollTime.current < cooldownDuration) {
+        event.preventDefault();
+        return;
+      }
+
       let delta = event.deltaY;
       if (event.deltaMode === 1) {
         delta *= 10;
       }
- 
-      if (Math.abs(delta) < 4) return;
- 
+
+      const absDelta = Math.abs(delta);
+      const prevAbsDelta = Math.abs(lastDeltaY.current);
+      lastDeltaY.current = delta;
+
+      if (wheelTimeout) clearTimeout(wheelTimeout);
+      wheelTimeout = setTimeout(() => {
+        lastDeltaY.current = 0;
+      }, 150);
+
+      // Ignore low delta values to prevent minor trackpad drifts from triggering full snaps
+      if (absDelta < 18) return;
+
+      // If the scroll delta is decreasing, it is momentum/inertia, so ignore it
+      if (absDelta <= prevAbsDelta) {
+        event.preventDefault();
+        return;
+      }
+
       event.preventDefault();
       event.stopPropagation();
       navigateToSection(delta > 0 ? 1 : -1);
     }
- 
+
     function onKeyDown(event) {
       const key = event.key;
       const code = event.code;
- 
+
       if (
         key === "ArrowDown" ||
         key === "ArrowRight" ||
@@ -360,71 +396,77 @@ function Home() {
       } else if (key === "Home") {
         event.preventDefault();
         event.stopPropagation();
- 
-        if (!isSnapping.current) {
+
+        if (!isSnapping.current && Date.now() - lastScrollTime.current >= cooldownDuration) {
           snapToSlide(0);
         }
       } else if (key === "End") {
         event.preventDefault();
         event.stopPropagation();
- 
-        if (!isSnapping.current) {
+
+        if (!isSnapping.current && Date.now() - lastScrollTime.current >= cooldownDuration) {
           snapToSlide(sectionEls.current.length - 1);
         }
       }
     }
- 
+
     let touchStartY = 0;
- 
+
     let touchStartTime = 0;
- 
+
     function onTouchStart(event) {
       touchStartY = event.touches[0].clientY;
- 
+
       touchStartTime = Date.now();
     }
- 
+
     function onTouchMove(event) {
       if (isSnapping.current) {
         event.preventDefault();
       }
     }
- 
+
     function onTouchEnd(event) {
       if (isSnapping.current) return;
- 
+      if (Date.now() - lastScrollTime.current < cooldownDuration) return;
+
       const touchEndY = event.changedTouches[0].clientY;
- 
+
       const diff = touchStartY - touchEndY;
- 
+
       const elapsed = Date.now() - touchStartTime;
- 
+
       if (Math.abs(diff) > 40 && elapsed < 600) {
         navigateToSection(diff > 0 ? 1 : -1);
       }
     }
- 
+
     window.addEventListener("wheel", onWheel, { passive: false });
- 
+
     window.addEventListener("keydown", onKeyDown);
- 
+
     window.addEventListener("touchstart", onTouchStart, { passive: true });
- 
+
     window.addEventListener("touchmove", onTouchMove, { passive: false });
- 
+
     window.addEventListener("touchend", onTouchEnd, { passive: true });
- 
+
     return () => {
       window.removeEventListener("wheel", onWheel);
- 
+
       window.removeEventListener("keydown", onKeyDown);
- 
+
       window.removeEventListener("touchstart", onTouchStart);
- 
+
       window.removeEventListener("touchmove", onTouchMove);
- 
+
       window.removeEventListener("touchend", onTouchEnd);
- 
+      snapToSlideRef.current = null;
+
+      if (wheelTimeout) {
+        clearTimeout(wheelTimeout);
+      }
+
       if (rafId) {
         cancelAnimationFrame(rafId);
       }
