@@ -4,12 +4,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { typedTexts } from './homeData';
 
-export function useTypingAnimation() {
+export function useTypingAnimation(enabled = true) {
   const typingRef = useRef(null);
   const timerRef = useRef(null);
   const [showHeroText, setShowHeroText] = useState(false);
 
   useEffect(() => {
+    if (!enabled) return;
     const words = typedTexts;
     let wordIndex = 0;
     let charIndex = 0;
@@ -54,7 +55,7 @@ export function useTypingAnimation() {
     return () => {
       if (timerRef.current) window.clearTimeout(timerRef.current);
     };
-  }, []);
+  }, [enabled]);
 
   return { typingRef, showHeroText };
 }

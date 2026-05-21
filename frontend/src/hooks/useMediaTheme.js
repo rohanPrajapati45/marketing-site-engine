@@ -124,6 +124,7 @@ export const getImageTheme = (
 export const useVideoTheme = (
   videoRef,
   {
+    enabled = true,
     threshold = DEFAULT_THRESHOLD,
     sampleIntervalMs = 600,
     sampleWidth = 48,
@@ -144,6 +145,7 @@ export const useVideoTheme = (
   const pendingThemeRef = useRef(null);
 
   useEffect(() => {
+    if (!enabled) return;
     const video = videoRef.current;
     if (!video || typeof window === "undefined") return;
 
@@ -262,6 +264,7 @@ export const useVideoTheme = (
       }
     };
   }, [
+    enabled,
     debounceMs,
     intersectionThreshold,
     navSelector,
