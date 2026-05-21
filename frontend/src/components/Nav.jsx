@@ -1,13 +1,9 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-
-import logo from "../assets/logo/tedmob_logo_dark.svg";
-import whiteLogo from "../assets/logo/tedmob_logo_white.svg";
-
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import logo from "../assets/logo/tedmob_logo_dark.svg";
+import whiteLogo from "../assets/logo/tedmob_logo_white.svg";
 
 const getRgbBrightness = (red, green, blue) =>
   (red * 299 + green * 587 + blue * 114) / 1000;
@@ -30,8 +26,6 @@ const parseRgbColor = (value) => {
 const getThemeFromColor = (value) => {
   const parsed = parseRgbColor(value);
 
-  // Skip fully transparent OR semi-transparent backgrounds (overlays, tints)
-  // so the detection continues to the actual content behind them
   if (!parsed || parsed.alpha < 0.75) return null;
 
   return getRgbBrightness(parsed.red, parsed.green, parsed.blue) >= 145
@@ -128,7 +122,6 @@ const sampleVideoTheme = (videoElement) => {
 const getThemeFromElement = (element) => {
   if (!element || element === document.documentElement) return null;
 
-  // Try canvas-based sampling for media elements
   if (element.tagName === "IMG") {
     const sampled = sampleImageTheme(element);
     if (sampled) return sampled;
@@ -139,11 +132,9 @@ const getThemeFromElement = (element) => {
     if (sampled) return sampled;
   }
 
-  // Walk up ancestors checking background colors AND data-theme attributes
   let current = element;
 
   while (current && current !== document.documentElement) {
-    // Check for explicit data-theme attribute (set by section components)
     const dataTheme = current.getAttribute("data-theme");
     if (dataTheme === "dark" || dataTheme === "light") {
       return dataTheme;
@@ -180,10 +171,6 @@ const samplePointTheme = (x, y, navElement) => {
   return null;
 };
 
-/**
- * Compute navbar position classes from page config flags.
- * This replaces the old hardcoded isHome / isContact checks.
- */
 const getNavbarPositionClass = (navbarFixed, navbarTransparent) => {
   if (navbarFixed && navbarTransparent) {
     return "fixed transparent inset-x-0 top-0 z-30";
@@ -203,11 +190,37 @@ function Nav({ replaySplash }) {
   const location = useLocation();
   const navRef = useRef(null);
   const [navbarTheme, setNavbarTheme] = useState("light");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Derive navbar positioning from page config (data-driven)
+  // Derive navbar positioning from page config
   const navbarFixed = page?.page?.navbarFixed ?? false;
   const navbarTransparent = page?.page?.navbarTransparent ?? false;
   const positionClass = getNavbarPositionClass(navbarFixed, navbarTransparent);
+
+  // Toggle mobile menu
+  const handleToggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+    // Prevent body scroll when menu is open
+    document.body.style.overflow = !isMenuOpen ? "hidden" : "";
+  };
+
+  // Close menu on navigation
+  const handleNavClick = () => {
+    setIsMenuOpen(false);
+    document.body.style.overflow = "";
+  };
+
+  // Close menu on route change
+  useEffect(() => {
+    handleNavClick();
+  }, [location.pathname]);
+
+  // Cleanup body overflow on unmount
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined" || typeof document === "undefined") {
@@ -308,6 +321,13 @@ function Nav({ replaySplash }) {
     };
   }, [location.pathname]);
 
+  // Determine if toggle button should be light or dark based on navbar theme
+  const toggleButtonColor = navbarTheme === "dark" ? "white" : "black";
+  const mobilePanelBg = navbarTheme === "dark" ? "bg-gray-900" : "bg-white";
+  const mobileTextColor = navbarTheme === "dark" ? "text-white" : "text-gray-900";
+  const mobileHoverColor = navbarTheme === "dark" ? "hover:text-gray-300" : "hover:text-black";
+  const closeButtonColor = navbarTheme === "dark" ? "bg-white" : "bg-black";
+
   return (
     <div
       ref={navRef}
@@ -315,11 +335,13 @@ function Nav({ replaySplash }) {
       className={`${positionClass} navbar-theme`}
     >
       <div className="flex justify-between items-center px-8 py-11">
+        {/* LOGO */}
         <div>
           <Link
             to="/"
             className="nav-logo"
             onClick={() => {
+              handleNavClick();
               replaySplash();
             }}
           >
@@ -357,7 +379,6 @@ function Nav({ replaySplash }) {
         </div>
 
         {/* MOBILE MENU BUTTON */}
-
         <button
           type="button"
           className={`
@@ -366,19 +387,51 @@ function Nav({ replaySplash }) {
 
             md:hidden
 
-            ${isMenuOpen ? "is-open" : ""}
+            relative
+            w-8
+            h-8
+
+            flex
+            flex-col
+            justify-center
+            items-center
+
+            z-50
           `}
-          aria-label="Toggle navigation"
+          onClick={handleToggleMenu}
+          aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
           aria-expanded={isMenuOpen}
           aria-controls="primary-nav"
-          onClick={handleToggleMenu}
+          style={{ color: toggleButtonColor }}
         >
-          <span className="nav-toggle-line" />
-          <span className="nav-toggle-line" />
+          <span 
+            className={`
+              nav-toggle-line
+              block
+              w-6
+              h-0.5
+              transition-all
+              duration-300
+              ${isMenuOpen ? "rotate-45 translate-y-1.5" : ""}
+            `}
+            style={{ backgroundColor: toggleButtonColor }}
+          />
+          <span 
+            className={`
+              nav-toggle-line
+              block
+              w-6
+              h-0.5
+              mt-1.5
+              transition-all
+              duration-300
+              ${isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""}
+            `}
+            style={{ backgroundColor: toggleButtonColor }}
+          />
         </button>
 
         {/* DESKTOP / TABLET NAV */}
-
         <ul
           className="
             hidden
@@ -413,6 +466,11 @@ function Nav({ replaySplash }) {
                     lg:text-[0.95rem]
 
                     whitespace-nowrap
+                    
+                    transition-colors
+                    duration-300
+                    
+                    hover:opacity-70
                   "
                   onClick={handleNavClick}
                 >
@@ -424,16 +482,88 @@ function Nav({ replaySplash }) {
         </ul>
 
         {/* MOBILE PANEL */}
-
         <div
           className={`
             nav-mobile-panel
             md:hidden
 
-            ${isMenuOpen ? "is-open" : ""}
+            fixed
+            inset-0
+            top-0
+            
+            ${mobilePanelBg}
+            
+            z-40
+            
+            transition-transform
+            duration-500
+            ease-[cubic-bezier(0.22,1,0.36,1)]
+            
+            ${isMenuOpen ? "translate-y-0" : "-translate-y-full"}
           `}
           role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
         >
+          {/* Mobile Menu Header */}
+          <div className="flex justify-between items-center px-8 py-11">
+            <div>
+              <Link
+                to="/"
+                className="nav-logo"
+                onClick={handleNavClick}
+              >
+                {navbarTheme === "dark" ? (
+                  <img
+                    src={whiteLogo}
+                    alt="Company Logo"
+                    className="
+                      h-4
+                      w-auto
+                      object-contain
+                    "
+                  />
+                ) : (
+                  <img
+                    src={logo}
+                    alt="Company Logo"
+                    className="
+                      h-4
+                      w-auto
+                      object-contain
+                    "
+                  />
+                )}
+              </Link>
+            </div>
+            
+            {/* Close Button */}
+            <button
+              type="button"
+              className="
+                w-8
+                h-8
+                flex
+                flex-col
+                justify-center
+                items-center
+                relative
+              "
+              onClick={handleToggleMenu}
+              aria-label="Close navigation"
+            >
+              <span 
+                className="block w-6 h-0.5 rotate-45 translate-y-1.5"
+                style={{ backgroundColor: closeButtonColor }}
+              />
+              <span 
+                className="block w-6 h-0.5 -rotate-45 -translate-y-1.5 mt-1.5"
+                style={{ backgroundColor: closeButtonColor }}
+              />
+            </button>
+          </div>
+
+          {/* Mobile Menu Links */}
           <ul
             className="
               flex
@@ -441,7 +571,7 @@ function Nav({ replaySplash }) {
 
               gap-6
 
-              px-6
+              px-8
               pb-8
               pt-6
 
@@ -458,7 +588,22 @@ function Nav({ replaySplash }) {
                 <li key={item._id}>
                   <Link
                     to={route}
-                    className="nav-mobile-link"
+                    className={`
+                      nav-mobile-link
+                      
+                      block
+                      
+                      text-2xl
+                      font-medium
+                      
+                      ${mobileTextColor}
+                      ${mobileHoverColor}
+                      
+                      transition-colors
+                      duration-300
+                      
+                      no-underline
+                    `}
                     onClick={handleNavClick}
                   >
                     {item.navTitle}

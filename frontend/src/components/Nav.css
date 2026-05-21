@@ -1,0 +1,47 @@
+/* Navbar Mobile Menu Styles */
+
+.navbar-theme {
+  /* Add your existing navbar theme styles here */
+}
+
+/* Mobile Panel Animation */
+.nav-mobile-panel {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Hamburger Menu Animation */
+.nav-toggle-line {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: center;
+}
+
+/* Prevent body scroll when mobile menu is open */
+body.menu-open {
+  overflow: hidden;
+}
+
+/* Optional: Add backdrop blur for mobile menu */
+.nav-mobile-panel {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Mobile link hover effect */
+.nav-mobile-link {
+  position: relative;
+}
+
+.nav-mobile-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: currentColor;
+  transition: width 0.3s ease;
+}
+
+.nav-mobile-link:hover::after {
+  width: 100%;
+}
