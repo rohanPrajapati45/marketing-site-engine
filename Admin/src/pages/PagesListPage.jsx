@@ -14,6 +14,8 @@ import {
   ExternalLink,
   ChevronUp,
   ChevronDown,
+  Pin,
+  Eye,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Badge from "../components/ui/Badge";
@@ -251,11 +253,25 @@ const PagesListPage = () => {
                       />
                     </td>
                     <td className="px-5 py-3.5">
-                      <Toggle
-                        enabled={page.showInNavbar}
-                        onChange={() => handleToggleNavbar(page)}
-                        size="sm"
-                      />
+                      <div className="flex items-center gap-2">
+                        <Toggle
+                          enabled={page.showInNavbar}
+                          onChange={() => handleToggleNavbar(page)}
+                          size="sm"
+                        />
+                        {page.navbarFixed && (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-500/10 text-blue-400 text-[10px] font-medium" title="Fixed Navbar">
+                            <Pin size={10} />
+                            Fixed
+                          </span>
+                        )}
+                        {page.navbarTransparent && (
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-purple-500/10 text-purple-400 text-[10px] font-medium" title="Transparent Navbar">
+                            <Eye size={10} />
+                            Transparent
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-5 py-3.5">
                       <div className="flex items-center justify-end gap-1">

@@ -164,11 +164,34 @@ const samplePointTheme = (x, y, navElement) => {
   return null;
 };
 
-function Nav({ replaySplash, isHome, isContact }) {
+/**
+ * Compute navbar position classes from page config flags.
+ * This replaces the old hardcoded isHome / isContact checks.
+ */
+const getNavbarPositionClass = (navbarFixed, navbarTransparent) => {
+  if (navbarFixed && navbarTransparent) {
+    return "fixed transparent inset-x-0 top-0 z-30";
+  }
+  if (navbarFixed) {
+    return "fixed inset-x-0 top-0 z-30";
+  }
+  if (navbarTransparent) {
+    return "absolute transparent inset-x-0 top-0 z-30";
+  }
+  return "relative";
+};
+
+function Nav({ replaySplash }) {
   const { navItems } = useSelector((state) => state.navigation);
+  const { page } = useSelector((state) => state.page);
   const location = useLocation();
   const navRef = useRef(null);
   const [navbarTheme, setNavbarTheme] = useState("light");
+
+  // Derive navbar positioning from page config (data-driven)
+  const navbarFixed = page?.page?.navbarFixed ?? false;
+  const navbarTransparent = page?.page?.navbarTransparent ?? false;
+  const positionClass = getNavbarPositionClass(navbarFixed, navbarTransparent);
 
   useEffect(() => {
     if (typeof window === "undefined" || typeof document === "undefined") {
@@ -275,13 +298,7 @@ function Nav({ replaySplash, isHome, isContact }) {
     <div
       ref={navRef}
       data-navbar-theme={navbarTheme}
-      className={`${
-        isHome
-          ? "fixed inset-x-0 top-0 z-30"
-          : isContact
-            ? "absolute inset-x-0 top-0 z-30"
-            : "relative"
-      } navbar-theme`}
+      className={`${positionClass} navbar-theme`}
     >
       <div className="flex justify-between items-center px-8 py-11">
         <div>

@@ -15,7 +15,7 @@ const pageSchema = new mongoose.Schema(
       metaDescription: String,
       ogImage: String,
     },
-    
+
     isPublished: {
       type: Boolean,
       default: true,
@@ -24,17 +24,27 @@ const pageSchema = new mongoose.Schema(
     navTitle: {
       type: String,
       required: true,
-      },
+    },
 
     showInNavbar: {
       type: Boolean,
       default: true,
-      },
+    },
+
+    navbarFixed: {
+      type: Boolean,
+      default: false,
+    },
+
+    navbarTransparent: {
+      type: Boolean,
+      default: false,
+    },
 
     navOrder: {
       type: Number,
       required: true,
-      }
+    }
   },
   { timestamps: true }
 );

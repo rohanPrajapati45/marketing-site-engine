@@ -10,7 +10,6 @@ import { getNavigation } from "../redux/slices/navigationSlice";
 const App = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
-  const isContact = location.pathname === "/contact";
   // const isNavOverlay = isHome || isContact;
   const [showSplash, setShowSplash] = useState(false);
   const [splashKey, setSplashKey] = useState(0);
@@ -39,7 +38,7 @@ const App = () => {
   return (
     <div className="relative min-h-screen flex flex-col">
       {showSplash && <SplashScreen key={splashKey} />}
-      <Nav replaySplash={replaySplash} isHome={isHome} isContact={isContact} />
+      <Nav replaySplash={replaySplash} />
       <main className="flex-1">
         <Outlet></Outlet>
       </main>
