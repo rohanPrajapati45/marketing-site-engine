@@ -11,26 +11,18 @@ const SolutionSection = ({
   section,
 }) => {
 
-  // BACKEND DATA
   const solution =
     section.data || {};
-
-
 
   const sectionRef =
     useRef(null);
 
-
-
-  // INTERSECTION ANIMATION
   useEffect(() => {
 
     const el =
       sectionRef.current;
 
     if (!el) return;
-
-
 
     const observer =
       new IntersectionObserver(
@@ -54,18 +46,12 @@ const SolutionSection = ({
         }
       );
 
-
-
     observer.observe(el);
-
-
 
     return () =>
       observer.disconnect();
 
   }, []);
-
-
 
   return (
 
@@ -88,8 +74,6 @@ const SolutionSection = ({
           }}
         />
 
-
-
         <div
           className="solution-bg-icon"
           style={{
@@ -100,8 +84,6 @@ const SolutionSection = ({
           }}
         />
 
-
-
         <div
           className="solution-bg-icon"
           style={{
@@ -111,8 +93,6 @@ const SolutionSection = ({
               "radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 58%)",
           }}
         />
-
-
 
         <div
           className="solution-bg-icon"
@@ -126,8 +106,6 @@ const SolutionSection = ({
 
       </div>
 
-
-
       {/* CONTENT */}
 
       <div className="solution-content-row">
@@ -140,30 +118,30 @@ const SolutionSection = ({
             {solution.title}
           </h2>
 
-
-
           <p className="solution-description">
             {solution.description}
           </p>
 
+          {/* DESKTOP FORM */}
 
+          <div className="hidden lg:block">
 
-          <SolutionForm
-            inquiryLabel={
-              solution.inquiryLabel
-            }
-            buttonText={
-              solution.buttonText
-            }
-            title={solution.title}
-            solutionId={
-              solution.id
-            }
-          />
+            <SolutionForm
+              inquiryLabel={
+                solution.inquiryLabel
+              }
+              buttonText={
+                solution.buttonText
+              }
+              title={solution.title}
+              solutionId={
+                solution.id
+              }
+            />
+
+          </div>
 
         </div>
-
-
 
         {/* RIGHT SIDE */}
 
@@ -178,13 +156,30 @@ const SolutionSection = ({
             }
           />
 
-
-
           <SolutionTags
             tags={
               solution.tags || []
             }
           />
+
+          {/* MOBILE FORM */}
+
+          <div className="block lg:hidden mt-8">
+
+            <SolutionForm
+              inquiryLabel={
+                solution.inquiryLabel
+              }
+              buttonText={
+                solution.buttonText
+              }
+              title={solution.title}
+              solutionId={
+                solution.id
+              }
+            />
+
+          </div>
 
         </div>
 
