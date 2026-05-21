@@ -15,7 +15,7 @@ import { useTypingAnimation } from "../hooks/useTypingAnimation";
 import { useVideoTheme } from "../hooks/useMediaTheme";
 
 // eslint-disable-next-line no-unused-vars
-const typingPrefix = "For";
+// const typingPrefix = "For";
 
 function Home() {
   const dispatch = useDispatch();
