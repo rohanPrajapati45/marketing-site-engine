@@ -24,8 +24,11 @@ const WorkTabs = ({
 
     if (!container || !activeEl) return;
 
-    const width = activeEl.offsetWidth;
-    const left = activeEl.offsetLeft;
+    const containerRect = container.getBoundingClientRect();
+    const activeRect = activeEl.getBoundingClientRect();
+    
+    const width = activeRect.width;
+    const left = activeRect.left - containerRect.left + container.scrollLeft;
 
     setGliderStyle({
       width: `${width}px`,
@@ -36,18 +39,25 @@ const WorkTabs = ({
   useLayoutEffect(() => {
     updateGlider();
 
+    const resizeObserver = new ResizeObserver(() => {
+      updateGlider();
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
     window.addEventListener("resize", updateGlider);
 
     return () => {
+      resizeObserver.disconnect();
       window.removeEventListener("resize", updateGlider);
     };
   }, [updateGlider]);
 
   return (
     <div className="tabs" ref={containerRef}>
-
       {tabs.map((tab, index) => (
-
         <button
           key={index}
           onClick={() => setActiveTab(tab)}
@@ -59,15 +69,14 @@ const WorkTabs = ({
           ref={(el) => {
             tabRefs.current[index] = el;
           }}
+          title={tab}
         >
           {tab}
         </button>
-
       ))}
-
+      
       {/* GLIDER */}
       <div className="glider" style={gliderStyle} />
-
     </div>
   );
 };

@@ -68,7 +68,9 @@ const ProjectCard = ({ project }) => {
           src={project.image}
           alt={project.title}
           className="
-            h-[420px]
+            h-[220px]
+            sm:h-[200px]
+            lg:h-[420px]
             w-full
 
             object-cover
@@ -86,7 +88,9 @@ const ProjectCard = ({ project }) => {
 
       <div
         className={`
-          mt-[12px]
+          mt-[5px]
+          sm:mt-[3px]
+          lg:mt-[12px]
           px-[4px]
 
           transition-all

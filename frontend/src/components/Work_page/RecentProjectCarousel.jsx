@@ -120,11 +120,11 @@ const RecentProjectCarousel = ({
           <h2
             className="
               text-white
-              text-[1.95rem]
+              text-[1.25rem]
               font-[500]
               uppercase
               leading-none
-              tracking-[-0.05em]
+              lg:text-[1.95rem]
             "
           >
             {category}
