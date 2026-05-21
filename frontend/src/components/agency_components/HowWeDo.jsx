@@ -26,7 +26,7 @@ const services = [
 ];
 
 function HowWeDo({ section }) {
-  const { title, subtitle, cards = [] } = section.data;
+  const { title, subtitle, cards = services } = section.data || {};
 
   return (
     <section
@@ -40,24 +40,24 @@ function HowWeDo({ section }) {
         lg:px-12
 
         py-14
-        lg:py-14
       "
       style={{
         fontFamily: "Exo, sans-serif",
       }}
     >
       {/* HEADER */}
+
       <div className="max-w-[1450px]">
         <h2
           className="
-            text-[30px]
+            text-[32px]
             sm:text-[58px]
             lg:text-[60px]
 
             font-bold
             tracking-[-2px]
             leading-none
-        "
+          "
         >
           {title}
         </h2>
@@ -70,13 +70,12 @@ function HowWeDo({ section }) {
 
             text-[16px]
             sm:text-[18px]
-            lg:text-[18px]
 
             leading-[1.3]
 
             text-[#777]
             font-[700]
-        "
+          "
         >
           {subtitle}
         </p>
@@ -86,77 +85,107 @@ function HowWeDo({ section }) {
 
       <div
         className="
-    mt-10
-    lg:mt-14
+          mt-10
+          lg:mt-14
 
-    grid
+          grid
 
-    grid-cols-1
-    sm:grid-cols-2
-    lg:grid-cols-5
+          grid-cols-1
+          sm:grid-cols-2
+          lg:grid-cols-5
 
-    gap-5
-  "
+          gap-5
+        "
       >
         {cards.map((service, index) => (
           <div
             key={index}
             className="
-        border
-        border-[#D9D9D9]
+              border
+              border-[#D9D9D9]
 
-        min-h-[200px]
+              h-[260px]
+              lg:h-[300px]
 
-        px-8
-        py-4
+              px-6
+              lg:px-7
 
-        flex
-        flex-col
+              py-6
 
-        bg-black
-        text-white
+              flex
+              flex-col
 
-        transition-all
-        duration-500
-        ease-out
+              bg-black
+              text-white
 
-        hover:bg-white
-        hover:text-black
+              overflow-hidden
 
-        hover:scale-[1.03]
-        hover:-translate-y-1
+              transition-all
+              duration-500
+              ease-out
 
-        cursor-pointer
-      "
+              hover:bg-white
+              hover:text-black
+
+              hover:scale-[1.03]
+              hover:-translate-y-1
+
+              cursor-pointer
+            "
           >
+            {/* TITLE */}
+
             <h3
               className="
-          text-[20px]
+                text-[22px]
+                lg:text-[24px]
 
-          font-[400]
-            py-2
-          leading-none
-          tracking-[-0.5px]
-        "
+                font-[500]
+
+                leading-tight
+                tracking-[-0.5px]
+
+                break-words
+              "
             >
               {service.title}
             </h3>
 
-            <p
+            {/* DESCRIPTION */}
+
+            <div
               className="
-          mt-7
+                mt-6
 
-          text-[15px]
+                flex-1
 
-          leading-[1.45]
-            
-          font-[400]
+                overflow-y-auto
+                overflow-x-hidden
 
-          text-inherit
-        "
+                pr-1
+
+                scrollbar-thin
+                scrollbar-thumb-[#555]
+                scrollbar-track-transparent
+              "
             >
-              {service.description}
-            </p>
+              <p
+                className="
+                  text-[15px]
+                  lg:text-[16px]
+
+                  leading-[1.6]
+
+                  font-[400]
+
+                  text-inherit
+
+                  break-words
+                "
+              >
+                {service.description}
+              </p>
+            </div>
           </div>
         ))}
       </div>

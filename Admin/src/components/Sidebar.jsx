@@ -49,10 +49,10 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         {!collapsed && (
           <div className="overflow-hidden">
             <span className="text-sm font-bold text-[var(--text-primary)] whitespace-nowrap">
-              SrashtaSoft
+              CMS 
             </span>
             <span className="block text-[10px] text-[var(--text-muted)] -mt-0.5">
-              CMS Admin
+              Admin
             </span>
           </div>
         )}

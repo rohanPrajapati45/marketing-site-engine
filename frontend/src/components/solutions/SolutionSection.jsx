@@ -4,35 +4,48 @@ import SolutionCarousel from "./SolutionCarousel";
 import SolutionTags from "./SolutionTags";
 import SolutionForm from "./SolutionForm";
 
-const SolutionSection = ({ section }) => {
-  // BACKEND DATA
-  const solution = section.data || {};
+const SolutionSection = ({
+  section,
+}) => {
 
-  const sectionRef = useRef(null);
+  const solution =
+    section.data || {};
 
-  // INTERSECTION ANIMATION
+  const sectionRef =
+    useRef(null);
+
   useEffect(() => {
     const el = sectionRef.current;
 
     if (!el) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add("in-view");
+    const observer =
+      new IntersectionObserver(
 
-          observer.disconnect();
+        ([entry]) => {
+
+          if (
+            entry.isIntersecting
+          ) {
+
+            el.classList.add(
+              "in-view"
+            );
+
+            observer.disconnect();
+          }
+        },
+
+        {
+          threshold: 0.15,
         }
-      },
-
-      {
-        threshold: 0.15,
-      },
-    );
+      );
 
     observer.observe(el);
 
-    return () => observer.disconnect();
+    return () =>
+      observer.disconnect();
+
   }, []);
 
   return (
@@ -92,25 +105,72 @@ const SolutionSection = ({ section }) => {
         <div className="solution-left">
           <h2 className="solution-title">{solution.title}</h2>
 
-          <p className="solution-description">{solution.description}</p>
+          <h2 className="solution-title">
+            {solution.title}
+          </h2>
 
-          <SolutionForm
-            inquiryLabel={solution.inquiryLabel}
-            buttonText={solution.buttonText}
-            title={solution.title}
-            solutionId={solution.id}
-          />
+          <p className="solution-description">
+            {solution.description}
+          </p>
+
+          {/* DESKTOP FORM */}
+
+          <div className="hidden lg:block">
+
+            <SolutionForm
+              inquiryLabel={
+                solution.inquiryLabel
+              }
+              buttonText={
+                solution.buttonText
+              }
+              title={solution.title}
+              solutionId={
+                solution.id
+              }
+            />
+
+          </div>
+
         </div>
 
         {/* RIGHT SIDE */}
 
         <div className="solution-right">
           <SolutionCarousel
-            images={solution.images || []}
-            title={solution.title}
+            images={
+              solution.images || []
+            }
+            title={
+              solution.title
+            }
           />
 
-          <SolutionTags tags={solution.tags || []} />
+          <SolutionTags
+            tags={
+              solution.tags || []
+            }
+          />
+
+          {/* MOBILE FORM */}
+
+          <div className="block lg:hidden mt-8">
+
+            <SolutionForm
+              inquiryLabel={
+                solution.inquiryLabel
+              }
+              buttonText={
+                solution.buttonText
+              }
+              title={solution.title}
+              solutionId={
+                solution.id
+              }
+            />
+
+          </div>
+
         </div>
       </div>
     </section>
