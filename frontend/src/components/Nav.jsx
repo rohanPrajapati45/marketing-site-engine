@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo/tedmob_logo_dark.svg";
 import whiteLogo from "../assets/logo/tedmob_logo_white.svg";
@@ -5,6 +6,16 @@ import { useSelector } from "react-redux";
 
 function Nav({ replaySplash, isHome, isContact, theme }) {
   const { navItems } = useSelector((state) => state.navigation);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleToggleMenu = () => {
+    setIsMenuOpen((prev) => !prev);
+  };
+
+  const handleNavClick = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <div
       className={
@@ -16,7 +27,7 @@ function Nav({ replaySplash, isHome, isContact, theme }) {
       }
     >
       <div
-        className={`flex justify-between items-center px-8 py-11 ${
+        className={`relative flex justify-between items-center px-6 py-7 md:px-8 md:py-11 ${
           theme?.navbar || "navbar-theme"
         }`}
       >
@@ -33,18 +44,31 @@ function Nav({ replaySplash, isHome, isContact, theme }) {
                 replaySplash();
               }}
               src={logo}
-              alt="Tedmob Logo"
+              alt="Company's Logo"
               className="nav-logo-img logo-dark h-5 w-auto object-contain"
             />
             <img
               src="./src/assets/logo/tedmob_logo_white.svg"
-              alt=""
+              alt="Company's Logo"
               aria-hidden="true"
               className="nav-logo-img logo-light h-5 w-auto object-contain"
             />
           </Link>
         </div>
-        <ul className="flex gap-12 shrink-0 list-none">
+        <button
+          type="button"
+          className={`nav-menu-icon nav-toggle md:hidden ${
+            isMenuOpen ? "is-open" : ""
+          }`}
+          aria-label="Toggle navigation"
+          aria-expanded={isMenuOpen}
+          aria-controls="primary-nav"
+          onClick={handleToggleMenu}
+        >
+          <span className="nav-toggle-line" />
+          <span className="nav-toggle-line" />
+        </button>
+        <ul className="hidden md:flex gap-12 shrink-0 list-none" id="primary-nav">
           {navItems.map((item) => {
             const route = item.slug === "home" ? "/" : `/${item.slug}`;
 
@@ -53,6 +77,7 @@ function Nav({ replaySplash, isHome, isContact, theme }) {
                 <Link
                   to={route}
                   className="no-underline font-semibold text-[0.95rem]"
+                  onClick={handleNavClick}
                 >
                   {item.navTitle}
                 </Link>
@@ -60,6 +85,30 @@ function Nav({ replaySplash, isHome, isContact, theme }) {
             );
           })}
         </ul>
+        <div
+          className={`nav-mobile-panel md:hidden ${
+            isMenuOpen ? "is-open" : ""
+          }`}
+          role="dialog"
+        >
+          <ul className="flex flex-col gap-6 px-6 pb-8 pt-6 list-none">
+            {navItems.map((item) => {
+              const route = item.slug === "home" ? "/" : `/${item.slug}`;
+
+              return (
+                <li key={item._id}>
+                  <Link
+                    to={route}
+                    className="nav-mobile-link"
+                    onClick={handleNavClick}
+                  >
+                    {item.navTitle}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </div>
   );
