@@ -33,6 +33,7 @@ import mediaRouter from './routes/mediaRouter.js';
 import { optionalAdmin } from './middleware/auth/optionalAuthMiddleware.js';
 import { mediaApiRouter } from './routes/mediaRouter.js';
 import navigationRouter from './routes/navigationRouter.js';
+import footerRouter from './routes/footerRouter.js';
 
 const app = express();
 
@@ -55,28 +56,29 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT;
 
 app.use("/", navigationRouter);
+app.use('/api/footer', footerRouter);
 app.use('/api/auth', authRoutes);
 
-// app.use('/api/services', serviceRoutes);
-// app.use('/api/categories', categoryRoutes);
-// app.use('/api/subcategories', subcategoryRoutes);
-// app.use('/api/projects', projectRoutes);
-// app.use('/api/home/hero', heroRoute);
-// app.use('/api/home/projects', homeProjectRoute);
-// app.use('/api/home/case-studies', caseStudyRoute);
-// // ═══════════════════════════════════════════════════════════════
-// // Contact page routes
-// // ═══════════════════════════════════════════════════════════════
-// app.use('/api/contact/info', contactInfoRoute);
-// app.use('/api/contact/branches', branchRoute);
-// app.use('/api/contact/form', contactFormRoute);
-// app.use('/api/contact/submissions', contactSubmissionRoute);
-// // ═══════════════════════════════════════════════════════════════
-// // solution page routes
-// // ═══════════════════════════════════════════════════════════════
-// app.use('/api/solutions/header', solutionsHeaderRoute);
-// app.use('/api/solutions', solutionRoute);
-// app.use('/api/solutions/demo-requests', demoRequestRoute);
+app.use('/api/services', serviceRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/subcategories', subcategoryRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/home/hero', heroRoute);
+app.use('/api/home/projects', homeProjectRoute);
+app.use('/api/home/case-studies', caseStudyRoute);
+// ═══════════════════════════════════════════════════════════════
+// Contact page routes
+// ═══════════════════════════════════════════════════════════════
+app.use('/api/contact/info', contactInfoRoute);
+app.use('/api/contact/branches', branchRoute);
+app.use('/api/contact/form', contactFormRoute);
+app.use('/api/contact/submissions', contactSubmissionRoute);
+// ═══════════════════════════════════════════════════════════════
+// solution page routes
+// ═══════════════════════════════════════════════════════════════
+app.use('/api/solutions/header', solutionsHeaderRoute);
+app.use('/api/solutions', solutionRoute);
+app.use('/api/solutions/demo-requests', demoRequestRoute);
 
 app.use('/admin', optionalAdmin, adminRouter);
 app.use('/admin', optionalAdmin, sectionRouter);

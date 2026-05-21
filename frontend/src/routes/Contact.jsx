@@ -17,7 +17,7 @@ import {
 
 import {
   componentMap,
-} from '../utils/ComponentMap';
+} from '../utils/componentMap';
 
 import '../styles/contactInfo.css';
 import '../styles/branch.css';

@@ -11,12 +11,14 @@ import {
   ChevronLeft,
   ChevronRight,
   Zap,
+  PanelBottom,
 } from "lucide-react";
 
 const navItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/pages", icon: FileText, label: "Pages" },
   { to: "/media", icon: ImageIcon, label: "Media" },
+  { to: "/footer", icon: PanelBottom, label: "Footer" },
 ];
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
