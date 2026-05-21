@@ -36,14 +36,14 @@ function Home() {
         section.type === "hero-section" || section.type === "hero"
           ? "hero"
           : section.type === "cta-section" || section.type === "cta"
-          ? "cta"
-          : `project-${index}`,
+            ? "cta"
+            : `project-${index}`,
       label:
         section.type === "hero-section" || section.type === "hero"
           ? "Hero"
           : section.type === "cta-section" || section.type === "cta"
-          ? section.data?.heading || "Call To Action"
-          : section.data?.clientName || `Project ${index}`,
+            ? section.data?.heading || "Call To Action"
+            : section.data?.clientName || `Project ${index}`,
     }));
   }, [pageSections]);
 
@@ -149,12 +149,7 @@ function Home() {
     };
   }, [popupPhase, outletContext]);
 
-  // HTML DATA THEME
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-
-    document.documentElement.dataset.homeTheme = currentTheme;
-  }, [currentTheme]);
+  // (navbar theme is now self-detected via Nav.jsx area sampling)
 
   // HIDE DEFAULT BROWSER SCROLLBAR ON HOME
   useEffect(() => {
@@ -358,11 +353,7 @@ function Home() {
         event.preventDefault();
         event.stopPropagation();
         navigateToSection(1);
-      } else if (
-        key === "ArrowUp" ||
-        key === "ArrowLeft" ||
-        key === "PageUp"
-      ) {
+      } else if (key === "ArrowUp" || key === "ArrowLeft" || key === "PageUp") {
         event.preventDefault();
         event.stopPropagation();
         navigateToSection(-1);

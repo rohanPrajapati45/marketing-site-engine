@@ -1,11 +1,13 @@
 {
   "type": "object",
   "name": "Error",
-  "message": "Unknown API key your_api_key",
+  "message": "getaddrinfo ENOTFOUND api.cloudinary.com",
+  "stack": "Error: getaddrinfo ENOTFOUND api.cloudinary.com\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)",
   "keys": [
-    "message",
-    "name",
-    "http_code"
+    "errno",
+    "code",
+    "syscall",
+    "hostname"
   ],
-  "stringified": "{\"message\":\"Unknown API key your_api_key\",\"name\":\"Error\",\"http_code\":401}"
+  "stringified": "{\"stack\":\"Error: getaddrinfo ENOTFOUND api.cloudinary.com\\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:122:26)\",\"message\":\"getaddrinfo ENOTFOUND api.cloudinary.com\",\"errno\":-3008,\"code\":\"ENOTFOUND\",\"syscall\":\"getaddrinfo\",\"hostname\":\"api.cloudinary.com\"}"
 }

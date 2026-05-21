@@ -352,53 +352,60 @@
         html[data-home-theme="light"] .typing-for,
         html[data-home-theme="light"] .typed-text,
         html[data-home-theme="light"] .typed-cursor,
-        html[data-home-theme="light"] .video-hover small {
+        html[data-home-theme="light"] .video-hover small 
+        /* {
+        [data-theme="light"] .hero-headline,
+        [data-theme="light"] .typing-for,
+        [data-theme="light"] .typed-text,
+        [data-theme="light"] .typed-cursor,
+        [data-theme="light"] .video-hover small */
+        { 
           color: #111 !important;
         }
 
-        html[data-home-theme="light"] .typed-text {
+        [data-theme="light"] .typed-text {
           background-color: transparent !important;
         }
 
-        html[data-home-theme="light"] .scroll-hint {
+        [data-theme="light"] .scroll-hint {
           color: rgba(0,0,0,0.7);
         }
 
-        html[data-home-theme="light"] .scroll-hint::after {
+        [data-theme="light"] .scroll-hint::after {
           background: rgba(0,0,0,0.35);
         }
 
-        html[data-home-theme="light"] .slide-heading h2,
-        html[data-home-theme="light"] .slide-heading p,
-        html[data-home-theme="light"] .client-name,
-        html[data-home-theme="light"] .client-country,
-        html[data-home-theme="light"] .slide-counter {
+        [data-theme="light"] .slide-heading h2,
+        [data-theme="light"] .slide-heading p,
+        [data-theme="light"] .client-name,
+        [data-theme="light"] .client-country,
+        [data-theme="light"] .slide-counter {
           color: #111 !important;
         }
 
-        html[data-home-theme="light"] .btn-case-study {
+        [data-theme="light"] .btn-case-study {
           border-color: rgba(0,0,0,0.92) !important;
           color: #111 !important;
         }
 
-        html[data-home-theme="light"] .btn-case-study::before {
+        [data-theme="light"] .btn-case-study::before {
           background: rgba(0,0,0,0.08) !important;
         }
 
-        html[data-home-theme="light"] .btn-case-study:hover::before {
+        [data-theme="light"] .btn-case-study:hover::before {
           background: rgba(0,0,0,0.15);
         }
 
-        html[data-home-theme="light"] .section-scrollbar .scrollbar-line {
+        [data-theme="light"] .section-scrollbar .scrollbar-line {
           background: rgba(0, 0, 0, 0.35) !important;
         }
 
-        html[data-home-theme="light"] .section-scrollbar .scrollbar-item.is-active .scrollbar-line {
+        [data-theme="light"] .section-scrollbar .scrollbar-item.is-active .scrollbar-line {
           background: #111 !important;
           box-shadow: 0 0 8px rgba(0, 0, 0, 0.25) !important;
         }
 
-        html[data-home-theme="light"] .section-scrollbar .scrollbar-item:not(.is-active):hover .scrollbar-line {
+        [data-theme="light"] .section-scrollbar .scrollbar-item:not(.is-active):hover .scrollbar-line {
           background: rgba(0,0,0,0.65) !important;
         }
 

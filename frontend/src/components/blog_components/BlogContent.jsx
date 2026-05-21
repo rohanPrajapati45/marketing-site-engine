@@ -15,7 +15,7 @@ function BlogContent({ blog }) {
             <div className="sticky top-28">
               <p className="text-gray-600 text-sm mb-3">Share it on</p>
 
-              <div className="w-[72px] border border-gray-300 bg-white">
+              <div className="w-18 border border-gray-300 bg-white">
                 {/* FACEBOOK */}
 
                 <a
@@ -24,7 +24,7 @@ function BlogContent({ blog }) {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-[72px] h-[72px] border-b border-gray-300 flex items-center justify-center text-black text-3xl hover:bg-black hover:text-white transition-all duration-300"
+                  className="w-18 h-18 border-b border-gray-300 flex items-center justify-center text-black text-3xl hover:bg-black hover:text-white transition-all duration-300"
                 >
                   <FaFacebookF />
                 </a>
@@ -37,7 +37,7 @@ function BlogContent({ blog }) {
                   )}&text=${encodeURIComponent(blog.title)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-[72px] h-[72px] border-b border-gray-300 flex items-center justify-center text-black text-3xl hover:bg-black hover:text-white transition-all duration-300"
+                  className="w-18 h-18 border-b border-gray-300 flex items-center justify-center text-black text-3xl hover:bg-black hover:text-white transition-all duration-300"
                 >
                   <FaTwitter />
                 </a>
@@ -50,7 +50,7 @@ function BlogContent({ blog }) {
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-[72px] h-[72px] border-b border-gray-300 flex items-center justify-center text-black text-3xl hover:bg-black hover:text-white transition-all duration-300"
+                  className="w-18 h-18 border-b border-gray-300 flex items-center justify-center text-black text-3xl hover:bg-black hover:text-white transition-all duration-300"
                 >
                   <FaLinkedinIn />
                 </a>

@@ -1,4 +1,7 @@
-import ContactSubmission from './ContactSubmission';
+import "../../styles/contactForm.css";
+import "../../styles/contactSubmission.css";
+
+import ContactSubmission from "./ContactSubmission";
 
 const ContactForm = ({ formData, formRef, headingRef, handleSubmit }) => {
   return (

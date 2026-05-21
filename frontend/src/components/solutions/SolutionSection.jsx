@@ -1,7 +1,4 @@
-import {
-  useEffect,
-  useRef,
-} from "react";
+import { useEffect, useRef } from "react";
 
 import SolutionCarousel from "./SolutionCarousel";
 import SolutionTags from "./SolutionTags";
@@ -18,9 +15,7 @@ const SolutionSection = ({
     useRef(null);
 
   useEffect(() => {
-
-    const el =
-      sectionRef.current;
+    const el = sectionRef.current;
 
     if (!el) return;
 
@@ -54,16 +49,13 @@ const SolutionSection = ({
   }, []);
 
   return (
-
     <section
       ref={sectionRef}
       className={`solution-section theme-${solution.theme}`}
     >
-
       {/* BACKGROUND ICONS */}
 
       <div className="solution-bg-icons">
-
         <div
           className="solution-bg-icon"
           style={{
@@ -103,16 +95,15 @@ const SolutionSection = ({
               "radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 58%)",
           }}
         />
-
       </div>
 
       {/* CONTENT */}
 
       <div className="solution-content-row">
-
         {/* LEFT SIDE */}
 
         <div className="solution-left">
+          <h2 className="solution-title">{solution.title}</h2>
 
           <h2 className="solution-title">
             {solution.title}
@@ -146,7 +137,6 @@ const SolutionSection = ({
         {/* RIGHT SIDE */}
 
         <div className="solution-right">
-
           <SolutionCarousel
             images={
               solution.images || []
@@ -182,9 +172,7 @@ const SolutionSection = ({
           </div>
 
         </div>
-
       </div>
-
     </section>
   );
 };

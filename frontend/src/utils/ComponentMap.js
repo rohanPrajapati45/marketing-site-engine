@@ -19,7 +19,6 @@ import SectionScrollBar from "../components/homepage/SectionScrollBar";
 import StickySidebarSection from "../components/what-we-do/StickySidebarSection";
 import WorkCategoryMenu from "../components/Work_page/WorkCategoryMenu";
 import SoluctionSection from "../components/solutions/SolutionSection";
-import Branch from "../components/Contact/Branch";
 import ContactInfo from "../components/Contact/ContactInfo";
 import BlogCards from "../components/blog_components/BlogCards";
 
@@ -56,6 +55,5 @@ export const componentMap = {
 
   //contact page
   "contact-hero": ContactInfo,
-  "branch-section": Branch,
   "content-blog": BlogCards,
 };

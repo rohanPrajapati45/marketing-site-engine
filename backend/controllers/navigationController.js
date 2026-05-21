@@ -8,7 +8,7 @@ export const getNavigation = async (req, res) => {
       isPublished: true,
       showInNavbar: true,
     })
-      .select("slug navTitle navOrder")
+      .select("slug navTitle navOrder navbarFixed navbarTransparent")
       .sort({ navOrder: 1 });
 
     return res.status(200).json({
