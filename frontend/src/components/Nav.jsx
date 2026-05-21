@@ -26,7 +26,9 @@ const parseRgbColor = (value) => {
 const getThemeFromColor = (value) => {
   const parsed = parseRgbColor(value);
 
-  if (!parsed || parsed.alpha === 0) return null;
+  // Skip fully transparent OR semi-transparent backgrounds (overlays, tints)
+  // so the detection continues to the actual content behind them
+  if (!parsed || parsed.alpha < 0.75) return null;
 
   return getRgbBrightness(parsed.red, parsed.green, parsed.blue) >= 145
     ? "light"
@@ -122,17 +124,27 @@ const sampleVideoTheme = (videoElement) => {
 const getThemeFromElement = (element) => {
   if (!element || element === document.documentElement) return null;
 
+  // Try canvas-based sampling for media elements
   if (element.tagName === "IMG") {
-    return sampleImageTheme(element);
+    const sampled = sampleImageTheme(element);
+    if (sampled) return sampled;
   }
 
   if (element.tagName === "VIDEO") {
-    return sampleVideoTheme(element);
+    const sampled = sampleVideoTheme(element);
+    if (sampled) return sampled;
   }
 
+  // Walk up ancestors checking background colors AND data-theme attributes
   let current = element;
 
   while (current && current !== document.documentElement) {
+    // Check for explicit data-theme attribute (set by section components)
+    const dataTheme = current.getAttribute("data-theme");
+    if (dataTheme === "dark" || dataTheme === "light") {
+      return dataTheme;
+    }
+
     const style = window.getComputedStyle(current);
     const colorTheme = getThemeFromColor(style.backgroundColor);
 
@@ -259,10 +271,8 @@ function Nav({ replaySplash }) {
       });
     };
 
-    const observer = new MutationObserver((mutations) => {
-      if (mutations.some((mutation) => mutation.type === "childList")) {
-        updateTheme();
-      }
+    const observer = new MutationObserver(() => {
+      updateTheme();
     });
 
     observer.observe(document.body, {

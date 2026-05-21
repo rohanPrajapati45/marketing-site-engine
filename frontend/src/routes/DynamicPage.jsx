@@ -72,21 +72,7 @@ function DynamicPage() {
     };
   }, [contactBranches]);
 
-  // KEEP THE CONTACT HERO TEXT LEGIBLE
-  useEffect(() => {
-    if (typeof document === "undefined") {
-      return;
-    }
-
-    const activeBranch = contactBranches[activeCityIndex];
-
-    if (!activeBranch) {
-      return;
-    }
-
-    document.documentElement.dataset.homeTheme =
-      branchThemes[activeBranch.id] || "dark";
-  }, [activeCityIndex, branchThemes, contactBranches]);
+  // (navbar theme is now self-detected via Nav.jsx area sampling)
 
   // LOADING
   if (loading) {
@@ -132,6 +118,11 @@ function DynamicPage() {
             section={section}
             activeCityIndex={
               section.type === "contact-hero" ? activeCityIndex : undefined
+            }
+            branchTheme={
+              section.type === "contact-hero"
+                ? branchThemes[contactBranches[activeCityIndex]?.id] || "dark"
+                : undefined
             }
           />
         );

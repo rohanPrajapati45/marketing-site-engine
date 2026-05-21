@@ -3,7 +3,7 @@ import "../../styles/branch.css";
 
 import resolveImageUrl from "../../utils/resolveImageUrl";
 
-const ContactInfo = ({ section, activeCityIndex }) => {
+const ContactInfo = ({ section, activeCityIndex, branchTheme }) => {
   const contactData = section.data?.contactInfo || section.data || {};
   const branchesData =
     section.data?.branchesData || contactData?.branchesData || [];
@@ -24,7 +24,7 @@ const ContactInfo = ({ section, activeCityIndex }) => {
   };
 
   return (
-    <>
+    <div data-theme={branchTheme || "dark"}>
       <section className="contact-hero">
         {branchesData?.map((branch, index) => {
           if (!branch?.cityImage) return null;
@@ -110,7 +110,7 @@ const ContactInfo = ({ section, activeCityIndex }) => {
           })}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

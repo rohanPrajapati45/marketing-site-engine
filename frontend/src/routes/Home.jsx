@@ -149,12 +149,7 @@ function Home() {
     };
   }, [popupPhase, outletContext]);
 
-  // HTML DATA THEME
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-
-    document.documentElement.dataset.homeTheme = currentTheme;
-  }, [currentTheme]);
+  // (navbar theme is now self-detected via Nav.jsx area sampling)
 
   // HIDE DEFAULT BROWSER SCROLLBAR ON HOME
   useEffect(() => {
