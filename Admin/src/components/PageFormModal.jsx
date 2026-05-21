@@ -18,6 +18,7 @@ const PageFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
     showInNavbar: initialData?.showInNavbar ?? true,
     navbarFixed: initialData?.navbarFixed ?? false,
     navbarTransparent: initialData?.navbarTransparent ?? false,
+    bgImage: initialData?.bgImage || "",
   });
 
   const handleChange = (field, value) => {
@@ -148,6 +149,32 @@ const PageFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                 value={form.seo.ogImage}
                 onChange={(e) => handleChange("seo.ogImage", e.target.value)}
                 placeholder="https://..."
+                className="w-full px-3.5 py-2.5 bg-[var(--bg)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-[var(--border)] pt-4">
+          <p className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider mb-3">
+            Background Settings
+          </p>
+          <div className="space-y-4">
+            <div>
+              <ImageUploader
+                value={form.bgImage}
+                onChange={(url) => handleChange("bgImage", url)}
+                label="Background Image"
+                folder="general"
+              />
+              <label className="block text-sm font-medium text-[var(--text-secondary)] mb-1.5 mt-2">
+                Background Image URL
+              </label>
+              <input
+                type="text"
+                value={form.bgImage}
+                onChange={(e) => handleChange("bgImage", e.target.value)}
+                placeholder="https://... or /media/..."
                 className="w-full px-3.5 py-2.5 bg-[var(--bg)] border border-[var(--border)] rounded-xl text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent"
               />
             </div>

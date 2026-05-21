@@ -497,8 +497,19 @@ function Home() {
     return null;
   }
  
+  const bgImage = page?.page?.bgImage;
+  const pageWrapperStyle = bgImage
+    ? {
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed",
+      }
+    : {};
+
   return (
-    <div className="home-page">
+    <div className="home-page" style={pageWrapperStyle}>
       {/* SCROLL BAR */}
       <SectionScrollBar
         sections={sections}

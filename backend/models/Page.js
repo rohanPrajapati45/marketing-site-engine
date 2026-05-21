@@ -41,6 +41,11 @@ const pageSchema = new mongoose.Schema(
       default: false,
     },
 
+    bgImage: {
+      type: String,
+      default: "",
+    },
+
     navOrder: {
       type: Number,
       required: true,
