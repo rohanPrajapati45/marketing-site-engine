@@ -33,8 +33,16 @@ const getThemeFromColor = (value) => {
     : "dark";
 };
 
+const imageThemeCache = new Map();
+const videoThemeCache = new Map();
+
 const sampleImageTheme = (imageElement) => {
   if (!imageElement.complete || !imageElement.naturalWidth) return null;
+
+  const src = imageElement.src;
+  if (src && imageThemeCache.has(src)) {
+    return imageThemeCache.get(src);
+  }
 
   try {
     const canvas = document.createElement("canvas");
@@ -72,7 +80,11 @@ const sampleImageTheme = (imageElement) => {
       count += 1;
     }
 
-    return count ? (total / count >= 145 ? "light" : "dark") : null;
+    const theme = count ? (total / count >= 145 ? "light" : "dark") : null;
+    if (src && theme) {
+      imageThemeCache.set(src, theme);
+    }
+    return theme;
   } catch (error) {
     return null;
   }
@@ -80,6 +92,14 @@ const sampleImageTheme = (imageElement) => {
 
 const sampleVideoTheme = (videoElement) => {
   if (videoElement.readyState < 2 || !videoElement.videoWidth) return null;
+
+  const src = videoElement.currentSrc || videoElement.src || "default-video";
+  const now = Date.now();
+  const cached = videoThemeCache.get(src);
+
+  if (cached && now - cached.timestamp < 500) {
+    return cached.theme;
+  }
 
   try {
     const canvas = document.createElement("canvas");
@@ -113,7 +133,9 @@ const sampleVideoTheme = (videoElement) => {
       count += 1;
     }
 
-    return count ? (total / count >= 145 ? "light" : "dark") : null;
+    const theme = count ? (total / count >= 145 ? "light" : "dark") : null;
+    videoThemeCache.set(src, { theme, timestamp: now });
+    return theme;
   } catch (error) {
     return null;
   }
