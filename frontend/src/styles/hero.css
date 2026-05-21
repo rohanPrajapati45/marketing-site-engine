@@ -196,6 +196,111 @@
           line-height: 1.5;
         }
 
+        @media (max-width: 1024px) {
+          .hero-text {
+            left: 36px;
+            max-width: 520px;
+            padding-top: 40px;
+          }
+
+          .hero-headline {
+            font-size: 2.35rem;
+          }
+
+          .typing-line,
+          .typing-for,
+          .typed-text,
+          .typed-cursor {
+            font-size: 2.2rem;
+            line-height: 70px;
+          }
+
+          .video-hover {
+            right: 44px;
+            bottom: 52px;
+          }
+
+          .video-hover img {
+            width: 180px;
+            height: 84px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          #hero {
+            min-height: 520px;
+          }
+
+          .hero-text {
+            left: 20px;
+            right: 20px;
+            top: auto;
+            bottom: 140px;
+            transform: none;
+            max-width: none;
+            padding-top: 0;
+          }
+
+          .hero-text.show {
+            transform: none;
+          }
+
+          .hero-headline {
+            font-size: 2.1rem;
+          }
+
+          .typing-line {
+            margin-top: 12px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+          }
+
+          .typing-for,
+          .typed-text,
+          .typed-cursor {
+            font-size: 2rem;
+            line-height: 58px;
+          }
+
+          .scroll-hint {
+            right: 20px;
+            bottom: 16px;
+            transform: scale(0.9);
+          }
+
+          .video-hover {
+            right: 20px;
+            bottom: 24px;
+          }
+
+          .video-hover img {
+            width: 160px;
+            height: 74px;
+          }
+
+          .video-hover small {
+            font-size: 14px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .hero-headline {
+            font-size: 1.8rem;
+          }
+
+          .typing-for,
+          .typed-text,
+          .typed-cursor {
+            font-size: 1.65rem;
+            line-height: 48px;
+          }
+
+          .video-hover img {
+            width: 140px;
+            height: 64px;
+          }
+        }
+
         html[data-home-theme="light"] .hero-headline,
         html[data-home-theme="light"] .typing-for,
         html[data-home-theme="light"] .typed-text,

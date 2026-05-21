@@ -13,11 +13,11 @@ const WorkSubmenu = ({
 
   return (
     <div
-      className={`relative overflow-hidden ml-[12px] transition-all duration-500
+      className={`relative overflow-hidden ml-0 sm:ml-[12px] transition-all duration-500
         ${
           hasSubmenu
-            ? "mt-[18px] h-[170px] opacity-100"
-            : "mt-[50px] h-0 opacity-0 pointer-events-none"
+            ? "mt-4 sm:mt-[18px] h-[240px] sm:h-[170px] opacity-100"
+            : "mt-6 sm:mt-[50px] h-0 opacity-0 pointer-events-none"
         }
       `}
     >
@@ -35,17 +35,19 @@ const WorkSubmenu = ({
           `}
         >
 
-          <div className="grid grid-cols-4 gap-y-[5px] gap-x-[1px]">
+          <div className="max-h-[200px] sm:max-h-[170px] overflow-y-auto pr-2">
+            <div className="flex flex-wrap gap-2 sm:grid sm:grid-cols-4 sm:gap-y-[6px] sm:gap-x-[6px]">
             {subCategories[
               previousMenu
             ]?.map((item, index) => (
               <button
                 key={index}
-                className="w-fit text-left text-[0.9rem] font-[400] text-[#1d1d1d]"
+                className="w-fit text-left text-[0.9rem] sm:text-[0.9rem] font-[400] text-[#1d1d1d]"
               >
                 {item}
               </button>
             ))}
+            </div>
           </div>
         </div>
       )}
@@ -60,7 +62,8 @@ const WorkSubmenu = ({
         `}
       >
 
-        <div className="grid grid-cols-4 gap-y-[1px] gap-x-[1px]">
+        <div className="max-h-[200px] sm:max-h-[170px] overflow-y-auto pr-2">
+          <div className="flex flex-wrap gap-2 sm:grid sm:grid-cols-4 sm:gap-y-[6px] sm:gap-x-[6px]">
 
           {subCategories[
             activeTab
@@ -81,8 +84,8 @@ const WorkSubmenu = ({
 
                   overflow-hidden
 
-                  px-[18px]
-                  py-[1px]
+                  px-[16px]
+                  py-[4px]
                   my-[2px]
 
                   cursor-pointer
@@ -93,11 +96,11 @@ const WorkSubmenu = ({
                   duration-[400ms]
                   ease-[cubic-bezier(0.9,1,0.36,1)]
 
-                  hover:translate-x-[12px]
+                  sm:hover:translate-x-[12px]
 
                   ${
                     isActive
-                      ? "translate-x-[10px]"
+                      ? "sm:translate-x-[10px]"
                       : ""
                   }
                 `}
@@ -135,7 +138,7 @@ const WorkSubmenu = ({
                   relative
                   z-[2]
 
-                  text-[0.9rem]
+                  text-[0.92rem]
                   font-[400]
 
                   tracking-[-0.01em]
@@ -160,6 +163,7 @@ const WorkSubmenu = ({
             );
           })}
 
+          </div>
         </div>
 
       </div>

@@ -15,6 +15,31 @@ const RecentProjectCarousel = ({
   const [currentIndex, setCurrentIndex] =
     useState(0);
 
+  const [cardsPerView, setCardsPerView] =
+    useState(3);
+
+  useEffect(() => {
+    const updateCardsPerView = () => {
+      const width = window.innerWidth;
+
+      if (width < 640) {
+        setCardsPerView(1);
+      } else if (width < 1024) {
+        setCardsPerView(2);
+      } else {
+        setCardsPerView(3);
+      }
+    };
+
+    updateCardsPerView();
+
+    window.addEventListener("resize", updateCardsPerView);
+
+    return () => {
+      window.removeEventListener("resize", updateCardsPerView);
+    };
+  }, []);
+
   useEffect(() => {
 
     const carousel =
@@ -35,7 +60,7 @@ const RecentProjectCarousel = ({
       cards[0].offsetWidth + gap;
 
     const maxIndex =
-      Math.max(0, projects.length - 3);
+      Math.max(0, projects.length - cardsPerView);
 
     const interval = setInterval(() => {
 
@@ -72,6 +97,7 @@ const RecentProjectCarousel = ({
   }, [
     currentIndex,
     projects.length,
+    cardsPerView,
   ]);
 
   return (
@@ -139,7 +165,9 @@ const RecentProjectCarousel = ({
 
                   shrink-0
 
-                  w-[calc((100%-36px)/3)]
+                  w-full
+                  sm:w-[calc((100%-18px)/2)]
+                  lg:w-[calc((100%-36px)/3)]
 
                   snap-start
                   group
@@ -161,7 +189,8 @@ const RecentProjectCarousel = ({
                     alt={project.title}
                     className="
                       w-full
-                      h-[260px]
+                      h-[220px]
+                      sm:h-[260px]
 
                       object-cover
 
@@ -235,7 +264,7 @@ const RecentProjectCarousel = ({
 
         {Array.from({
           length:
-            Math.max(0, projects.length - 2),
+            Math.max(0, projects.length - (cardsPerView - 1)),
         }).map((_, index) => (
 
           <button

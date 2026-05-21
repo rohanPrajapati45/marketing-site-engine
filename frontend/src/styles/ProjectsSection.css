@@ -176,6 +176,10 @@
 }
 
 @media (max-width: 1024px) {
+  .project-slide {
+    min-height: 85vh;
+  }
+
   .slide-content {
     width: 100%;
     padding: 40px 32px;
@@ -187,13 +191,60 @@
 }
 
 @media (max-width: 768px) {
+  .project-slide {
+    min-height: 78vh;
+    align-items: flex-end;
+  }
+
   .slide-content {
     justify-content: flex-end;
     padding: 40px 24px 60px;
   }
 
+  .slide-heading {
+    margin-bottom: 20px;
+  }
+
+  .slide-logo {
+    margin-bottom: 16px;
+  }
+
+  .client-logo {
+    height: 34px;
+  }
+
+  .client-name {
+    font-size: 16px;
+  }
+
+  .client-country {
+    margin-bottom: 12px;
+  }
+
+  .btn-case-study {
+    margin-top: 16px;
+  }
+
   .slide-counter {
     right: 24px;
     bottom: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-slide {
+    min-height: 70vh;
+  }
+
+  .slide-content {
+    padding: 32px 18px 56px;
+  }
+
+  .slide-heading h2 {
+    font-size: clamp(24px, 7vw, 30px);
+  }
+
+  .slide-heading p {
+    font-size: clamp(16px, 5vw, 20px);
   }
 }
