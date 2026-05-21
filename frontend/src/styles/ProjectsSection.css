@@ -193,11 +193,11 @@
 @media (max-width: 768px) {
   .project-slide {
     min-height: 78vh;
-    align-items: flex-end;
+    align-items: center;
   }
 
   .slide-content {
-    justify-content: flex-end;
+    justify-content: center;
     padding: 40px 24px 60px;
   }
 

@@ -164,7 +164,7 @@
           position: absolute;
           bottom: 70px;
           right: 70px;
-          width: 100px;
+          width: auto;
           text-align: center;
           z-index: 10;
           cursor: pointer;
@@ -178,6 +178,14 @@
           margin: 0 auto 6px auto;
           filter: brightness(0.9);
           transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        @media (min-width: 1025px) {
+          .video-hover img {
+            width: 205px;
+            height: 95px;
+            object-fit: contain;
+          }
         }
 
         .video-hover:hover img {
@@ -234,32 +242,55 @@
           .hero-text {
             left: 20px;
             right: 20px;
-            top: auto;
-            bottom: 140px;
-            transform: none;
+            top: 50%;
+            bottom: auto;
+            transform: translateY(-50%);
             max-width: none;
             padding-top: 0;
+            text-align: left;
           }
 
           .hero-text.show {
-            transform: none;
+            transform: translateY(-50%);
           }
 
           .hero-headline {
-            font-size: 2.1rem;
+            font-size: 1.85rem;
           }
 
           .typing-line {
-            margin-top: 12px;
+            margin-top: 6px;
             margin-bottom: 18px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            display: inline-flex;
+            align-items: center;
+            column-gap: 0;
+          }
+
+          .typed-text {
+            min-width: 0;
+            width: auto;
+            text-align: left;
           }
 
           .typing-for,
           .typed-text,
           .typed-cursor {
-            font-size: 2rem;
-            line-height: 58px;
+            font-size: 1.7rem;
+            line-height: 50px;
+          }
+
+          .typing-for {
+            width: 4ch;
+            text-align: right;
+            margin-left: -2px;
+          }
+
+          .typed-text {
+            font-size: 1.55rem;
+            line-height: 46px;
+            white-space: nowrap;
           }
 
           .scroll-hint {
@@ -274,8 +305,8 @@
           }
 
           .video-hover img {
-            width: 160px;
-            height: 74px;
+            width: clamp(90px, 34vw, 130px);
+            height: auto;
           }
 
           .video-hover small {
@@ -285,19 +316,35 @@
 
         @media (max-width: 480px) {
           .hero-headline {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
           }
 
           .typing-for,
           .typed-text,
           .typed-cursor {
-            font-size: 1.65rem;
-            line-height: 48px;
+            font-size: 1.45rem;
+            line-height: 44px;
+          }
+
+          .typing-for {
+            width: 3.6ch;
+            margin-left: -2px;
+          }
+
+          .typed-text {
+            font-size: 1.3rem;
+            line-height: 40px;
+            white-space: nowrap;
+          }
+
+          .typed-text {
+            width: auto;
+            min-width: 0;
           }
 
           .video-hover img {
-            width: 140px;
-            height: 64px;
+            width: clamp(80px, 46vw, 115px);
+            height: auto;
           }
         }
 
