@@ -7,7 +7,6 @@ import Home from "./routes/Home.jsx";
 import Work from "./routes/Work.jsx";
 import What_we_do from "./routes/What_we_do.jsx";
 import Solutions from "./routes/Solutions.jsx";
-import Contact from "./routes/Contact.jsx";
 import Agency from "./routes/Agency.jsx";
 import Blog_details from "./routes/Blog_details.jsx";
 import CaseStudy from "./routes/CaseStudy.jsx";
@@ -28,10 +27,6 @@ const router = createBrowserRouter([
       {
         path: "/:pageSlug/:blogSlug",
         element: <Blog_details />,
-      },
-      {
-        path: "/contact",
-        element: <Contact />,
       },
 
       // GENERIC CMS PAGE

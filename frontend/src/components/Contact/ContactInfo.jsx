@@ -1,3 +1,6 @@
+import "../../styles/contactInfo.css";
+import "../../styles/branch.css";
+
 import resolveImageUrl from "../../utils/resolveImageUrl";
 
 const ContactInfo = ({ section, activeCityIndex }) => {
