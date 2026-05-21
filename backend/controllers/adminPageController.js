@@ -114,6 +114,7 @@ export const createPage = async (req, res) => {
       navbarFixed,
       navbarTransparent,
       navOrder,
+      bgImage,
     } = req.body;
 
     // CHECK EXISTING PAGE
@@ -140,6 +141,7 @@ export const createPage = async (req, res) => {
       title,
       seo,
       isPublished,
+      bgImage: bgImage || "",
 
       navTitle:
         navTitle || title || slug,
@@ -201,6 +203,7 @@ export const updatePage = async (req, res) => {
       navbarFixed,
       navbarTransparent,
       navOrder,
+      bgImage,
     } = req.body;
 
     if (slug !== undefined) {
@@ -217,6 +220,10 @@ export const updatePage = async (req, res) => {
 
     if (isPublished !== undefined) {
       page.isPublished = isPublished;
+    }
+
+    if (bgImage !== undefined) {
+      page.bgImage = bgImage;
     }
 
     // UPDATE NAV TITLE

@@ -102,6 +102,7 @@ export const getPublicPage = async (req, res) => {
           slug: page.slug,
           title: page.title,
           seo: page.seo,
+          bgImage: page.bgImage || "",
           navbarFixed: page.navbarFixed ?? false,
           navbarTransparent: page.navbarTransparent ?? false,
         },
