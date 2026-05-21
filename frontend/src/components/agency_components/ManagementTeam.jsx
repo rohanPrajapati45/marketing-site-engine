@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react";
+
 const teamMembers = [
   {
     name: "Lara Jannoun",
@@ -70,19 +72,38 @@ const teamMembers = [
   },
 ];
 
-const lastCard = {
-  title: "+45 more",
-  subtitle: "Employees",
-};
+function ManagementTeam() {
+  const cardRefs = useRef([]);
+  const [visibleCards, setVisibleCards] = useState(() => new Set());
 
-function ManagementTeam({ section }) {
-  const {
-    title,
-    subtitle,
-    lastCardTitle,
-    lastCardSubtitle,
-    cards = [],
-  } = section.data;
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = Number(entry.target.dataset.index);
+
+            setVisibleCards((prev) => {
+              const next = new Set(prev);
+              next.add(index);
+              return next;
+            });
+
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+      }
+    );
+
+    cardRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
@@ -96,140 +117,169 @@ function ManagementTeam({ section }) {
         lg:px-12
 
         py-14
-        lg:py-14
+        lg:py-20
       "
       style={{
         fontFamily: "Exo, sans-serif",
       }}
     >
       {/* HEADER */}
-      <div className="max-w-[1450px]">
+
+      <div className="max-w-[1400px]">
         <h2
           className="
-            text-[30px]
+            text-[34px]
             sm:text-[58px]
-            lg:text-[60px]
+            lg:text-[72px]
 
             font-bold
             tracking-[-2px]
             leading-none
-        "
+          "
         >
-          {title}
+          Management Team
         </h2>
 
         <p
           className="
-            mt-6
+            mt-5
 
-            max-w-[1200px]
+            max-w-[1000px]
 
-            text-[16px]
+            text-[15px]
             sm:text-[18px]
-            lg:text-[18px]
 
-            leading-[1.3]
+            text-[#8A8A8A]
 
-            text-[#777]
-            font-[700]
-        "
+            font-[600]
+            leading-[1.4]
+          "
         >
-          {subtitle}
+          Meet the people leading innovation, strategy and technology behind
+          the company.
         </p>
       </div>
 
       {/* CARDS */}
 
-      {/* CARDS */}
-
       <div
         className="
-    mt-10
-    lg:mt-14
+          mt-12
+          lg:mt-16
 
-    grid
+          grid
 
-    grid-cols-1
-    sm:grid-cols-2
-    lg:grid-cols-4
+          grid-cols-2
+          lg:grid-cols-4
 
-    gap-x-8
-    gap-y-14
-  "
+          gap-x-4
+          sm:gap-x-8
+
+          gap-y-8
+          sm:gap-y-14
+        "
       >
-        {cards.map((member, index) => (
+        {teamMembers.map((member, index) => (
           <div
             key={index}
+            ref={(el) => {
+              cardRefs.current[index] = el;
+            }}
+            data-index={index}
             className="
-        group
-        cursor-pointer
-      "
+              group
+              cursor-pointer
+
+              flex
+              flex-col
+
+              overflow-hidden
+
+              transition-all
+              duration-500
+              ease-out
+            "
+            style={{
+              opacity: visibleCards.has(index) ? 1 : 0,
+              transform: visibleCards.has(index)
+                ? "translateY(0)"
+                : "translateY(80px)",
+
+              transition:
+                "opacity 0.8s ease-out, transform 0.8s ease-out",
+
+              transitionDelay: `${index * 100}ms`,
+
+              willChange: "opacity, transform",
+            }}
           >
             {/* IMAGE */}
 
             <div
               className="
-          overflow-hidden
+                overflow-hidden
 
-          bg-[#D9D9D9]
+                bg-[#D9D9D9]
 
-          aspect-[0.88]
+                aspect-[0.8]
 
-          mb-5
-        "
+                mb-4
+              "
             >
               <img
                 src={member.image}
                 alt={member.name}
                 loading="lazy"
                 className="
-            w-full
-            h-full
+                  w-full
+                  h-full
 
-            object-cover
-            object-center
+                  object-cover
+                  object-top
 
-            grayscale
+                  grayscale
 
-            group-hover:grayscale-0
+                  transition-all
+                  duration-700
+                  ease-out
 
-            transition-all
-            duration-700
-            ease-out
-
-            group-hover:scale-[1.03]
-          "
+                  group-hover:grayscale-0
+                  group-hover:scale-[1.04]
+                "
               />
             </div>
 
-            {/* TEXT */}
+            {/* NAME */}
 
             <h3
               className="
-          text-[28px]
+                text-[16px]
+                sm:text-[26px]
 
-          font-[700]
+                font-[700]
 
-          tracking-[-1px]
-
-          leading-none
-        "
+                tracking-[-0.5px]
+                leading-tight
+              "
             >
               {member.name}
             </h3>
 
+            {/* ROLE */}
+
             <p
               className="
-          mt-3
+                mt-2
 
-          text-[16px]
+                text-[13px]
+                sm:text-[16px]
 
-          text-[#A3A3A3]
+                text-[#A3A3A3]
 
-          font-[700]
+                font-[600]
 
-          leading-[1.25]
-        "
+                leading-[1.3]
+              "
             >
               {member.role}
             </p>
@@ -240,48 +290,53 @@ function ManagementTeam({ section }) {
 
         <div
           className="
-      border
-      border-white
+            border
+            border-[#2A2A2A]
 
-      aspect-[0.88]
+            min-h-[220px]
+            sm:min-h-[300px]
 
-      flex
-      items-center
-      justify-center
+            flex
+            items-center
+            justify-center
 
-      text-center
+            text-center
 
-      cursor-pointer
+            transition-all
+            duration-500
+            ease-out
 
-      transition-all
-      duration-500
-      ease-out
+            hover:bg-white
+            hover:text-black
 
-      hover:bg-white
-      hover:text-black
-    "
+            cursor-pointer
+          "
         >
           <div>
             <p
               className="
-          text-[32px]
-          font-[700]
-          leading-none
-        "
+                text-[28px]
+                sm:text-[40px]
+
+                font-[700]
+                leading-none
+              "
             >
-              {lastCardTitle}
+              +45
             </p>
 
             <p
               className="
-          mt-2
+                mt-2
 
-          text-[32px]
-          font-[700]
-          leading-none
-        "
+                text-[24px]
+                sm:text-[38px]
+
+                font-[700]
+                leading-none
+              "
             >
-              {lastCardSubtitle}
+              Employees
             </p>
           </div>
         </div>

@@ -1,160 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-const clients = [
-  {
-    name: "Toyota",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/2126786316.png",
-  },
-  {
-    name: "Alfardan Group",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1234784539.png",
-  },
-  {
-    name: "Zain",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/487585540.png",
-  },
-  {
-    name: "USAID",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/450538554.png",
-  },
-  {
-    name: "Sanita",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/932838626.png",
-  },
-  {
-    name: "Chronora",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/990380556.png",
-  },
-  {
-    name: "Spinneys",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/3468944.png",
-  },
-  {
-    name: "MBC",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1310936977.png",
-  },
-  {
-    name: "Unicef",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/298841887.png",
-  },
-  {
-    name: "McDonald's",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/749293166.png",
-  },
-  {
-    name: "Africell",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1630290294.png",
-  },
-  {
-    name: "Sanofi",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/453573080.png",
-  },
-  {
-    name: "Ooredoo",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1450529123.png",
-  },
-  {
-    name: "NYMCARD",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1797975091.png",
-  },
-  {
-    name: "OMT",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1057543036.png",
-  },
-  {
-    name: "IDM",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1077994846.png",
-  },
-  {
-    name: "Jallad",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/672616672.png",
-  },
-  {
-    name: "Life",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1796840537.png",
-  },
-  {
-    name: "Rifai",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/790444017.png",
-  },
-  {
-    name: "Saudi Signs",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/246103352.png",
-  },
-  {
-    name: "Vodafone",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/645513243.png",
-  },
-  {
-    name: "Globemed",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/2081961552.png",
-  },
-  {
-    name: "Dar",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/755932002.png",
-  },
-  {
-    name: "Alfa",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/491618948.png",
-  },
-  {
-    name: "IPT",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1760914763.png",
-  },
-  {
-    name: "Sodetel",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1058769945.png",
-  },
-  {
-    name: "IRC",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/790569376.png",
-  },
-  {
-    name: "Allianz",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/876611546.png",
-  },
-  {
-    name: "Banque",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1492006509.png",
-  },
-  {
-    name: "Bank Audi",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/work-with/1513853162.png",
-  },
-];
-
 function ClientItem({ client, index }) {
   const ref = useRef(null);
+
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -162,12 +10,13 @@ function ClientItem({ client, index }) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
+
           observer.disconnect();
         }
       },
       {
         threshold: 0.15,
-      },
+      }
     );
 
     if (ref.current) observer.observe(ref.current);
@@ -189,11 +38,15 @@ function ClientItem({ client, index }) {
 
         transition-all
         duration-700
-        ease
+        ease-out
 
-        hover:-translate-y-3
+        lg:hover:-translate-y-3
 
-        ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}
+        ${
+          visible
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-12"
+        }
       `}
       style={{
         transitionDelay: `${index * 55}ms`,
@@ -201,37 +54,37 @@ function ClientItem({ client, index }) {
     >
       <div
         className="
-    overflow-hidden
+          overflow-hidden
 
-    w-full
+          w-full
 
-    h-[38px]
-    sm:h-[80px]
-    lg:h-[85px]
+          h-[38px]
+          sm:h-[70px]
+          lg:h-[85px]
 
-    flex
-    items-center
-    justify-center
-  "
+          flex
+          items-center
+          justify-center
+        "
       >
         <img
           src={client.image}
           alt={client.name}
           loading="lazy"
           className="
-      w-auto
+            w-auto
 
-      max-w-[150px]
-      sm:max-w-[180px]
-      lg:max-w-[250px]
+            max-w-[120px]
+            sm:max-w-[150px]
+            lg:max-w-[250px]
 
-      h-full
+            h-full
 
-      object-cover
-      object-center
+            object-contain
+            object-center
 
-      mix-blend-multiply
-    "
+            mix-blend-multiply
+          "
         />
       </div>
     </li>
@@ -240,6 +93,47 @@ function ClientItem({ client, index }) {
 
 function WorkWithClients({ section }) {
   const { title, subtitle, cards = [] } = section.data;
+
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const sliderRef = useRef(null);
+
+  const totalSlides = Math.ceil(cards.length / 4);
+
+  const handleScroll = () => {
+    if (!sliderRef.current) return;
+
+    const scrollLeft = sliderRef.current.scrollLeft;
+
+    const width = sliderRef.current.offsetWidth;
+
+    const index = Math.round(scrollLeft / width);
+
+    setActiveSlide(index);
+  };
+
+  useEffect(() => {
+  if (!sliderRef.current || totalSlides <= 1) return;
+
+  const slider = sliderRef.current;
+
+  const interval = setInterval(() => {
+    const nextSlide =
+      activeSlide === totalSlides - 1
+        ? 0
+        : activeSlide + 1;
+
+    slider.scrollTo({
+      left: nextSlide * slider.offsetWidth,
+      behavior: "smooth",
+    });
+
+    setActiveSlide(nextSlide);
+  }, 2000);
+
+  return () => clearInterval(interval);
+}, [activeSlide, totalSlides]);
+
   return (
     <section
       className="
@@ -263,16 +157,16 @@ function WorkWithClients({ section }) {
 
         <h2
           className="
-            text-[52px]
-            sm:text-[40px]
-            lg:text-[55px]
+            text-[32px]
+    sm:text-[40px]
+    lg:text-[55px]
 
-            font-black
+    font-black
 
-            leading-none
-            tracking-[-3px]
+    leading-none
+  
 
-            text-[#1F2329]
+    text-[#1F2329]
           "
         >
           {title}
@@ -283,8 +177,6 @@ function WorkWithClients({ section }) {
             mt-8
 
             text-[16px]
-            sm:text-[16px]
-            lg:text-[16px]
 
             font-[700]
 
@@ -294,30 +186,111 @@ function WorkWithClients({ section }) {
           {subtitle}
         </p>
 
-        {/* CLIENTS */}
+        {/* MOBILE SLIDER */}
+
+        <div className="block lg:hidden mt-10 overflow-hidden">
+          <div
+            ref={sliderRef}
+            onScroll={handleScroll}
+            className="
+              flex
+
+              overflow-x-auto
+              overflow-y-hidden
+
+              snap-x
+              snap-mandatory
+
+              scrollbar-hide
+
+              scroll-smooth
+            "
+          >
+            {Array.from({
+              length: totalSlides,
+            }).map((_, groupIndex) => {
+              const group = cards.slice(
+                groupIndex * 4,
+                groupIndex * 4 + 4
+              );
+
+              return (
+                <div
+                  key={groupIndex}
+                  className="
+                    min-w-full
+
+                    shrink-0
+
+                    snap-center
+
+                    grid
+                    grid-cols-2
+
+                    gap-y-6
+                    gap-x-6
+
+                    place-items-center
+                  "
+                >
+                  {group.map((client, index) => (
+                    <ClientItem
+                      key={index}
+                      client={client}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* DOTS */}
+
+          <div className="flex justify-center gap-2 mt-5">
+            {Array.from({
+              length: totalSlides,
+            }).map((_, index) => (
+              <div
+                key={index}
+                className={`
+                  h-[7px]
+                  rounded-full
+
+                  transition-all
+                  duration-300
+
+                  ${
+                    activeSlide === index
+                      ? "w-2 bg-black"
+                      : "w-2 bg-[#C5C5C5]"
+                  }
+                `}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* DESKTOP GRID */}
 
         <ul
           className="
-            mt-10
-            lg:mt-12
+            hidden
+            lg:grid
 
-            grid
+            mt-12
 
-            grid-cols-2
-            sm:grid-cols-3
-            md:grid-cols-4
-            lg:grid-cols-10
+            grid-cols-10
 
-            gap-y-2
-            sm:gap-y-2
-            lg:gap-y-0
-
-            gap-x-5
-            lg:gap-x-4
+            gap-x-4
           "
         >
           {cards.map((client, index) => (
-            <ClientItem key={index} client={client} index={index} />
+            <ClientItem
+              key={index}
+              client={client}
+              index={index}
+            />
           ))}
         </ul>
       </div>

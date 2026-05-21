@@ -1,39 +1,38 @@
-const services = [
-  [
-    "E-Commerce Solutions",
-    "Loyalty Program Solutions",
-    "Enterprise Solutions",
-    "Website Development",
-    "Mobile Application Development",
-  ],
-
-  [
-    "Artificial Intelligence",
-    "Machine learning",
-    "Connected Hardware",
-    "ChatBots",
-    "Emerging Technologies",
-  ],
-
-  [
-    "User Research & Testing",
-    "UI/UX Design",
-    "Information Architecture",
-    "Experience Strategy",
-    "Prototyping & Optimization",
-  ],
-
-  [
-    "Talent Acquisition & Outsourcing",
-    "Cross Industry Capabilities",
-    "Multi-Tech Support",
-    "Digital Transformation Services",
-    "ASO /SEO / SEM",
-  ],
-];
+import { useEffect, useRef, useState } from "react";
 
 function WhatWeDo({ section }) {
   const { title, subtitle, cards = [] } = section.data;
+
+  const cardRefs = useRef([]);
+  const [activeCard, setActiveCard] = useState(0);
+
+  useEffect(() => {
+    const observers = [];
+
+    cardRefs.current.forEach((card, index) => {
+      if (!card) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveCard(index);
+          }
+        },
+        {
+          threshold: 0.6,
+        }
+      );
+
+      observer.observe(card);
+
+      observers.push(observer);
+    });
+
+    return () => {
+      observers.forEach((observer) => observer.disconnect());
+    };
+  }, [cards]);
+
   return (
     <section
       className="
@@ -46,116 +45,161 @@ function WhatWeDo({ section }) {
         lg:px-12
 
         py-14
-        lg:py-14
       "
       style={{
         fontFamily: "Exo, sans-serif",
       }}
     >
       {/* HEADER */}
-      <div className="max-w-[1450px]">
+
+      <div className="max-w-[1400px]">
         <h2
           className="
-            text-[30px]
+            text-[34px]
             sm:text-[58px]
             lg:text-[60px]
 
             font-bold
+
             tracking-[-2px]
             leading-none
-        "
+          "
         >
           {title}
         </h2>
 
         <p
           className="
-            mt-6
+            mt-5
 
-            max-w-[1200px]
+            max-w-[1100px]
 
-            text-[16px]
+            text-[15px]
             sm:text-[18px]
-            lg:text-[18px]
 
-            leading-[1.3]
+            leading-[1.35]
 
-            text-[#777]
+            text-[#7C7C7C]
+
             font-[700]
-        "
+          "
         >
           {subtitle}
         </p>
       </div>
 
       {/* CARDS */}
-      {/* CARDS */}
+
       <div
         className="
-    mt-10
-    lg:mt-14
+          mt-10
+          lg:mt-14
 
-    grid
-    grid-cols-1
-    sm:grid-cols-2
-    xl:grid-cols-4
+          grid
 
-    gap-4
-    lg:gap-5
-  "
+          grid-cols-1
+          sm:grid-cols-2
+          xl:grid-cols-4
+
+          gap-4
+          lg:gap-5
+        "
       >
-        {cards.map((group, index) => (
-          <div
-            key={index}
-            className="
-        bg-[#2a2b2f]
+        {cards.map((group, index) => {
+          const isActive = activeCard === index;
 
-        min-h-[150px]
-        lg:min-h-[200px]
+          return (
+            <div
+              key={index}
+              ref={(el) => {
+                cardRefs.current[index] = el;
+              }}
+              className={`
+                
 
-        px-6
-        lg:px-7
+                overflow-hidden
 
-        py-6
-        lg:py-7
+                transition-all
+                duration-700
+                ease-out
 
-        flex
-        flex-col
+                hover:scale-[1.02]
 
-        transition-all
-        duration-500
-        ease-out
+                ${
+  isActive
+    ? "bg-[#F1F1F1] text-black"
+    : "bg-[#24252B] text-white"
+}
 
-        hover:bg-[#F3F3F3]
-        hover:text-black
-        hover:scale-[1.025]
+lg:bg-[#24252B]
+lg:text-white
 
-        cursor-pointer
-      "
-          >
-            {group.lines.map((item, itemIndex) => (
+lg:hover:bg-[#F1F1F1]
+lg:hover:text-black
+lg:hover:scale-[1.02]
+              `}
+            >
               <div
-                key={itemIndex}
                 className="
-            text-[17px]
-            sm:text-[18px]
-            lg:text-[16px]
+                  px-6
+                  sm:px-7
 
-            font-[400]
+                  py-7
+                  sm:py-8
 
-            tracking-[-0.2px]
+                  min-h-[320px]
+                  sm:min-h-[360px]
 
-            leading-[1.15]
+                  flex
+                  flex-col
 
-            mb-7
-            last:mb-0
-          "
+                  overflow-hidden
+                "
               >
-                {item}
+                {/* SCROLLABLE CONTENT */}
+
+                <div
+                  className="
+                    flex-1
+
+                    overflow-y-auto
+                    overflow-x-hidden
+
+                    pr-2
+
+                    scrollbar-thin
+                    scrollbar-thumb-[#666]
+                    scrollbar-track-transparent
+                  "
+                >
+                  {group.lines.map((item, itemIndex) => (
+                    <div
+                      key={itemIndex}
+                      className="
+                        text-[15px]
+                        sm:text-[17px]
+                        lg:text-[16px]
+
+                        font-[500]
+
+                        leading-[1.25]
+
+                        tracking-[-0.2px]
+
+                        mb-7
+                        last:mb-0
+
+                        break-words
+                      "
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
     </section>
   );

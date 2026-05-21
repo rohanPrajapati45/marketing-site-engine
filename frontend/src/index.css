@@ -168,3 +168,14 @@ html[data-home-theme="light"] .nav-logo .logo-dark {
 html[data-home-theme="light"] .nav-logo .logo-light {
   opacity: 0;
 }
+
+/* HIDE SCROLLBAR */
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

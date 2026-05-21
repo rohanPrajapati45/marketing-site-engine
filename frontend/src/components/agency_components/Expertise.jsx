@@ -1,151 +1,159 @@
-const certifications = [
-  {
-    link: "https://www.designrush.com",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/264234342.png",
-  },
+import { useEffect, useRef, useState } from "react";
 
-  {
-    link: "https://sendgrid.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/436600237.png",
-  },
+function ExpertiseItem({ item, index }) {
+  const ref = useRef(null);
 
-  {
-    link: "https://stripe.com",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/67477477.png",
-  },
+  const [visible, setVisible] = useState(false);
 
-  {
-    link: "https://reactnative.dev/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/183619392.png",
-  },
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
 
-  {
-    link: "https://developers.google.com/ml-kit",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/920906950.png",
-  },
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.15,
+      }
+    );
 
-  {
-    link: "https://firebase.google.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/1984016222.png",
-  },
+    if (ref.current) observer.observe(ref.current);
 
-  {
-    link: "https://www.apple.com/apple-pay/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/910734131.png",
-  },
+    return () => observer.disconnect();
+  }, []);
 
-  {
-    link: "https://laravel.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/583730353.png",
-  },
+  return (
+    <li
+      ref={ref}
+      className={`
+        flex
+        items-center
+        justify-center
 
-  {
-    link: "https://www.oracle.com",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/1377190685.png",
-  },
+        transition-all
+        duration-700
+        ease-out
 
-  {
-    link: "https://www.salesforce.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/221629520.png",
-  },
+        lg:hover:-translate-y-4
+        lg:hover:scale-[1.03]
 
-  {
-    link: "https://mailchimp.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/2054804823.png",
-  },
+        ${
+          visible
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-16"
+        }
+      `}
+      style={{
+        transitionDelay: `${index * 80}ms`,
+      }}
+    >
+      <a
+        href={item.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="
+          w-full
 
-  {
-    link: "https://onesignal.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/1845580431.png",
-  },
+          flex
+          items-center
+          justify-center
+        "
+      >
+        <div
+          className="
+            w-full
 
-  {
-    link: "https://www.twilio.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/838583440.png",
-  },
+            h-[120px]
+            sm:h-[150px]
+            lg:h-[190px]
 
-  {
-    link: "https://github.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/1885738698.png",
-  },
+            flex
+            items-center
+            justify-center
 
-  {
-    link: "https://www.adjust.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/1205789607.png",
-  },
+            overflow-hidden
+          "
+        >
+          <img
+            src={item.image}
+            alt="Certification"
+            loading="lazy"
+            className="
+              max-w-[120px]
+  max-h-[70px]
 
-  {
-    link: "https://analytics.google.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/735243488.png",
-  },
+  sm:max-w-[150px]
+  sm:max-h-[90px]
 
-  {
-    link: "https://azure.microsoft.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/2073006633.png",
-  },
+  lg:max-w-[220px]
+  lg:max-h-[140px]
 
-  {
-    link: "https://rasa.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/1514711069.png",
-  },
+  w-auto
+  h-auto
 
-  {
-    link: "https://dialogflow.cloud.google.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/990380247.png",
-  },
+              object-contain
 
-  {
-    link: "https://woocommerce.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/568086696.png",
-  },
+              transition-transform
+              duration-700
+              ease-out
 
-  {
-    link: "https://www.shopify.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/800391213.png",
-  },
-
-  {
-    link: "https://magento.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/855533679.png",
-  },
-
-  {
-    link: "https://nodejs.org/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/2142635058.png",
-  },
-
-  {
-    link: "https://aws.amazon.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/certifications/1234293507.png",
-  },
-];
+              lg:hover:scale-[1.06]
+            "
+          />
+        </div>
+      </a>
+    </li>
+  );
+}
 
 function Expertise({ section }) {
   const { title, subtitle, cards = [] } = section.data;
+
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const sliderRef = useRef(null);
+
+  const totalSlides = Math.ceil(cards.length / 4);
+
+  // AUTO SLIDE
+  useEffect(() => {
+    const slider = sliderRef.current;
+
+    if (!slider || window.innerWidth >= 1024) return;
+
+    const interval = setInterval(() => {
+      const width = slider.offsetWidth;
+
+      const nextSlide =
+        activeSlide === totalSlides - 1
+          ? 0
+          : activeSlide + 1;
+
+      slider.scrollTo({
+        left: width * nextSlide,
+        behavior: "smooth",
+      });
+
+      setActiveSlide(nextSlide);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [activeSlide, totalSlides]);
+
+  // HANDLE MANUAL SCROLL
+  const handleScroll = () => {
+    if (!sliderRef.current) return;
+
+    const scrollLeft = sliderRef.current.scrollLeft;
+
+    const width = sliderRef.current.offsetWidth;
+
+    const index = Math.round(scrollLeft / width);
+
+    setActiveSlide(index);
+  };
 
   return (
     <section
@@ -170,14 +178,14 @@ function Expertise({ section }) {
 
         <h2
           className="
-            text-[38px]
+            text-[28px]
             sm:text-[52px]
-            lg:text-[72px]
+            lg:text-[60px]
 
             font-black
 
             leading-none
-            tracking-[-3px]
+            
 
             text-[#1E2329]
           "
@@ -200,17 +208,103 @@ function Expertise({ section }) {
           {subtitle}
         </p>
 
-        {/* LOGOS */}
+        {/* MOBILE SLIDER */}
+
+        <div className="block lg:hidden mt-12 overflow-hidden">
+          <div
+            ref={sliderRef}
+            onScroll={handleScroll}
+            className="
+              flex
+
+              overflow-x-auto
+              overflow-y-hidden
+
+              snap-x
+              snap-mandatory
+
+              scrollbar-hide
+
+              scroll-smooth
+            "
+          >
+            {Array.from({
+              length: totalSlides,
+            }).map((_, groupIndex) => {
+              const group = cards.slice(
+                groupIndex * 4,
+                groupIndex * 4 + 4
+              );
+
+              return (
+                <div
+                  key={groupIndex}
+                  className="
+                    min-w-full
+
+                    shrink-0
+
+                    snap-center
+
+                    grid
+                    grid-cols-2
+
+                    gap-x-8
+                    gap-y-10
+
+                    place-items-center
+                  "
+                >
+                  {group.map((item, index) => (
+                    <ExpertiseItem
+                      key={index}
+                      item={item}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* DOTS */}
+
+          <div className="flex justify-center gap-2 mt-6">
+            {Array.from({
+              length: totalSlides,
+            }).map((_, index) => (
+              <div
+                key={index}
+                className={`
+                  h-[8px]
+                  w-[8px]
+
+                  rounded-full
+
+                  transition-all
+                  duration-300
+
+                  ${
+                    activeSlide === index
+                      ? "bg-black scale-125"
+                      : "bg-[#C9C9C9]"
+                  }
+                `}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* DESKTOP GRID */}
 
         <ul
           className="
+            hidden
+            lg:grid
+
             mt-14
 
-            grid
-
-            grid-cols-2
-            sm:grid-cols-3
-            lg:grid-cols-6
+            grid-cols-6
 
             gap-x-10
             gap-y-14
@@ -219,39 +313,11 @@ function Expertise({ section }) {
           "
         >
           {cards.map((item, index) => (
-            <li
+            <ExpertiseItem
               key={index}
-              className="
-                flex
-                items-center
-                justify-center
-              "
-            >
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  w-full
-
-                  flex
-                  items-center
-                  justify-center
-                "
-              >
-                <img
-                  src={item.image}
-                  alt="Certification"
-                  loading="lazy"
-                  className="
-                    w-full
-                    h-auto
-
-                    object-contain
-                  "
-                />
-              </a>
-            </li>
+              item={item}
+              index={index}
+            />
           ))}
         </ul>
       </div>
