@@ -16,7 +16,7 @@ export const getNavigation = createAsyncThunk(
     try {
 
       const response = await axios.get(
-        "http://localhost:3000/navigation"
+        "http://localhost:8080/navigation"
       );
 
       return response.data.data;

@@ -1,80 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
-const teamMembers = [
-  {
-    name: "Lara Jannoun",
-    role: "Director of Strategic & Technology Projects",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-members/1411598431.jpg",
-  },
-
-  {
-    name: "Wassim Seifeddine",
-    role: "CTO & AI Tech Lead",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-members/141507803.jpg",
-  },
-
-  {
-    name: "Jozy Yaacoub",
-    role: "Financial Director",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-members/1492849806.jpg",
-  },
-
-  {
-    name: "Marianne Chamoun",
-    role: "Assistant CEO",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-members/443205995.jpg",
-  },
-
-  {
-    name: "Ali Kassem",
-    role: "Project Manager",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-members/355673301.jpg",
-  },
-
-  {
-    name: "Raffi Kestanian",
-    role: "iOS Tech Lead",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-members/1968895145.jpg",
-  },
-
-  {
-    name: "Saleh Aweek",
-    role: "Android Tech Lead",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-members/966601775.jpg",
-  },
-
-  {
-    name: "Ibrahim Tarhini",
-    role: "Tech Lead | Web development department",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-members/1482321894.jpg",
-  },
-
-  {
-    name: "Hussein Harake",
-    role: "Tech Lead | Web development department",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-members/267147450.jpg",
-  },
-
-  {
-    name: "Mohamad Al Zohbie",
-    role: "Tech Lead | Web development department",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-members/412427731.jpg",
-  },
-];
-
-function ManagementTeam() {
+function ManagementTeam({ section }) {
   const cardRefs = useRef([]);
   const [visibleCards, setVisibleCards] = useState(() => new Set());
+  const { title, subTitle, cards = [] } = section.data;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -95,7 +24,7 @@ function ManagementTeam() {
       },
       {
         threshold: 0.2,
-      }
+      },
     );
 
     cardRefs.current.forEach((el) => {
@@ -155,8 +84,8 @@ function ManagementTeam() {
             leading-[1.4]
           "
         >
-          Meet the people leading innovation, strategy and technology behind
-          the company.
+          Meet the people leading innovation, strategy and technology behind the
+          company.
         </p>
       </div>
 
@@ -179,7 +108,7 @@ function ManagementTeam() {
           sm:gap-y-14
         "
       >
-        {teamMembers.map((member, index) => (
+        {cards.map((member, index) => (
           <div
             key={index}
             ref={(el) => {
@@ -205,8 +134,7 @@ function ManagementTeam() {
                 ? "translateY(0)"
                 : "translateY(80px)",
 
-              transition:
-                "opacity 0.8s ease-out, transform 0.8s ease-out",
+              transition: "opacity 0.8s ease-out, transform 0.8s ease-out",
 
               transitionDelay: `${index * 100}ms`,
 
