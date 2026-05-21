@@ -13,7 +13,6 @@ const categorySchema =
         {
           type:
             mongoose.Schema.Types.ObjectId,
-            
             ref: "subcategoryModel",
             required: false,
         }

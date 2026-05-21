@@ -15,9 +15,8 @@ export const getNavigation = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
 
-      const API = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
       const response = await axios.get(
-        `${API}/navigation`
+        "http://localhost:3000/navigation"
       );
 
       return response.data.data;

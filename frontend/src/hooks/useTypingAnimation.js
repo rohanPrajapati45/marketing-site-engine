@@ -7,9 +7,17 @@ import { typedTexts } from './homeData';
 export function useTypingAnimation() {
   const typingRef = useRef(null);
   const timerRef = useRef(null);
+  const isCompactRef = useRef(false);
   const [showHeroText, setShowHeroText] = useState(false);
 
   useEffect(() => {
+    const updateCompactMode = () => {
+      isCompactRef.current = window.matchMedia('(max-width: 768px)').matches;
+    };
+
+    updateCompactMode();
+    window.addEventListener('resize', updateCompactMode);
+
     const words = typedTexts;
     let wordIndex = 0;
     let charIndex = 0;
@@ -20,7 +28,10 @@ export function useTypingAnimation() {
       const typingEl = typingRef.current;
       if (!typingEl) return;
 
-      const currentWord = words[wordIndex];
+      const rawWord = words[wordIndex];
+      const currentWord = isCompactRef.current
+        ? rawWord.split(' ')[0]
+        : rawWord;
 
       if (!isDeleting) {
         currentText = currentWord.substring(0, charIndex + 1);
@@ -53,6 +64,7 @@ export function useTypingAnimation() {
 
     return () => {
       if (timerRef.current) window.clearTimeout(timerRef.current);
+      window.removeEventListener('resize', updateCompactMode);
     };
   }, []);
 

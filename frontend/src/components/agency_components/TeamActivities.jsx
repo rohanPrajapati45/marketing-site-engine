@@ -1,68 +1,70 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const teamActivities = [
-  {
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-activities/573834303.jfif",
-  },
-
-  {
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-activities/956235381.jpeg",
-  },
-
-  {
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-activities/1227089550.jpeg",
-  },
-
-  {
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-activities/689650001.jfif",
-  },
-
-  {
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-activities/1689159825.jpg",
-  },
-
-  {
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-activities/215765465.jpg",
-  },
-
-  {
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-activities/1624314847.jpg",
-  },
-
-  {
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/team-activities/1268855950.jpg",
-  },
-];
-
 function TeamActivities({ section }) {
   const { cards = [] } = section.data;
-  const [startIndex, setStartIndex] = useState(0);
 
-  // AUTO MOVE
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // HOW MANY DESKTOP SLIDES ARE POSSIBLE
+  const desktopMaxSlide = Math.max(cards.length - 4, 0);
+
+  // AUTO SLIDE
 
   useEffect(() => {
     const interval = setInterval(() => {
-      nextSlide();
+      // MOBILE
+      if (window.innerWidth < 1024) {
+        setCurrentSlide((prev) =>
+          prev === cards.length - 1 ? 0 : prev + 1
+        );
+      }
+
+      // DESKTOP
+      else {
+        setCurrentSlide((prev) =>
+          prev >= desktopMaxSlide ? 0 : prev + 1
+        );
+      }
     }, 2500);
 
     return () => clearInterval(interval);
-  }, [startIndex]);
+  }, [cards.length, desktopMaxSlide]);
+
+  // NEXT
 
   const nextSlide = () => {
-    setStartIndex((prev) => (prev >= cards.length - 4 ? 0 : prev + 1));
+    // MOBILE
+    if (window.innerWidth < 1024) {
+      setCurrentSlide((prev) =>
+        prev === cards.length - 1 ? 0 : prev + 1
+      );
+    }
+
+    // DESKTOP
+    else {
+      setCurrentSlide((prev) =>
+        prev >= desktopMaxSlide ? 0 : prev + 1
+      );
+    }
   };
 
+  // PREV
+
   const prevSlide = () => {
-    setStartIndex((prev) => (prev === 0 ? cards.length - 4 : prev - 1));
+    // MOBILE
+    if (window.innerWidth < 1024) {
+      setCurrentSlide((prev) =>
+        prev === 0 ? cards.length - 1 : prev - 1
+      );
+    }
+
+    // DESKTOP
+    else {
+      setCurrentSlide((prev) =>
+        prev === 0 ? desktopMaxSlide : prev - 1
+      );
+    }
   };
 
   return (
@@ -77,48 +79,135 @@ function TeamActivities({ section }) {
       }}
     >
       <div className="relative overflow-hidden">
-        {/* SLIDER */}
+        {/* MOBILE SLIDER */}
 
-        <div className="overflow-hidden w-full">
+        <div className="block lg:hidden overflow-hidden w-full">
           <div
             className="
-      flex
+              flex
 
-      transition-transform
-      duration-700
-      ease-in-out
-    "
+              transition-transform
+              duration-[1400ms]
+              ease-in-out
+            "
             style={{
-              transform: `translateX(-${startIndex * 25}%)`,
+              width: `${cards.length * 100}%`,
+              transform: `translateX(-${
+                currentSlide * (100 / cards.length)
+              }%)`,
             }}
           >
             {cards.map((item, index) => (
               <div
                 key={index}
                 className="
-                    w-[25%]
-                    flex-shrink-0
+                  w-full
+                  flex-shrink-0
 
-                    relative
+                  h-[220px]
+                  sm:h-[340px]
 
-                    h-[180px]
-                    sm:h-[240px]
-                    lg:h-[340px]
-
-                    overflow-hidden
-                    "
+                  overflow-hidden
+                "
+                style={{
+                  width: `${100 / cards.length}%`,
+                }}
               >
                 <img
                   src={item.image}
                   alt="Team Activity"
                   loading="lazy"
                   className="
-                w-full
-                h-full
+                    w-full
+                    h-full
 
-                object-cover
-                object-center
+                    object-cover
+                    object-center
+                  "
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* MOBILE DOTS */}
+
+          <div
+            className="
+              absolute
+
+              bottom-5
+              left-1/2
+
+              -translate-x-1/2
+
+              flex
+              items-center
+              gap-2
+
+              z-20
+            "
+          >
+            {cards.map((_, index) => (
+              <div
+                key={index}
+                className={`
+                  h-[8px]
+                  w-[8px]
+
+                  rounded-full
+
+                  transition-all
+                  duration-300
+
+                  ${
+                    currentSlide === index
+                      ? "bg-white scale-125"
+                      : "bg-white/40"
+                  }
+                `}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* DESKTOP ORIGINAL VIEW */}
+
+        <div className="hidden lg:block overflow-hidden w-full">
+          <div
+            className="
+              flex
+
+              transition-transform
+              duration-700
+              ease-in-out
+            "
+            style={{
+              transform: `translateX(-${currentSlide * 25}%)`,
+            }}
+          >
+            {cards.map((item, index) => (
+              <div
+                key={index}
+                className="
+                  w-[25%]
+                  flex-shrink-0
+
+                  h-[340px]
+
+                  overflow-hidden
                 "
+              >
+                <img
+                  src={item.image}
+                  alt="Team Activity"
+                  loading="lazy"
+                  className="
+                    w-full
+                    h-full
+
+                    object-cover
+                    object-center
+                  "
                 />
               </div>
             ))}
@@ -133,8 +222,12 @@ function TeamActivities({ section }) {
 
             bottom-4
             right-4
-            lg:bottom-6
-            lg:right-6
+
+            sm:bottom-6
+            sm:right-6
+
+            lg:bottom-8
+            lg:right-8
 
             flex
             items-center

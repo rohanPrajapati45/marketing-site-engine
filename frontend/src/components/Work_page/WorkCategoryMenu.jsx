@@ -291,9 +291,9 @@ const submenuTabs = useMemo(
 
     <main id="AOS">
 
-      <div className="max-w-[1500px] w-full px-[15px] mx-auto mt-[45px]">
+      <div className="max-w-[1500px] w-full px-4 sm:px-6 lg:px-8 mx-auto mt-6 sm:mt-[45px]">
 
-        <div className="ml-[13px]">
+        <div className="ml-0 sm:ml-[13px]">
 
           <WorkTabs
             tabs={tabs}
@@ -347,7 +347,7 @@ const submenuTabs = useMemo(
 
           ) : (
 
-            <section className="mt-[18px]">
+            <section className="mt-4 sm:mt-[18px]">
 
               <div className="project-section-animate">
 

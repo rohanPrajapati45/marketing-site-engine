@@ -1,81 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-const partners = [
-  {
-    link: "https://evulpa.com",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/1621825262.png",
-  },
-
-  {
-    link: "https://gte.tedmob.com",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/2074614409.png",
-  },
-
-  {
-    link: "https://nymcard.com",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/770870888.png",
-  },
-
-  {
-    link: "https://aga-adk.com",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/907204380.png",
-  },
-
-  {
-    link: "https://www.thearlab.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/694568439.png",
-  },
-
-  {
-    link: "https://4dsme.com",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/1570685982.webp",
-  },
-
-  {
-    link: "http://thechannel-me.com",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/1726764729.jpg",
-  },
-
-  {
-    link: "http://numbase.com",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/43603629.jpg",
-  },
-
-  {
-    link: "https://www.rizkgroup.com/",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/149820745.jpg",
-  },
-
-  {
-    link: "http://aub.edu.lb",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/2085297417.jpg",
-  },
-
-  {
-    link: "http://grey.com/en",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/1037864398.jpg",
-  },
-
-  {
-    link: "http://mcsaatchi.me",
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/partners/736168035.jpg",
-  },
-];
-
 function ClientItem({ client, index }) {
   const ref = useRef(null);
+
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -83,12 +10,13 @@ function ClientItem({ client, index }) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true);
+
           observer.disconnect();
         }
       },
       {
         threshold: 0.15,
-      },
+      }
     );
 
     if (ref.current) observer.observe(ref.current);
@@ -100,14 +28,23 @@ function ClientItem({ client, index }) {
     <li
       ref={ref}
       className={`
-      ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}
+        list-none
 
-      transition-all
-      duration-700
-      ease-out
-    `}
+        transition-all
+        duration-700
+        ease-out
+
+        lg:hover:-translate-y-3
+        lg:hover:scale-[1.02]
+
+        ${
+          visible
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 translate-y-10"
+        }
+      `}
       style={{
-        transitionDelay: `${index * 50}ms`,
+        transitionDelay: `${index * 60}ms`,
       }}
     >
       <a
@@ -115,37 +52,51 @@ function ClientItem({ client, index }) {
         target="_blank"
         rel="noopener noreferrer"
         className="
-    bg-[#DCDCDC]
+          bg-[#DCDCDC]
 
-    h-[170px]
-    sm:h-[190px]
-    lg:h-[190px]
+          w-full
 
-    flex
-    items-center
-    justify-center
+          h-[160px]
+          sm:h-[180px]
+          lg:h-[220px]
 
-    overflow-hidden
+          flex
+          items-center
+          justify-center
 
-    group
-  "
+          overflow-hidden
+
+          group
+        "
       >
         <img
           src={client.image}
           alt="partner"
           loading="lazy"
           className="
+            max-w-[140px]
+            max-h-[90px]
 
+            sm:max-w-[170px]
+            sm:max-h-[110px]
 
-      object-contain
+            lg:max-w-[220px]
+            lg:max-h-[130px]
 
-      grayscale
-      group-hover:grayscale-0
+            w-auto
+            h-auto
 
-      transition-all
-      duration-500
-      ease-out
-    "
+            object-contain
+
+            grayscale
+            lg:group-hover:grayscale-0
+
+            transition-all
+            duration-700
+            ease-out
+
+            lg:group-hover:scale-[1.05]
+          "
         />
       </a>
     </li>
@@ -154,6 +105,53 @@ function ClientItem({ client, index }) {
 
 function Partners({ section }) {
   const { title, subtitle, cards = [] } = section.data;
+
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const sliderRef = useRef(null);
+
+  const totalSlides = Math.ceil(cards.length / 4);
+
+  // AUTO SLIDE
+
+  useEffect(() => {
+    const slider = sliderRef.current;
+
+    if (!slider || window.innerWidth >= 1024) return;
+
+    const interval = setInterval(() => {
+      const width = slider.offsetWidth;
+
+      const nextSlide =
+        activeSlide === totalSlides - 1
+          ? 0
+          : activeSlide + 1;
+
+      slider.scrollTo({
+        left: width * nextSlide,
+        behavior: "smooth",
+      });
+
+      setActiveSlide(nextSlide);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [activeSlide, totalSlides]);
+
+  // HANDLE MANUAL SCROLL
+
+  const handleScroll = () => {
+    if (!sliderRef.current) return;
+
+    const scrollLeft = sliderRef.current.scrollLeft;
+
+    const width = sliderRef.current.offsetWidth;
+
+    const index = Math.round(scrollLeft / width);
+
+    setActiveSlide(index);
+  };
+
   return (
     <section
       className="
@@ -177,14 +175,14 @@ function Partners({ section }) {
 
         <h2
           className="
-            text-[52px]
+            text-[28px]
             sm:text-[40px]
             lg:text-[55px]
 
             font-black
 
             leading-none
-            tracking-[-3px]
+            
 
             text-[#1F2329]
           "
@@ -194,10 +192,9 @@ function Partners({ section }) {
 
         <p
           className="
-            mt-8
+            mt-6
 
-            text-[16px]
-            sm:text-[16px]
+            text-[15px]
             lg:text-[16px]
 
             font-[700]
@@ -208,24 +205,120 @@ function Partners({ section }) {
           {subtitle}
         </p>
 
-        {/* CLIENTS */}
+        {/* MOBILE SLIDER */}
+
+        <div className="block lg:hidden mt-10 overflow-hidden">
+          <div
+            ref={sliderRef}
+            onScroll={handleScroll}
+            className="
+              flex
+
+              overflow-x-auto
+              overflow-y-hidden
+
+              snap-x
+              snap-mandatory
+
+              scrollbar-hide
+
+              scroll-smooth
+
+              list-none
+              p-0
+              m-0
+            "
+          >
+            {Array.from({
+              length: totalSlides,
+            }).map((_, groupIndex) => {
+              const group = cards.slice(
+                groupIndex * 4,
+                groupIndex * 4 + 4
+              );
+
+              return (
+                <div
+                  key={groupIndex}
+                  className="
+                    min-w-full
+
+                    shrink-0
+
+                    snap-center
+
+                    grid
+                    grid-cols-2
+
+                    gap-4
+
+                    items-stretch
+                  "
+                >
+                  {group.map((client, index) => (
+                    <ClientItem
+                      key={index}
+                      client={client}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* DOTS */}
+
+          <div className="flex justify-center gap-2 mt-6">
+            {Array.from({
+              length: totalSlides,
+            }).map((_, index) => (
+              <div
+                key={index}
+                className={`
+                  h-[8px]
+                  w-[8px]
+
+                  rounded-full
+
+                  transition-all
+                  duration-300
+
+                  ${
+                    activeSlide === index
+                      ? "bg-black scale-125"
+                      : "bg-[#C9C9C9]"
+                  }
+                `}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* DESKTOP GRID */}
 
         <ul
           className="
-            mt-10
-            lg:mt-14
+            hidden
+            lg:grid
 
-            grid
+            mt-14
 
-            grid-cols-1
-            sm:grid-cols-2
-            lg:grid-cols-4
+            grid-cols-4
 
             gap-5
-            "
+
+            list-none
+            p-0
+            m-0
+          "
         >
           {cards.map((client, index) => (
-            <ClientItem key={index} client={client} index={index} />
+            <ClientItem
+              key={index}
+              client={client}
+              index={index}
+            />
           ))}
         </ul>
       </div>

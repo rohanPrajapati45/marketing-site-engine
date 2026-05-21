@@ -1,21 +1,6 @@
 import { useEffect, useState } from "react";
 import Btn_slide from "../Btn_slide";
 
-const careerImages = [
-  {
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/career-slider/1755989291.png",
-    alt: "Tedmob Team",
-  },
-
-  {
-    image:
-      "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/career-slider/2072802599.png",
-    alt: "Tedmob Office",
-  },
-
-  // add more images here
-];
 
 function JoinOurTeam({ section }) {
   const {
@@ -78,7 +63,7 @@ function JoinOurTeam({ section }) {
         <div className="order-2 lg:order-1">
           <h2
             className="
-              text-[44px]
+              text-[35px]
               sm:text-[58px]
               lg:text-[60px]
 
@@ -86,7 +71,7 @@ function JoinOurTeam({ section }) {
 
               uppercase
 
-              tracking-[-3px]
+            
 
               leading-none
 
@@ -151,8 +136,8 @@ function JoinOurTeam({ section }) {
           <div
             className="flex h-full transition-transform duration-[1800ms] ease-in-out"
             style={{
-              width: `${careerImages.length * 100}%`,
-              transform: `translateX(-${currentImage * (100 / careerImages.length)}%)`,
+              width: `${cards.length * 100}%`,
+              transform: `translateX(-${currentImage * (100 / cards.length)}%)`,
             }}
           >
             {cards.map((item, index) => (
@@ -160,7 +145,7 @@ function JoinOurTeam({ section }) {
                 key={index}
                 className="w-full h-full flex-shrink-0"
                 style={{
-                  width: `${100 / careerImages.length}%`,
+                  width: `${100 / cards.length}%`,
                 }}
               >
                 <img

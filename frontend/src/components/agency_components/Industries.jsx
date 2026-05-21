@@ -1,67 +1,148 @@
-const industries = [
-  {
-    title: "Finance",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/678630862.svg",
-  },
+import { useEffect, useRef, useState } from "react";
 
-  {
-    title: "Telecom",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/806329025.svg",
-  },
+function IndustryItem({ item }) {
+  return (
+    <li
+      className="
+        flex
+        flex-col
 
-  {
-    title: "Healthcare",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/1203929516.svg",
-  },
+        items-center
+        justify-center
 
-  {
-    title: "Travel",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/617260528.svg",
-  },
+        text-center
+      "
+    >
+      {/* MOBILE = ONLY ICON + TEXT */}
 
-  {
-    title: "logistics",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/1003329320.svg",
-  },
+      <div className="flex flex-col items-center justify-center lg:hidden">
+        <img
+          src={item.icon}
+          alt={item.title}
+          loading="lazy"
+          className="
+            w-[42px]
+            h-[42px]
 
-  {
-    title: "B2B & Entreprise",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/1645568391.svg",
-  },
+            object-contain
+          "
+        />
 
-  {
-    title: "e-commerce",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/287114565.svg",
-  },
+        <p
+          className="
+            mt-4
 
-  {
-    title: "Government",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/1839914653.svg",
-  },
+            text-[14px]
 
-  {
-    title: "Food & Beverage",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/532566286.svg",
-  },
+            leading-[1.3]
 
-  {
-    title: "Entertainment",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/1612749263.svg",
-  },
+            font-[400]
+          "
+        >
+          {item.title}
+        </p>
+      </div>
 
-  {
-    title: "Education",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/1449781340.svg",
-  },
+      {/* DESKTOP = ORIGINAL BOX DESIGN */}
 
-  {
-    title: "Real Estate",
-    icon: "https://tedmob-cop1-files.s3.amazonaws.com/tedmob.com/storage/agency-industries/683516326.svg",
-  },
-];
+      <div
+        className="
+          hidden
+          lg:flex
+
+          border
+          border-[#E5E5E5]
+
+          h-[200px]
+          w-full
+
+          flex-col
+
+          items-center
+          justify-center
+
+          text-center
+
+          px-2
+        "
+      >
+        <img
+          src={item.icon}
+          alt={item.title}
+          loading="lazy"
+          className="
+            w-[50px]
+            h-[50px]
+
+            object-contain
+          "
+        />
+
+        <p
+          className="
+            mt-6
+
+            text-[20px]
+
+            leading-[1.3]
+
+            font-[400]
+          "
+        >
+          {item.title}
+        </p>
+      </div>
+    </li>
+  );
+}
 
 function Industries({ section }) {
   const { title, cards = [] } = section.data;
+
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const sliderRef = useRef(null);
+
+  // 6 items per slide
+  const totalSlides = Math.ceil(cards.length / 6);
+
+  // AUTO SLIDE
+  useEffect(() => {
+    const slider = sliderRef.current;
+
+    if (!slider || window.innerWidth >= 1024) return;
+
+    const interval = setInterval(() => {
+      const width = slider.offsetWidth;
+
+      const nextSlide =
+        activeSlide === totalSlides - 1
+          ? 0
+          : activeSlide + 1;
+
+      slider.scrollTo({
+        left: width * nextSlide,
+        behavior: "smooth",
+      });
+
+      setActiveSlide(nextSlide);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [activeSlide, totalSlides]);
+
+  // HANDLE MANUAL SCROLL
+  const handleScroll = () => {
+    if (!sliderRef.current) return;
+
+    const scrollLeft = sliderRef.current.scrollLeft;
+
+    const width = sliderRef.current.offsetWidth;
+
+    const index = Math.round(scrollLeft / width);
+
+    setActiveSlide(index);
+  };
 
   return (
     <section
@@ -82,36 +163,119 @@ function Industries({ section }) {
         fontFamily: "Exo, sans-serif",
       }}
     >
-      {/* HEADER */}
-
       <div className="max-w-[1600px]">
+        {/* HEADER */}
+
         <h2
           className="
-            text-[42px]
-            sm:text-[58px]
+            text-[30px]
+            sm:text-[50px]
             lg:text-[60px]
 
             font-black
 
             leading-none
-            tracking-[-3px]
           "
         >
           {title}
         </h2>
 
-        {/* GRID */}
+        {/* MOBILE SLIDER */}
+
+        <div className="block lg:hidden mt-10 overflow-hidden">
+          <div
+            ref={sliderRef}
+            onScroll={handleScroll}
+            className="
+              flex
+
+              overflow-x-auto
+              overflow-y-hidden
+
+              snap-x
+              snap-mandatory
+
+              scrollbar-hide
+
+              scroll-smooth
+            "
+          >
+            {Array.from({
+              length: totalSlides,
+            }).map((_, groupIndex) => {
+              const group = cards.slice(
+                groupIndex * 6,
+                groupIndex * 6 + 6
+              );
+
+              return (
+                <div
+                  key={groupIndex}
+                  className="
+                    min-w-full
+
+                    shrink-0
+
+                    snap-center
+
+                    grid
+                    grid-cols-3
+
+                    gap-x-8
+                    gap-y-10
+
+                    place-items-center
+                  "
+                >
+                  {group.map((item, index) => (
+                    <IndustryItem
+                      key={index}
+                      item={item}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* DOTS */}
+
+          <div className="flex justify-center gap-2 mt-6">
+            {Array.from({
+              length: totalSlides,
+            }).map((_, index) => (
+              <div
+                key={index}
+                className={`
+                  h-[8px]
+                  w-[8px]
+
+                  rounded-full
+
+                  transition-all
+                  duration-300
+
+                  ${
+                    activeSlide === index
+                      ? "bg-white scale-125"
+                      : "bg-[#5A5A5A]"
+                  }
+                `}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* DESKTOP GRID */}
 
         <ul
           className="
-            mt-10
-            lg:mt-12
+            hidden
+            lg:grid
 
-            grid
+            mt-12
 
-            grid-cols-2
-            sm:grid-cols-3
-            lg:grid-cols-6
+            grid-cols-6
 
             gap-10
             lg:gap-x-16
@@ -119,57 +283,10 @@ function Industries({ section }) {
           "
         >
           {cards.map((item, index) => (
-            <li key={index}>
-              <div
-                className="
-                  border
-                  border-[#E5E5E5]
-
-                  h-[170px]
-                  sm:h-[210px]
-                  lg:h-[200px]
-
-                  flex
-                  flex-col
-
-                  items-center
-                  justify-center
-
-                  text-center
-
-                  px-2
-                "
-              >
-                <img
-                  src={item.icon}
-                  alt={item.title}
-                  loading="lazy"
-                  className="
-                    w-[42px]
-                    h-[42px]
-                    lg:w-[50px]
-                    lg:h-[50px]
-
-                    object-contain
-                  "
-                />
-
-                <p
-                  className="
-                    mt-6
-
-                    text-[18px]
-                    lg:text-[20px]
-
-                    leading-[1.3]
-
-                    font-[400]
-                  "
-                >
-                  {item.title}
-                </p>
-              </div>
-            </li>
+            <IndustryItem
+              key={index}
+              item={item}
+            />
           ))}
         </ul>
       </div>
