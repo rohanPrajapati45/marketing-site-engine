@@ -134,7 +134,7 @@ function ReputationCard({ item }) {
       w-full
       max-w-[440px]
 
-      min-h-[320px]
+      min-h-[420px]
       sm:min-h-[480px]
       lg:min-h-[480px]
 
@@ -187,23 +187,24 @@ function ReputationCard({ item }) {
         <CountUp end={item.number} start={visible} />+
       </div>
 
-      <div className="mt-auto flex flex-col">
+      <div className="mt-auto flex flex-col items-start text-left">
         {item.lines.map((line, index) => (
           <div
             key={index}
             className="
             relative
-            w-fit
+            w-full
             overflow-hidden
 
-            text-[10px]
-            sm:text-[15px]
+            text-[16px]
+            sm:text-[18px]
             lg:text-[20px]
 
-            leading-[1.08]
+            leading-[1.45]
 
             font-[300]
             tracking-[-0.5px]
+            break-words
           "
           >
             {line}
